@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>wc_lib — One API, Two Frameworks</title>
-<meta name="description" content="wc_lib is a shared RedM library that bridges VORP and RSG Core behind one API, so you write your resource once.">
+<title>Wild Country Libs — One API, Two Frameworks</title>
+<meta name="description" content="Wild Country Libs is a shared RedM library that bridges VORP and RSG Core behind one API, so you write your resource once.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
@@ -12,7 +12,7 @@
 <body>
 
 <div class="topbar">
-  <div class="topbar-brand">🤠 <span>wc_lib</span></div>
+  <div class="topbar-brand">🤠 <span>Wild Country Libs</span></div>
   <button class="topbar-toggle" data-sidebar-toggle>Menu</button>
 </div>
 
@@ -21,7 +21,7 @@
   <!-- ============ SIDEBAR ============ -->
   <nav class="sidebar">
     <div class="brand">
-      <span class="brand-mark">wc<span class="accent">_lib</span></span>
+      <span class="brand-mark">Wild Country<span class="accent"> Libs</span></span>
     </div>
     <span class="brand-sub">Green Studio · RedM</span>
 
@@ -69,9 +69,9 @@
   <main class="main" style="max-width:none; padding:0;">
 
     <section class="hero">
-      <div class="hero-kicker">wc_lib · shared framework library</div>
+      <div class="hero-kicker">Wild Country Libs · shared framework library</div>
       <h1 class="hero-title">Write the resource once.<br>Run it on <span class="accent">VORP or RSG</span>.</h1>
-      <p class="hero-lede">wc_lib sits between your RedM resources and whichever core framework the server runs. One set of functions for player data, money, notifications, prompts, and Discord logging — the lib figures out the rest.</p>
+      <p class="hero-lede">Wild Country Libs sits between your RedM resources and whichever core framework the server runs. One set of functions for player data, money, notifications, prompts, and Discord logging — the lib figures out the rest.</p>
 
       <div class="hero-actions">
         <a class="btn btn-primary" href="getting-started.html">Get started →</a>
@@ -92,7 +92,7 @@
       </div>
 
       <div class="fw-toggle-wrap">
-        <span class="fw-toggle-label">wc_lib does this underneath, on —</span>
+        <span class="fw-toggle-label">Wild Country Libs does this underneath, on —</span>
         <div class="fw-toggle">
           <button type="button" class="fw-vorp" data-fw-set="vorp">VORP</button>
           <button type="button" class="fw-rsg" data-fw-set="rsg">RSG</button>
@@ -127,8 +127,8 @@ lib.<span class="tok-fn">notify</span>({ title = <span class="tok-str">"+$50"</s
 
     <div class="main" style="padding-top:0;">
 
-      <h2>Why wc_lib exists</h2>
-      <p>Most RedM resources are written hard against one framework's exports. Switch cores — or just write a second resource for a server that runs the other one — and every <code>character.addCurrency</code> or <code>Player.Functions.AddMoney</code> call has to be found and rewritten by hand. wc_lib removes that step: your resource calls <code>wc_lib</code>, and <code>wc_lib</code> calls whichever core is actually running.</p>
+      <h2>Why Wild Country Libs exists</h2>
+      <p>Most RedM resources are written hard against one framework's exports. Switch cores — or just write a second resource for a server that runs the other one — and every <code>character.addCurrency</code> or <code>Player.Functions.AddMoney</code> call has to be found and rewritten by hand. Wild Country Libs removes that step: your resource calls <code>wc_lib</code>, and <code>wc_lib</code> calls whichever core is actually running.</p>
 
       <div class="feature-grid">
         <div class="feature-card">
@@ -137,7 +137,7 @@ lib.<span class="tok-fn">notify</span>({ title = <span class="tok-str">"+$50"</s
         </div>
         <div class="feature-card">
           <h3><span class="feature-glyph">→</span> Auto-detected, overridable</h3>
-          <p>wc_lib checks which core resource is running on start. Force it with one config flag if you ever need to.</p>
+          <p>Wild Country Libs checks which core resource is running on start. Force it with one config flag if you ever need to.</p>
         </div>
         <div class="feature-card">
           <h3><span class="feature-glyph">→</span> Nothing hidden</h3>
@@ -196,7 +196,7 @@ lib.<span class="tok-fn">notify</span>({ title = <span class="tok-str">"+$50"</s
     </div>
 
     <footer class="site-footer">
-      <span>wc_lib v1.0.0 — Green Studio</span>
+      <span>Wild Country Libs v1.0.0 — Green Studio</span>
       <span>Built for Wild County RP</span>
     </footer>
 
