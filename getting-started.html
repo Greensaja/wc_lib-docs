@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Getting Started — wc_lib</title>
+<title>Getting Started — Wild Country Libs</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
@@ -11,14 +11,14 @@
 <body>
 
 <div class="topbar">
-  <div class="topbar-brand">🤠 <span>wc_lib</span></div>
+  <div class="topbar-brand">🤠 <span>Wild Country Libs</span></div>
   <button class="topbar-toggle" data-sidebar-toggle>Menu</button>
 </div>
 
 <div class="shell">
 
   <nav class="sidebar">
-    <div class="brand"><span class="brand-mark">wc<span class="accent">_lib</span></span></div>
+    <div class="brand"><span class="brand-mark">Wild Country<span class="accent"> Libs</span></span></div>
     <span class="brand-sub">Green Studio · RedM</span>
 
     <div class="nav-group">
@@ -61,11 +61,11 @@
   <main class="main">
 
     <span class="eyebrow">Getting started</span>
-    <h1 class="page-title">Install wc_lib</h1>
+    <h1 class="page-title">Install wc_libs</h1>
     <p class="page-lede">Three steps: drop the resource in, ensure it before anything that depends on it, optionally pin the framework. That's the whole setup.</p>
 
     <h2>1. Add the resource</h2>
-    <p>Copy the <code>wc_lib</code> folder into your server's <code>resources</code> directory, alongside your other resources — not nested inside one of them.</p>
+    <p>Copy the <code>wc_libs</code> folder into your server's <code>resources</code> directory, alongside your other resources — not nested inside one of them.</p>
 
     <div class="code-block">
       <div class="code-block-head"><span class="code-block-tag">file tree</span></div>
@@ -73,14 +73,14 @@
 ├── [core]/
 │   └── vorp_core/
 ├── [standalone]/
-│   └── wc_lib/              <span class="tok-com">← here</span>
+│   └── wc_libs/             <span class="tok-com">← here</span>
 └── [wc]/
     ├── wc_encounter/
     └── wc_death/</code></pre>
     </div>
 
     <h2>2. Ensure it before dependent resources</h2>
-    <p>wc_lib needs to start <em>before</em> any resource that calls its exports. Add it to your <code>server.cfg</code> ahead of everything else with a "wc_" prefix or anything else you plan to migrate.</p>
+    <p>wc_libs needs to start <em>before</em> any resource that uses it. Add it to your <code>server.cfg</code> ahead of everything else with a "wc_" prefix or anything else you plan to migrate.</p>
 
     <div class="code-block">
       <div class="code-block-head">
@@ -88,62 +88,67 @@
         <button class="copy-btn" type="button">copy</button>
       </div>
       <pre><code>ensure vorp_core
-ensure wc_lib
+ensure wc_libs
 ensure wc_encounter
 ensure wc_death</code></pre>
     </div>
 
     <div class="note">
-      <strong>Order matters.</strong> If a resource calling <code>exports.wc_lib:GetMoney(...)</code> starts before wc_lib has finished initializing, the export won't exist yet. Keep <code>ensure wc_lib</code> directly after your core framework and before anything that uses it.
+      <strong>Order matters.</strong> If a resource using <code>wc:GetMoney(...)</code> starts before wc_libs has finished initializing, the export won't resolve. Keep <code>ensure wc_libs</code> directly after your core framework and before anything that uses it.
     </div>
 
     <h2>3. Confirm it picked up your framework</h2>
-    <p>On start, wc_lib auto-detects which core is running by checking for <code>vorp_core</code> or <code>rsg-core</code> as a started resource. Check your server console for a line like:</p>
+    <p>On start, wc_libs auto-detects which core is running by checking for <code>vorp_core</code> or <code>rsg-core</code> as a started resource. Check your server console for a line like:</p>
 
     <div class="code-block">
       <div class="code-block-head"><span class="code-block-tag">console output</span></div>
-      <pre><code>[wc_lib] server ready — framework: vorp — version: 1.0.0
-[wc_lib] client ready — framework: vorp — version: 1.0.0</code></pre>
+      <pre><code>[wc_libs] server ready — framework: vorp — version: 1.0.0
+[wc_libs] client ready — framework: vorp — version: 1.0.0</code></pre>
     </div>
 
-    <p>If you see <code>NONE DETECTED</code> instead, your core framework either isn't installed or started after wc_lib. Check your <code>ensure</code> order, or set the framework explicitly — see below.</p>
+    <p>If you see <code>NONE DETECTED</code> instead, your core framework either isn't installed or started after wc_libs. Check your <code>ensure</code> order, or set the framework explicitly — see below.</p>
 
     <h2>Optional: force the framework</h2>
-    <p>Auto-detection covers almost every setup. The one case it doesn't is running both cores side by side mid-migration — wc_lib will default to VORP and print a warning if it sees both. Override it explicitly in <code>shared/config.lua</code>:</p>
+    <p>Auto-detection covers almost every setup. The one case it doesn't is running both cores side by side mid-migration — wc_libs will default to VORP and print a warning if it sees both. Override it explicitly in <code>shared/config.lua</code>:</p>
 
     <div class="code-block">
       <div class="code-block-head">
-        <span class="code-block-tag">wc_lib/shared/config.lua</span>
+        <span class="code-block-tag">wc_libs/shared/config.lua</span>
         <button class="copy-btn" type="button">copy</button>
       </div>
       <pre><code><span class="tok-com">-- leave as nil to auto-detect (the default)</span>
 WCLibConfig.ForceFramework = <span class="tok-str">'vorp'</span> <span class="tok-com">-- or 'rsg'</span></code></pre>
     </div>
 
-    <h2>Calling wc_lib from your own resource</h2>
-    <p>Every function is exposed as a standard FXServer export. No require, no import — just call it the way you'd call any other resource's export.</p>
+    <h2>Calling wc_libs from your own resource</h2>
+    <p>Add <code>'@wc_libs/init.lua'</code> to your resource's <code>shared_scripts</code> — that sets the <code>wc</code> shorthand global. Then call any wc_libs function as <code>wc:FunctionName(...)</code>, same syntax on client and server.</p>
 
     <div class="code-block">
       <div class="code-block-head">
-        <span class="code-block-tag">server-side, any resource</span>
+        <span class="code-block-tag">my_resource/fxmanifest.lua</span>
         <button class="copy-btn" type="button">copy</button>
       </div>
-      <pre><code><span class="tok-kw">local</span> money = <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">GetMoney</span>(source)
-<span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">AddMoney</span>(source, <span class="tok-num">50</span>)
-<span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">Notify</span>(source, { title = <span class="tok-str">"+$50"</span> })</code></pre>
+      <pre><code>shared_scripts {
+  <span class="tok-str">'@wc_libs/init.lua'</span>,
+  <span class="tok-str">'config.lua'</span>,
+}</code></pre>
     </div>
 
     <div class="code-block">
       <div class="code-block-head">
-        <span class="code-block-tag">client-side, any resource</span>
+        <span class="code-block-tag">server-side or client-side, any resource</span>
         <button class="copy-btn" type="button">copy</button>
       </div>
-      <pre><code><span class="tok-kw">local</span> prompt = <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">CreatePrompt</span>(<span class="tok-str">"Talk [G]"</span>)
-<span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">SetPromptVisible</span>(prompt, <span class="tok-kw">true</span>)</code></pre>
+      <pre><code><span class="tok-kw">local</span> money = wc:<span class="tok-fn">GetMoney</span>(source)
+wc:<span class="tok-fn">AddMoney</span>(source, <span class="tok-num">50</span>)
+wc:<span class="tok-fn">Notify</span>(source, { title = <span class="tok-str">"+$50"</span> })
+
+<span class="tok-kw">local</span> prompt = wc:<span class="tok-fn">CreatePrompt</span>(<span class="tok-str">"Talk [G]"</span>)
+wc:<span class="tok-fn">SetPromptVisible</span>(prompt, <span class="tok-kw">true</span>)</code></pre>
     </div>
 
     <div class="note">
-      <strong>Tip.</strong> If you want autocomplete-friendly access inside <code>wc_lib</code> itself, the full <code>WCLib</code> table is also available as a global within wc_lib's own files — but from <em>outside</em> the resource, always go through <code>exports.wc_lib:FunctionName(...)</code>.
+      <strong><code>wc</code> is a live proxy.</strong> <code>init.lua</code> sets <code>wc = exports['wc_libs']</code> — it resolves at call time, not load time, so it works correctly on both client and server without any extra setup.
     </div>
 
     <hr class="divider">

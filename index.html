@@ -87,8 +87,8 @@
           <button class="copy-btn" type="button">copy</button>
         </div>
         <pre><code><span class="tok-com">-- same call, every server</span>
-<span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">AddMoney</span>(source, <span class="tok-num">50</span>)
-<span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">Notify</span>(source, { title = <span class="tok-str">"+$50"</span> })</code></pre>
+wc:<span class="tok-fn">AddMoney</span>(source, <span class="tok-num">50</span>)
+wc:<span class="tok-fn">Notify</span>(source, { title = <span class="tok-str">"+$50"</span> })</code></pre>
       </div>
 
       <div class="fw-toggle-wrap">
@@ -128,7 +128,7 @@ lib.<span class="tok-fn">notify</span>({ title = <span class="tok-str">"+$50"</s
     <div class="main" style="padding-top:0;">
 
       <h2>Why Wild Country Libs exists</h2>
-      <p>Most RedM resources are written hard against one framework's exports. Switch cores — or just write a second resource for a server that runs the other one — and every <code>character.addCurrency</code> or <code>Player.Functions.AddMoney</code> call has to be found and rewritten by hand. Wild Country Libs removes that step: your resource calls <code>wc_lib</code>, and <code>wc_lib</code> calls whichever core is actually running.</p>
+      <p>Most RedM resources are written hard against one framework's exports. Switch cores — or just write a second resource for a server that runs the other one — and every <code>character.addCurrency</code> or <code>Player.Functions.AddMoney</code> call has to be found and rewritten by hand. Wild Country Libs removes that step: your resource calls <code>wc</code>, and <code>wc_libs</code> calls whichever core is actually running.</p>
 
       <div class="feature-grid">
         <div class="feature-card">

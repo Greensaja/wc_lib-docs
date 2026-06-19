@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Callbacks — wc_lib</title>
-<meta name="description" content="RegisterCallback and TriggerCallback reference for wc_lib.">
+<title>Callbacks — Wild Country Libs</title>
+<meta name="description" content="RegisterCallback and TriggerCallback reference for wc_libs.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/style.css">
@@ -13,14 +13,14 @@
 <body>
 
 <div class="topbar">
-  <div class="topbar-brand">&#129312; <span>wc_lib</span></div>
+  <div class="topbar-brand">&#129312; <span>Wild Country Libs</span></div>
   <button class="topbar-toggle" data-sidebar-toggle>Menu</button>
 </div>
 
 <div class="shell">
 
 <nav class="sidebar">
-  <div class="brand"><span class="brand-mark">wc<span class="accent">_lib</span></span></div>
+  <div class="brand"><span class="brand-mark">Wild Country<span class="accent"> Libs</span></span></div>
   <span class="brand-sub">Green Studio &middot; RedM</span>
   <div class="nav-group">
     <span class="nav-label">Start here</span>
@@ -62,10 +62,10 @@
   <main class="main">
     <span class="eyebrow">Server API</span>
     <h1 class="page-title">Callbacks</h1>
-    <p class="page-lede">VORP's <code>Callback.Register</code>/<code>TriggerAsync</code> and RSG's <code>CreateCallback</code>/<code>TriggerClientCallback</code> use different signatures underneath. wc_lib normalizes both into one shape, and namespaces every callback name with a fixed <code>wc_lib:</code> prefix so it never collides with a resource's own callback names.</p>
+    <p class="page-lede">VORP's <code>Callback.Register</code>/<code>TriggerAsync</code> and RSG's <code>CreateCallback</code>/<code>TriggerClientCallback</code> use different signatures underneath. wc_libs normalizes both into one shape, and namespaces every callback name with a fixed <code>wc_libs:</code> prefix so it never collides with a resource's own callback names.</p>
 
     <div class="note">
-      <strong>You don't type the prefix yourself.</strong> Pass <code>"myCallback"</code> and wc_lib registers/triggers it internally as <code>"wc_lib:myCallback"</code>. Passing an already-prefixed name is safe too — it won't double-prefix.
+      <strong>You don't type the prefix yourself.</strong> Pass <code>"myCallback"</code> and wc_libs registers/triggers it internally as <code>"wc_libs:myCallback"</code>. Passing an already-prefixed name is safe too — it won't double-prefix.
     </div>
 
     <div class="api-entry">
@@ -85,8 +85,8 @@
             <span class="code-block-tag">example — job-gate check, ported from wc_encounter</span>
             <button class="copy-btn" type="button">copy</button>
           </div>
-          <pre><code><span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">RegisterCallback</span>(<span class="tok-str">'encounter:isJobAllowed'</span>, <span class="tok-kw">function</span>(source, cb)
-  <span class="tok-kw">local</span> job = <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">GetJob</span>(source)
+          <pre><code>wc:<span class="tok-fn">RegisterCallback</span>(<span class="tok-str">'encounter:isJobAllowed'</span>, <span class="tok-kw">function</span>(source, cb)
+  <span class="tok-kw">local</span> job = wc:<span class="tok-fn">GetJob</span>(source)
   <span class="tok-kw">if</span> <span class="tok-kw">not</span> job <span class="tok-kw">then</span> cb(<span class="tok-kw">true</span>); <span class="tok-kw">return</span> <span class="tok-kw">end</span>
   <span class="tok-kw">for</span> _, blocked <span class="tok-kw">in</span> ipairs(Config.BlacklistJobs <span class="tok-kw">or</span> {}) <span class="tok-kw">do</span>
     <span class="tok-kw">if</span> job.name == blocked <span class="tok-kw">then</span> cb(<span class="tok-kw">false</span>); <span class="tok-kw">return</span> <span class="tok-kw">end</span>
@@ -132,7 +132,7 @@
     </div>
 
     <div class="note warn">
-      <strong>Client-side trigger helper not included in v1.</strong> Server-side <code>RegisterCallback</code>/<code>TriggerCallback</code> are ready to use. A matching client-side "trigger a server callback" wrapper hasn't been built yet — for now, call your framework's own client-side trigger function directly with the <code>wc_lib:</code>-prefixed name, or add the wrapper yourself in <code>_custom/client.lua</code>.
+      <strong>Client-side trigger helper not included in v1.</strong> Server-side <code>RegisterCallback</code>/<code>TriggerCallback</code> are ready to use. A matching client-side "trigger a server callback" wrapper hasn't been built yet — for now, call your framework's own client-side trigger function directly with the <code>wc_libs:</code>-prefixed name, or add the wrapper yourself in <code>_custom/client.lua</code>.
     </div>
 
     <hr class="divider">

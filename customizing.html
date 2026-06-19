@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Custom Overrides — wc_lib</title>
-<meta name="description" content="How to extend wc_lib safely using the _custom override folder.">
+<title>Custom Overrides — Wild Country Libs</title>
+<meta name="description" content="How to extend wc_libs safely using the _custom override folder.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
@@ -13,14 +13,14 @@
 <body>
 
 <div class="topbar">
-  <div class="topbar-brand">&#129312; <span>wc_lib</span></div>
+  <div class="topbar-brand">&#129312; <span>Wild Country Libs</span></div>
   <button class="topbar-toggle" data-sidebar-toggle>Menu</button>
 </div>
 
 <div class="shell">
 
 <nav class="sidebar">
-  <div class="brand"><span class="brand-mark">wc<span class="accent">_lib</span></span></div>
+  <div class="brand"><span class="brand-mark">Wild Country<span class="accent"> Libs</span></span></div>
   <span class="brand-sub">Green Studio &middot; RedM</span>
   <div class="nav-group">
     <span class="nav-label">Start here</span>
@@ -62,10 +62,10 @@
   <main class="main">
     <span class="eyebrow">Reference</span>
     <h1 class="page-title">Custom Overrides</h1>
-    <p class="page-lede">Two files exist specifically so your project-specific additions survive a wc_lib update: <code>_custom/client.lua</code> and <code>_custom/server.lua</code>. They load last, after the rest of wc_lib has already been assembled.</p>
+    <p class="page-lede">Two files exist specifically so your project-specific additions survive a wc_libs update: <code>_custom/client.lua</code> and <code>_custom/server.lua</code>. They load last, after the rest of wc_libs has already been assembled.</p>
 
     <div class="note">
-      <strong>Why a separate folder instead of editing the modules directly?</strong> If you patch <code>server/modules/money.lua</code> by hand and later pull a wc_lib update, your change gets overwritten. Anything in <code>_custom/</code> stays untouched — you only need to glance at these two files after an update, not the whole lib.
+      <strong>Why a separate folder instead of editing the modules directly?</strong> If you patch <code>server/modules/money.lua</code> by hand and later pull a wc_libs update, your change gets overwritten. Anything in <code>_custom/</code> stays untouched — you only need to glance at these two files after an update, not the whole lib.
     </div>
 
     <h2>Adding a new function</h2>
@@ -73,11 +73,11 @@
 
     <div class="code-block">
       <div class="code-block-head">
-        <span class="code-block-tag">wc_lib/_custom/server.lua</span>
+        <span class="code-block-tag">wc_libs/_custom/server.lua</span>
         <button class="copy-btn" type="button">copy</button>
       </div>
       <pre><code>WCLib.GetHonorLevel = <span class="tok-kw">function</span>(source)
-  <span class="tok-kw">local</span> ch = <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">GetCharacter</span>(source)
+  <span class="tok-kw">local</span> ch = WCLib.<span class="tok-fn">GetCharacter</span>(source)
   <span class="tok-kw">if</span> <span class="tok-kw">not</span> ch <span class="tok-kw">or</span> <span class="tok-kw">not</span> ch.skills <span class="tok-kw">then</span> <span class="tok-kw">return</span> <span class="tok-num">1</span> <span class="tok-kw">end</span>
   <span class="tok-kw">local</span> honor = ch.skills[<span class="tok-str">"Honor"</span>]
   <span class="tok-kw">return</span> honor <span class="tok-kw">and</span> honor.Level <span class="tok-kw">or</span> <span class="tok-num">1</span>
@@ -86,14 +86,14 @@
 <span class="tok-fn">exports</span>(<span class="tok-str">'GetHonorLevel'</span>, WCLib.GetHonorLevel)</code></pre>
     </div>
 
-    <p>Now every resource on the server can call <code>exports.wc_lib:GetHonorLevel(source)</code>, even though it's specific to your project and not part of the core lib.</p>
+    <p>Now every resource on the server can call <code>wc:GetHonorLevel(source)</code>, even though it's specific to your project and not part of the core lib.</p>
 
     <h2>Overriding existing behaviour</h2>
     <p>Same pattern, just reassigning a field that already exists. Useful if your VORP server tracks something (like job duty status) that the stock adapter doesn't have a confirmed event/field for.</p>
 
     <div class="code-block">
       <div class="code-block-head">
-        <span class="code-block-tag">wc_lib/_custom/server.lua</span>
+        <span class="code-block-tag">wc_libs/_custom/server.lua</span>
         <button class="copy-btn" type="button">copy</button>
       </div>
       <pre><code><span class="tok-kw">local</span> originalGetJob = WCLib.GetJob
@@ -111,7 +111,7 @@ WCLib.GetJob = <span class="tok-kw">function</span>(source)
     </div>
 
     <div class="note warn">
-      <strong>Re-export after overriding.</strong> Reassigning <code>WCLib.GetJob</code> alone doesn't change what <code>exports.wc_lib:GetJob(...)</code> calls from other resources — exports are bound at registration time. Always call <code>exports('GetJob', WCLib.GetJob)</code> again after changing the field, as shown above.
+      <strong>Re-export after overriding.</strong> Reassigning <code>WCLib.GetJob</code> alone doesn't change what <code>wc:GetJob(...)</code> calls from other resources — exports are bound at registration time. Always call <code>exports('GetJob', WCLib.GetJob)</code> again after changing the field, as shown above.
     </div>
 
     <h2>When to graduate something out of Raw</h2>

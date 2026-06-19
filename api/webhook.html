@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Discord Webhooks — wc_lib</title>
-<meta name="description" content="SendWebhook reference for wc_lib, Green Studio branded Discord logging.">
+<title>Discord Webhooks — Wild Country Libs</title>
+<meta name="description" content="SendWebhook reference for wc_libs, Green Studio branded Discord logging.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/style.css">
@@ -13,14 +13,14 @@
 <body>
 
 <div class="topbar">
-  <div class="topbar-brand">&#129312; <span>wc_lib</span></div>
+  <div class="topbar-brand">&#129312; <span>Wild Country Libs</span></div>
   <button class="topbar-toggle" data-sidebar-toggle>Menu</button>
 </div>
 
 <div class="shell">
 
 <nav class="sidebar">
-  <div class="brand"><span class="brand-mark">wc<span class="accent">_lib</span></span></div>
+  <div class="brand"><span class="brand-mark">Wild Country<span class="accent"> Libs</span></span></div>
   <span class="brand-sub">Green Studio &middot; RedM</span>
   <div class="nav-group">
     <span class="nav-label">Start here</span>
@@ -99,7 +99,7 @@
   decline  = <span class="tok-num">0x9B59B6</span>, <span class="tok-com">-- purple, selfless act</span>
 }
 
-<span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">SendWebhook</span>(
+wc:<span class="tok-fn">SendWebhook</span>(
   source,
   Config.WebhookUrl,
   <span class="tok-str">"Encounter"</span>,
@@ -107,7 +107,7 @@
   {
     { <span class="tok-str">"Encounter"</span>,    <span class="tok-str">"Wagon Breakdown"</span> },
     { <span class="tok-str">"Trust Score"</span>,  <span class="tok-str">"80/100"</span> },
-    { <span class="tok-str">"Money Earned"</span>, <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">FormatMoney</span>(<span class="tok-num">50</span>) },
+    { <span class="tok-str">"Money Earned"</span>, wc:<span class="tok-fn">FormatMoney</span>(<span class="tok-num">50</span>) },
     { <span class="tok-str">"XP Earned"</span>,     <span class="tok-num">8</span> },
   },
   colorMap
@@ -146,13 +146,13 @@ Discord: &lt;@123456789012345678&gt;</code></pre>
             <span class="code-block-tag">example</span>
             <button class="copy-btn" type="button">copy</button>
           </div>
-          <pre><code><span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">FormatMoney</span>(<span class="tok-num">12.5</span>) <span class="tok-com">-- "$12.50"</span></code></pre>
+          <pre><code>wc:<span class="tok-fn">FormatMoney</span>(<span class="tok-num">12.5</span>) <span class="tok-com">-- "$12.50"</span></code></pre>
         </div>
       </div>
     </div>
 
     <h2>How the embed sender picks a path</h2>
-    <p>On VORP, wc_lib prefers <code>Core.AddWebhook</code> when it's available, since that's already the pattern <code>wc_encounter</code> uses. If it's missing, or you're on RSG, it falls back to a manual <code>PerformHttpRequest</code> POST with a Green Studio branded payload — same visual result either way.</p>
+    <p>On VORP, wc_libs prefers <code>Core.AddWebhook</code> when it's available, since that's already the pattern <code>wc_encounter</code> uses. If it's missing, or you're on RSG, it falls back to a manual <code>PerformHttpRequest</code> POST with a Green Studio branded payload — same visual result either way.</p>
 
     <hr class="divider">
 

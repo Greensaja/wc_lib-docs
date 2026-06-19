@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Full Example Resource — wc_lib</title>
-<meta name="description" content="A complete worked wc_lib resource example, side by side with the original.">
+<title>Full Example Resource — Wild Country Libs</title>
+<meta name="description" content="A complete worked wc_libs resource example, side by side with the original.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/style.css">
@@ -13,14 +13,14 @@
 <body>
 
 <div class="topbar">
-  <div class="topbar-brand">&#129312; <span>wc_lib</span></div>
+  <div class="topbar-brand">&#129312; <span>Wild Country Libs</span></div>
   <button class="topbar-toggle" data-sidebar-toggle>Menu</button>
 </div>
 
 <div class="shell">
 
 <nav class="sidebar">
-  <div class="brand"><span class="brand-mark">wc<span class="accent">_lib</span></span></div>
+  <div class="brand"><span class="brand-mark">Wild Country<span class="accent"> Libs</span></span></div>
   <span class="brand-sub">Green Studio &middot; RedM</span>
   <div class="nav-group">
     <span class="nav-label">Start here</span>
@@ -86,6 +86,7 @@ lua54 <span class="tok-str">'yes'</span>
 name <span class="tok-str">'my_injured_traveler'</span>
 
 shared_scripts {
+  <span class="tok-str">'@wc_libs/init.lua'</span>,
   <span class="tok-str">'config.lua'</span>,
 }
 
@@ -120,39 +121,39 @@ Config.NpcModels    = { <span class="tok-str">"a_m_m_armtownfolk_01"</span>, <sp
   <span class="tok-kw">local</span> playerPos = <span class="tok-fn">GetEntityCoords</span>(<span class="tok-fn">PlayerPedId</span>())
   <span class="tok-kw">local</span> spawnPos  = playerPos + vector3(<span class="tok-num">5.0</span>, <span class="tok-num">0.0</span>, <span class="tok-num">0.0</span>)
 
-  <span class="tok-kw">local</span> hash = <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">LoadAnyModel</span>(Config.NpcModels)
+  <span class="tok-kw">local</span> hash = wc:<span class="tok-fn">LoadAnyModel</span>(Config.NpcModels)
   <span class="tok-kw">if</span> <span class="tok-kw">not</span> hash <span class="tok-kw">then</span> <span class="tok-kw">return</span> <span class="tok-kw">end</span>
 
-  <span class="tok-kw">local</span> ped = <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">SpawnPed</span>(hash, spawnPos.x, spawnPos.y, spawnPos.z, <span class="tok-num">0.0</span>, <span class="tok-kw">true</span>, <span class="tok-kw">true</span>)
+  <span class="tok-kw">local</span> ped = wc:<span class="tok-fn">SpawnPed</span>(hash, spawnPos.x, spawnPos.y, spawnPos.z, <span class="tok-num">0.0</span>, <span class="tok-kw">true</span>, <span class="tok-kw">true</span>)
   <span class="tok-kw">if</span> <span class="tok-kw">not</span> ped <span class="tok-kw">then</span> <span class="tok-kw">return</span> <span class="tok-kw">end</span>
 
-  <span class="tok-kw">local</span> prompt = <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">CreatePrompt</span>(<span class="tok-str">"Tend Wounds [G]"</span>)
-  <span class="tok-kw">local</span> blip   = <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">CreateBlip</span>(spawnPos.x, spawnPos.y, spawnPos.z, <span class="tok-str">"Injured Traveler"</span>)
+  <span class="tok-kw">local</span> prompt = wc:<span class="tok-fn">CreatePrompt</span>(<span class="tok-str">"Tend Wounds [G]"</span>)
+  <span class="tok-kw">local</span> blip   = wc:<span class="tok-fn">CreateBlip</span>(spawnPos.x, spawnPos.y, spawnPos.z, <span class="tok-str">"Injured Traveler"</span>)
 
-  <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">Notify</span>(<span class="tok-kw">nil</span>, { title = <span class="tok-str">"Someone needs help nearby."</span> })
+  wc:<span class="tok-fn">Notify</span>(<span class="tok-kw">nil</span>, { title = <span class="tok-str">"Someone needs help nearby."</span> })
 
   <span class="tok-kw">local</span> inRange = <span class="tok-kw">false</span>
   <span class="tok-fn">CreateThread</span>(<span class="tok-kw">function</span>()
     <span class="tok-kw">while</span> <span class="tok-kw">true</span> <span class="tok-kw">do</span>
       <span class="tok-fn">Wait</span>(inRange <span class="tok-kw">and</span> <span class="tok-num">0</span> <span class="tok-kw">or</span> <span class="tok-num">300</span>)
-      <span class="tok-kw">local</span> near = <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">IsPlayerNearCoords</span>(spawnPos, <span class="tok-num">3.0</span>)
+      <span class="tok-kw">local</span> near = wc:<span class="tok-fn">IsPlayerNearCoords</span>(spawnPos, <span class="tok-num">3.0</span>)
 
       <span class="tok-kw">if</span> near <span class="tok-kw">and</span> <span class="tok-kw">not</span> inRange <span class="tok-kw">then</span>
         inRange = <span class="tok-kw">true</span>
-        <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">SetPromptVisible</span>(prompt, <span class="tok-kw">true</span>)
+        wc:<span class="tok-fn">SetPromptVisible</span>(prompt, <span class="tok-kw">true</span>)
       <span class="tok-kw">elseif</span> <span class="tok-kw">not</span> near <span class="tok-kw">and</span> inRange <span class="tok-kw">then</span>
         inRange = <span class="tok-kw">false</span>
-        <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">SetPromptVisible</span>(prompt, <span class="tok-kw">false</span>)
+        wc:<span class="tok-fn">SetPromptVisible</span>(prompt, <span class="tok-kw">false</span>)
       <span class="tok-kw">end</span>
 
-      <span class="tok-kw">if</span> inRange <span class="tok-kw">and</span> <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">IsPromptCompleted</span>(prompt) <span class="tok-kw">then</span>
-        <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">SetPromptVisible</span>(prompt, <span class="tok-kw">false</span>)
-        <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">DeletePrompt</span>(prompt)
-        <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">RemoveBlip</span>(blip)
-        <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">FaceEachOther</span>(ped)
+      <span class="tok-kw">if</span> inRange <span class="tok-kw">and</span> wc:<span class="tok-fn">IsPromptCompleted</span>(prompt) <span class="tok-kw">then</span>
+        wc:<span class="tok-fn">SetPromptVisible</span>(prompt, <span class="tok-kw">false</span>)
+        wc:<span class="tok-fn">DeletePrompt</span>(prompt)
+        wc:<span class="tok-fn">RemoveBlip</span>(blip)
+        wc:<span class="tok-fn">FaceEachOther</span>(ped)
 
         <span class="tok-fn">TriggerServerEvent</span>(<span class="tok-str">'my_injured_traveler:complete'</span>)
-        <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">DeletePed</span>(ped)
+        wc:<span class="tok-fn">DeletePed</span>(ped)
         <span class="tok-kw">break</span>
       <span class="tok-kw">end</span>
     <span class="tok-kw">end</span>
@@ -169,26 +170,26 @@ Config.NpcModels    = { <span class="tok-str">"a_m_m_armtownfolk_01"</span>, <sp
       <pre><code><span class="tok-fn">RegisterNetEvent</span>(<span class="tok-str">'my_injured_traveler:complete'</span>, <span class="tok-kw">function</span>()
   <span class="tok-kw">local</span> src = source
 
-  <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">AddMoney</span>(src, Config.RewardMoney)
-  <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">Notify</span>(src, {
+  wc:<span class="tok-fn">AddMoney</span>(src, Config.RewardMoney)
+  wc:<span class="tok-fn">Notify</span>(src, {
     title = <span class="tok-str">"+$"</span> .. Config.RewardMoney,
     icon  = <span class="tok-str">'itemtype_cash'</span>,
   })
 
-  <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">SendWebhook</span>(
+  wc:<span class="tok-fn">SendWebhook</span>(
     src,
     Config.WebhookUrl,
     <span class="tok-str">"Injured Traveler"</span>,
     <span class="tok-str">"complete"</span>,
     {
-      { <span class="tok-str">"Money Earned"</span>, <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">FormatMoney</span>(Config.RewardMoney) },
+      { <span class="tok-str">"Money Earned"</span>, wc:<span class="tok-fn">FormatMoney</span>(Config.RewardMoney) },
     },
     { complete = <span class="tok-num">0x2ECC71</span> }
   )
 <span class="tok-kw">end</span>)</code></pre>
     </div>
 
-    <p>That's the entire resource — 4 files, ~70 lines, zero direct calls to <code>vorp_core</code> or <code>rsg-core</code>. The only thing that changes between a VORP server and an RSG server is which copy of <code>wc_lib</code> is installed underneath — this resource never knows or cares.</p>
+    <p>That's the entire resource — 4 files, ~70 lines, zero direct calls to <code>vorp_core</code> or <code>rsg-core</code>. The only thing that changes between a VORP server and an RSG server is which copy of <code>wc_libs</code> is installed underneath — this resource never knows or cares.</p>
 
     <hr class="divider">
 

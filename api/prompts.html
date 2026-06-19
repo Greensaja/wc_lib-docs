@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Native Prompts — wc_lib</title>
-<meta name="description" content="CreatePrompt, SetPromptVisible and IsPromptCompleted reference for wc_lib.">
+<title>Native Prompts — Wild Country Libs</title>
+<meta name="description" content="CreatePrompt, SetPromptVisible and IsPromptCompleted reference for wc_libs.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/style.css">
@@ -13,14 +13,14 @@
 <body>
 
 <div class="topbar">
-  <div class="topbar-brand">&#129312; <span>wc_lib</span></div>
+  <div class="topbar-brand">&#129312; <span>Wild Country Libs</span></div>
   <button class="topbar-toggle" data-sidebar-toggle>Menu</button>
 </div>
 
 <div class="shell">
 
 <nav class="sidebar">
-  <div class="brand"><span class="brand-mark">wc<span class="accent">_lib</span></span></div>
+  <div class="brand"><span class="brand-mark">Wild Country<span class="accent"> Libs</span></span></div>
   <span class="brand-sub">Green Studio &middot; RedM</span>
   <div class="nav-group">
     <span class="nav-label">Start here</span>
@@ -124,26 +124,26 @@
         <span class="code-block-tag">client — talk to an NPC within 3.5m</span>
         <button class="copy-btn" type="button">copy</button>
       </div>
-      <pre><code><span class="tok-kw">local</span> prompt = <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">CreatePrompt</span>(<span class="tok-str">"Talk [G]"</span>)
+      <pre><code><span class="tok-kw">local</span> prompt = wc:<span class="tok-fn">CreatePrompt</span>(<span class="tok-str">"Talk [G]"</span>)
 <span class="tok-kw">local</span> inRange = <span class="tok-kw">false</span>
 
 <span class="tok-fn">CreateThread</span>(<span class="tok-kw">function</span>()
   <span class="tok-kw">while</span> <span class="tok-kw">true</span> <span class="tok-kw">do</span>
     <span class="tok-fn">Wait</span>(inRange <span class="tok-kw">and</span> <span class="tok-num">0</span> <span class="tok-kw">or</span> <span class="tok-num">300</span>)
 
-    <span class="tok-kw">local</span> near = <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">IsPlayerNearCoords</span>(npcCoords, <span class="tok-num">3.5</span>)
+    <span class="tok-kw">local</span> near = wc:<span class="tok-fn">IsPlayerNearCoords</span>(npcCoords, <span class="tok-num">3.5</span>)
 
     <span class="tok-kw">if</span> near <span class="tok-kw">and</span> <span class="tok-kw">not</span> inRange <span class="tok-kw">then</span>
       inRange = <span class="tok-kw">true</span>
-      <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">SetPromptVisible</span>(prompt, <span class="tok-kw">true</span>)
+      wc:<span class="tok-fn">SetPromptVisible</span>(prompt, <span class="tok-kw">true</span>)
     <span class="tok-kw">elseif</span> <span class="tok-kw">not</span> near <span class="tok-kw">and</span> inRange <span class="tok-kw">then</span>
       inRange = <span class="tok-kw">false</span>
-      <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">SetPromptVisible</span>(prompt, <span class="tok-kw">false</span>)
+      wc:<span class="tok-fn">SetPromptVisible</span>(prompt, <span class="tok-kw">false</span>)
     <span class="tok-kw">end</span>
 
-    <span class="tok-kw">if</span> inRange <span class="tok-kw">and</span> <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">IsPromptCompleted</span>(prompt) <span class="tok-kw">then</span>
-      <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">SetPromptVisible</span>(prompt, <span class="tok-kw">false</span>)
-      <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">DeletePrompt</span>(prompt)
+    <span class="tok-kw">if</span> inRange <span class="tok-kw">and</span> wc:<span class="tok-fn">IsPromptCompleted</span>(prompt) <span class="tok-kw">then</span>
+      wc:<span class="tok-fn">SetPromptVisible</span>(prompt, <span class="tok-kw">false</span>)
+      wc:<span class="tok-fn">DeletePrompt</span>(prompt)
       <span class="tok-kw">break</span>
     <span class="tok-kw">end</span>
   <span class="tok-kw">end</span>

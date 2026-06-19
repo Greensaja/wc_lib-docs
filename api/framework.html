@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Framework &amp; Raw — wc_lib</title>
-<meta name="description" content="Framework.Get, Framework.Is and Raw escape hatch reference for wc_lib.">
+<title>Framework &amp; Raw — Wild Country Libs</title>
+<meta name="description" content="Framework.Get, Framework.Is and Raw escape hatch reference for wc_libs.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/style.css">
@@ -13,14 +13,14 @@
 <body>
 
 <div class="topbar">
-  <div class="topbar-brand">&#129312; <span>wc_lib</span></div>
+  <div class="topbar-brand">&#129312; <span>Wild Country Libs</span></div>
   <button class="topbar-toggle" data-sidebar-toggle>Menu</button>
 </div>
 
 <div class="shell">
 
 <nav class="sidebar">
-  <div class="brand"><span class="brand-mark">wc<span class="accent">_lib</span></span></div>
+  <div class="brand"><span class="brand-mark">Wild Country<span class="accent"> Libs</span></span></div>
   <span class="brand-sub">Green Studio &middot; RedM</span>
   <div class="nav-group">
     <span class="nav-label">Start here</span>
@@ -81,7 +81,7 @@
             <span class="code-block-tag">example</span>
             <button class="copy-btn" type="button">copy</button>
           </div>
-          <pre><code>print(<span class="tok-fn">exports</span>.wc_lib:Framework_Get()) <span class="tok-com">-- "vorp"</span></code></pre>
+          <pre><code>print(wc:Framework_Get()) <span class="tok-com">-- "vorp"</span></code></pre>
         </div>
       </div>
     </div>
@@ -97,7 +97,7 @@
             <span class="code-block-tag">example — VORP-only feature gate</span>
             <button class="copy-btn" type="button">copy</button>
           </div>
-          <pre><code><span class="tok-kw">if</span> <span class="tok-fn">exports</span>.wc_lib:Framework_Is(<span class="tok-str">'vorp'</span>) <span class="tok-kw">then</span>
+          <pre><code><span class="tok-kw">if</span> wc:Framework_Is(<span class="tok-str">'vorp'</span>) <span class="tok-kw">then</span>
   <span class="tok-com">-- e.g. a Honor-skill feature that only exists in VORP's skill system</span>
 <span class="tok-kw">end</span></code></pre>
         </div>
@@ -118,8 +118,8 @@
             <span class="code-block-tag">example — a VORP-specific setter wc_lib doesn't wrap</span>
             <button class="copy-btn" type="button">copy</button>
           </div>
-          <pre><code><span class="tok-kw">local</span> Core = <span class="tok-fn">exports</span>.wc_lib:Raw_VORP()
-<span class="tok-kw">local</span> ch = <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">GetCharacter</span>(source)
+          <pre><code><span class="tok-kw">local</span> Core = wc:Raw_VORP()
+<span class="tok-kw">local</span> ch = wc:<span class="tok-fn">GetCharacter</span>(source)
 ch.<span class="tok-fn">setNickName</span>(<span class="tok-str">"Stranger"</span>)</code></pre>
         </div>
       </div>

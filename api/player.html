@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Player &amp; Character — wc_lib</title>
-<meta name="description" content="GetPlayer, GetCharacter and GetJob reference for wc_lib.">
+<title>Player &amp; Character — Wild Country Libs</title>
+<meta name="description" content="GetPlayer, GetCharacter and GetJob reference for wc_libs.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/style.css">
@@ -13,14 +13,14 @@
 <body>
 
 <div class="topbar">
-  <div class="topbar-brand">&#129312; <span>wc_lib</span></div>
+  <div class="topbar-brand">&#129312; <span>Wild Country Libs</span></div>
   <button class="topbar-toggle" data-sidebar-toggle>Menu</button>
 </div>
 
 <div class="shell">
 
 <nav class="sidebar">
-  <div class="brand"><span class="brand-mark">wc<span class="accent">_lib</span></span></div>
+  <div class="brand"><span class="brand-mark">Wild Country<span class="accent"> Libs</span></span></div>
   <span class="brand-sub">Green Studio &middot; RedM</span>
   <div class="nav-group">
     <span class="nav-label">Start here</span>
@@ -135,7 +135,7 @@
         <p class="api-desc">Returns the raw underlying character/player object for whichever framework is active — VORP's <code>character</code>, RSG's <code>Player</code>.</p>
       </div>
       <div class="api-body">
-        <p>Use this when you need to call a framework-native method that <code>GetPlayer()</code>'s flat table doesn't expose — for example VORP's <code>character.setSkills(...)</code>. This is the exact object <code>server.lua</code> and <code>webhook.lua</code> in <code>wc_encounter</code> used to resolve by hand, twice, with duplicated logic. wc_lib does it once.</p>
+        <p>Use this when you need to call a framework-native method that <code>GetPlayer()</code>'s flat table doesn't expose — for example VORP's <code>character.setSkills(...)</code>. This is the exact object <code>server.lua</code> and <code>webhook.lua</code> in <code>wc_encounter</code> used to resolve by hand, twice, with duplicated logic. wc_libs does it once.</p>
 
         <table class="param-table">
           <tr><th>Param</th><th>Type</th><th>Description</th></tr>
@@ -160,7 +160,7 @@
             <span class="code-block-tag">after</span>
             <button class="copy-btn" type="button">copy</button>
           </div>
-          <pre><code><span class="tok-kw">local</span> ch = <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">GetCharacter</span>(source)</code></pre>
+          <pre><code><span class="tok-kw">local</span> ch = wc:<span class="tok-fn">GetCharacter</span>(source)</code></pre>
         </div>
       </div>
     </div>
@@ -191,7 +191,7 @@
             <span class="code-block-tag">example — job-gated logic</span>
             <button class="copy-btn" type="button">copy</button>
           </div>
-          <pre><code><span class="tok-kw">local</span> job = <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">GetJob</span>(source)
+          <pre><code><span class="tok-kw">local</span> job = wc:<span class="tok-fn">GetJob</span>(source)
 <span class="tok-kw">if</span> job <span class="tok-kw">and</span> job.name == <span class="tok-str">"bandit"</span> <span class="tok-kw">then</span>
   <span class="tok-kw">return</span> <span class="tok-com">-- bandits don't get roadside encounters</span>
 <span class="tok-kw">end</span></code></pre>
