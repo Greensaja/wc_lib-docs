@@ -1,18 +1,18 @@
-# wc_lib — Documentation
+# wc_libs — Documentation
 
-Documentation site for **wc_lib**, Green Studio's shared RedM library that bridges VORP Core and RSG Core behind one API — write a resource once, run it on either framework.
+Documentation site for **wc_libs**, Green Studio's shared RedM library that bridges VORP Core and RSG Core behind one API — write a resource once, run it on either framework.
 
 **Live site:** https://docs.greenystudio.site/
 
 ## What's here
 
-This repo is just the static documentation site — plain HTML/CSS/JS, no build step, hosted via GitHub Pages. It documents the actual `wc_lib` resource (the Lua library itself lives in your RedM server's `resources` folder, not in this repo).
+This repo is just the static documentation site — plain HTML/CSS/JS, no build step, hosted via GitHub Pages. It documents the actual `wc_libs` resource (the Lua library itself lives in your RedM server's `resources` folder, not in this repo).
 
 ```
 .
 ├── index.html              Landing page + live VORP/RSG code toggle
 ├── getting-started.html    Install & setup
-├── customizing.html        How to extend wc_lib via _custom/
+├── customizing.html        How to extend wc_libs via _custom/
 ├── api/                    Function reference, one page per module
 │   ├── player.html
 │   ├── money.html
@@ -55,9 +55,9 @@ Each API page is hand-written HTML sharing a common sidebar/topbar structure. If
 
 For small content edits (fixing a typo, updating an example), just edit the relevant `.html` file directly and push.
 
-## About wc_lib
+## About wc_libs
 
-wc_lib is maintained alongside [Wild County RP](https://github.com/WILD-COUNTY-RP) RedM resources. It currently bridges:
+wc_libs is maintained alongside [Wild County RP](https://github.com/WILD-COUNTY-RP) RedM resources. It currently bridges:
 
 - **VORP Core** — primary/production framework, full feature fidelity
 - **RSG Core** — supported, best-effort fallback where RSG has no native equivalent (see the [Notify](api/notify.html) and [Revive & Heal](api/revive.html) pages for specifics)
