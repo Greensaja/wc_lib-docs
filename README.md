@@ -2,8 +2,7 @@
 
 Documentation site for **wc_lib**, Green Studio's shared RedM library that bridges VORP Core and RSG Core behind one API — write a resource once, run it on either framework.
 
-**Live site:** `https://<your-github-username>.github.io/<repo-name>/`
-*(update this link once GitHub Pages is enabled — see below)*
+**Live site:** https://docs.greenystudio.site/
 
 ## What's here
 
