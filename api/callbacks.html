@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Callbacks — wc_lib</title>
+<meta name="description" content="RegisterCallback and TriggerCallback reference for wc_lib.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-brand">&#129312; <span>wc_lib</span></div>
+  <button class="topbar-toggle" data-sidebar-toggle>Menu</button>
+</div>
+
+<div class="shell">
+
+<nav class="sidebar">
+  <div class="brand"><span class="brand-mark">wc<span class="accent">_lib</span></span></div>
+  <span class="brand-sub">Green Studio &middot; RedM</span>
+  <div class="nav-group">
+    <span class="nav-label">Start here</span>
+    <ul class="nav-list">
+      <li><a href="../index.html">Overview</a></li>
+      <li><a href="../getting-started.html">Getting started</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Server API</span>
+    <ul class="nav-list">
+      <li><a href="../api/player.html">Player &amp; character</a></li>
+      <li><a href="../api/money.html">Money</a></li>
+      <li><a href="../api/revive.html">Revive &amp; heal</a></li>
+      <li><a href="../api/callbacks.html">Callbacks</a></li>
+      <li><a href="../api/lifecycle.html">Lifecycle events</a></li>
+      <li><a href="../api/webhook.html">Discord webhooks</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Client API</span>
+    <ul class="nav-list">
+      <li><a href="../api/notify.html">Notify</a></li>
+      <li><a href="../api/prompts.html">Native prompts</a></li>
+      <li><a href="../api/entities.html">Peds, horses &amp; props</a></li>
+      <li><a href="../api/distance.html">Distance &amp; proximity</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Reference</span>
+    <ul class="nav-list">
+      <li><a href="../api/framework.html">Framework &amp; Raw</a></li>
+      <li><a href="../examples/full-resource.html">Full example resource</a></li>
+      <li><a href="../customizing.html">Custom overrides</a></li>
+    </ul>
+  </div>
+</nav>
+
+  <main class="main">
+    <span class="eyebrow">Server API</span>
+    <h1 class="page-title">Callbacks</h1>
+    <p class="page-lede">VORP's <code>Callback.Register</code>/<code>TriggerAsync</code> and RSG's <code>CreateCallback</code>/<code>TriggerClientCallback</code> use different signatures underneath. wc_lib normalizes both into one shape, and namespaces every callback name with a fixed <code>wc_lib:</code> prefix so it never collides with a resource's own callback names.</p>
+
+    <div class="note">
+      <strong>You don't type the prefix yourself.</strong> Pass <code>"myCallback"</code> and wc_lib registers/triggers it internally as <code>"wc_lib:myCallback"</code>. Passing an already-prefixed name is safe too — it won't double-prefix.
+    </div>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">RegisterCallback</span>(<span class="tok-num">name</span>, <span class="tok-num">handler</span>)<span class="badge badge-server">server</span></span>
+        <p class="api-desc">Registers a server-side callback.</p>
+      </div>
+      <div class="api-body">
+        <table class="param-table">
+          <tr><th>Param</th><th>Type</th><th>Description</th></tr>
+          <tr><td>name</td><td><span class="param-type">string</span></td><td>Callback name (auto-prefixed).</td></tr>
+          <tr><td>handler</td><td><span class="param-type">function(source, cb, ...)</span></td><td>Call <code>cb(result)</code> when done.</td></tr>
+        </table>
+
+        <div class="code-block">
+          <div class="code-block-head">
+            <span class="code-block-tag">example — job-gate check, ported from wc_encounter</span>
+            <button class="copy-btn" type="button">copy</button>
+          </div>
+          <pre><code><span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">RegisterCallback</span>(<span class="tok-str">'encounter:isJobAllowed'</span>, <span class="tok-kw">function</span>(source, cb)
+  <span class="tok-kw">local</span> job = <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">GetJob</span>(source)
+  <span class="tok-kw">if</span> <span class="tok-kw">not</span> job <span class="tok-kw">then</span> cb(<span class="tok-kw">true</span>); <span class="tok-kw">return</span> <span class="tok-kw">end</span>
+  <span class="tok-kw">for</span> _, blocked <span class="tok-kw">in</span> ipairs(Config.BlacklistJobs <span class="tok-kw">or</span> {}) <span class="tok-kw">do</span>
+    <span class="tok-kw">if</span> job.name == blocked <span class="tok-kw">then</span> cb(<span class="tok-kw">false</span>); <span class="tok-kw">return</span> <span class="tok-kw">end</span>
+  <span class="tok-kw">end</span>
+  cb(<span class="tok-kw">true</span>)
+<span class="tok-kw">end</span>)</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">TriggerCallback</span>(<span class="tok-num">name</span>, <span class="tok-num">source</span>, <span class="tok-num">cb</span>, ...)<span class="badge badge-server">server</span></span>
+        <p class="api-desc">Triggers a client-registered callback from the server (server &rarr; client &rarr; server round trip).</p>
+      </div>
+      <div class="api-body">
+        <table class="param-table">
+          <tr><th>Param</th><th>Type</th><th>Description</th></tr>
+          <tr><td>name</td><td><span class="param-type">string</span></td><td>Callback name (auto-prefixed).</td></tr>
+          <tr><td>source</td><td><span class="param-type">integer</span></td><td>Target player.</td></tr>
+          <tr><td>cb</td><td><span class="param-type">function(result)</span></td><td>Called with the client's response.</td></tr>
+          <tr><td>...</td><td><span class="param-type">any</span></td><td>Extra args passed through to the client handler.</td></tr>
+        </table>
+
+        <div class="fw-toggle-wrap">
+          <span class="fw-toggle-label">underneath, on —</span>
+          <div class="fw-toggle">
+            <button type="button" class="fw-vorp" data-fw-set="vorp">VORP</button>
+            <button type="button" class="fw-rsg" data-fw-set="rsg">RSG</button>
+          </div>
+        </div>
+        <div class="code-block" style="margin-top:14px;">
+          <div data-fw-panel="vorp">
+            <div class="code-block-head"><span class="code-block-tag">vorp_core</span></div>
+            <pre><code>Core.Callback.<span class="tok-fn">TriggerAsync</span>(name, source, cb, ...)</code></pre>
+          </div>
+          <div data-fw-panel="rsg">
+            <div class="code-block-head"><span class="code-block-tag">rsg-core</span></div>
+            <pre><code>RSGCore.Functions.<span class="tok-fn">TriggerClientCallback</span>(name, source, cb, ...)</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="note warn">
+      <strong>Client-side trigger helper not included in v1.</strong> Server-side <code>RegisterCallback</code>/<code>TriggerCallback</code> are ready to use. A matching client-side "trigger a server callback" wrapper hasn't been built yet — for now, call your framework's own client-side trigger function directly with the <code>wc_lib:</code>-prefixed name, or add the wrapper yourself in <code>_custom/client.lua</code>.
+    </div>
+
+    <hr class="divider">
+
+    <div class="page-nav">
+      <a href="revive.html"><span class="dir">&larr; back</span>Revive &amp; heal</a>
+      <a class="right" href="lifecycle.html"><span class="dir">next &rarr;</span>Lifecycle events</a>
+    </div>
+
+  </main>
+</div>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

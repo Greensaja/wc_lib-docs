@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>wc_lib — One API, Two Frameworks</title>
+<meta name="description" content="wc_lib is a shared RedM library that bridges VORP and RSG Core behind one API, so you write your resource once.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-brand">🤠 <span>wc_lib</span></div>
+  <button class="topbar-toggle" data-sidebar-toggle>Menu</button>
+</div>
+
+<div class="shell">
+
+  <!-- ============ SIDEBAR ============ -->
+  <nav class="sidebar">
+    <div class="brand">
+      <span class="brand-mark">wc<span class="accent">_lib</span></span>
+    </div>
+    <span class="brand-sub">Green Studio · RedM</span>
+
+    <div class="nav-group">
+      <span class="nav-label">Start here</span>
+      <ul class="nav-list">
+        <li><a href="index.html">Overview</a></li>
+        <li><a href="getting-started.html">Getting started</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-label">Server API</span>
+      <ul class="nav-list">
+        <li><a href="api/player.html">Player &amp; character</a></li>
+        <li><a href="api/money.html">Money</a></li>
+        <li><a href="api/revive.html">Revive &amp; heal</a></li>
+        <li><a href="api/callbacks.html">Callbacks</a></li>
+        <li><a href="api/lifecycle.html">Lifecycle events</a></li>
+        <li><a href="api/webhook.html">Discord webhooks</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-label">Client API</span>
+      <ul class="nav-list">
+        <li><a href="api/notify.html">Notify</a></li>
+        <li><a href="api/prompts.html">Native prompts</a></li>
+        <li><a href="api/entities.html">Peds, horses &amp; props</a></li>
+        <li><a href="api/distance.html">Distance &amp; proximity</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
+      <span class="nav-label">Reference</span>
+      <ul class="nav-list">
+        <li><a href="api/framework.html">Framework &amp; Raw</a></li>
+        <li><a href="examples/full-resource.html">Full example resource</a></li>
+        <li><a href="customizing.html">Custom overrides</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ============ MAIN ============ -->
+  <main class="main" style="max-width:none; padding:0;">
+
+    <section class="hero">
+      <div class="hero-kicker">wc_lib · shared framework library</div>
+      <h1 class="hero-title">Write the resource once.<br>Run it on <span class="accent">VORP or RSG</span>.</h1>
+      <p class="hero-lede">wc_lib sits between your RedM resources and whichever core framework the server runs. One set of functions for player data, money, notifications, prompts, and Discord logging — the lib figures out the rest.</p>
+
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="getting-started.html">Get started →</a>
+        <a class="btn btn-secondary" href="examples/full-resource.html">See a full example</a>
+      </div>
+
+      <!-- Signature interaction: live framework swap right on the
+           landing page, before any explanation, so the value
+           proposition is felt before it's read. -->
+      <div class="code-block">
+        <div class="code-block-head">
+          <span class="code-block-tag">server · give a reward</span>
+          <button class="copy-btn" type="button">copy</button>
+        </div>
+        <pre><code><span class="tok-com">-- same call, every server</span>
+<span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">AddMoney</span>(source, <span class="tok-num">50</span>)
+<span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">Notify</span>(source, { title = <span class="tok-str">"+$50"</span> })</code></pre>
+      </div>
+
+      <div class="fw-toggle-wrap">
+        <span class="fw-toggle-label">wc_lib does this underneath, on —</span>
+        <div class="fw-toggle">
+          <button type="button" class="fw-vorp" data-fw-set="vorp">VORP</button>
+          <button type="button" class="fw-rsg" data-fw-set="rsg">RSG</button>
+        </div>
+      </div>
+
+      <div class="code-block" style="margin-top:14px;">
+        <div data-fw-panel="vorp">
+          <div class="code-block-head">
+            <span class="code-block-tag">vorp_core, underneath</span>
+          </div>
+          <pre><code><span class="tok-com">-- VORP: currency index 0 = cash</span>
+character.<span class="tok-fn">addCurrency</span>(<span class="tok-num">0</span>, <span class="tok-num">50</span>)
+Core.<span class="tok-fn">NotifyAvanced</span>(source, <span class="tok-str">"+$50"</span>, <span class="tok-str">'itemtype_textures'</span>, <span class="tok-str">'itemtype_cash'</span>, <span class="tok-str">'COLOR_WHITE'</span>, <span class="tok-num">4000</span>)</code></pre>
+        </div>
+        <div data-fw-panel="rsg">
+          <div class="code-block-head">
+            <span class="code-block-tag">rsg-core, underneath</span>
+          </div>
+          <pre><code><span class="tok-com">-- RSG: named money type</span>
+Player.Functions.<span class="tok-fn">AddMoney</span>(<span class="tok-str">'cash'</span>, <span class="tok-num">50</span>)
+lib.<span class="tok-fn">notify</span>({ title = <span class="tok-str">"+$50"</span>, type = <span class="tok-str">'success'</span> })</code></pre>
+        </div>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat"><span class="num">2</span><span class="label">frameworks bridged</span></div>
+        <div class="stat"><span class="num">30+</span><span class="label">functions exported</span></div>
+        <div class="stat"><span class="num">1</span><span class="label">resource to ensure first</span></div>
+      </div>
+    </section>
+
+    <div class="main" style="padding-top:0;">
+
+      <h2>Why wc_lib exists</h2>
+      <p>Most RedM resources are written hard against one framework's exports. Switch cores — or just write a second resource for a server that runs the other one — and every <code>character.addCurrency</code> or <code>Player.Functions.AddMoney</code> call has to be found and rewritten by hand. wc_lib removes that step: your resource calls <code>wc_lib</code>, and <code>wc_lib</code> calls whichever core is actually running.</p>
+
+      <div class="feature-grid">
+        <div class="feature-card">
+          <h3><span class="feature-glyph">→</span> One API surface</h3>
+          <p>GetMoney, GetPlayer, GetJob, Notify, Revive — call the same function regardless of which core is installed.</p>
+        </div>
+        <div class="feature-card">
+          <h3><span class="feature-glyph">→</span> Auto-detected, overridable</h3>
+          <p>wc_lib checks which core resource is running on start. Force it with one config flag if you ever need to.</p>
+        </div>
+        <div class="feature-card">
+          <h3><span class="feature-glyph">→</span> Nothing hidden</h3>
+          <p>Need something the bridge doesn't cover? <code>WCLib.Raw.VORP()</code> and <code>WCLib.Raw.RSG()</code> hand you the native core object directly.</p>
+        </div>
+        <div class="feature-card">
+          <h3><span class="feature-glyph">→</span> Built from real resources</h3>
+          <p>Every helper — prompts, blips, ped spawning, Discord embeds — was extracted from working Wild County RP code, not written speculatively.</p>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <h2>Browse the API</h2>
+      <p>Grouped the way you'll actually reach for it — server-side player/money/data on one side, client-side world/UI helpers on the other.</p>
+
+      <div class="module-grid">
+        <a class="module-card" href="api/player.html">
+          <span class="m-name">Player &amp; character</span>
+          <span class="m-desc">GetPlayer, GetCharacter, GetJob</span>
+        </a>
+        <a class="module-card" href="api/money.html">
+          <span class="m-name">Money</span>
+          <span class="m-desc">GetMoney, AddMoney, RemoveMoney, GetGold</span>
+        </a>
+        <a class="module-card" href="api/notify.html">
+          <span class="m-name">Notify</span>
+          <span class="m-desc">17 VORP variants, RSG best-fit fallback</span>
+        </a>
+        <a class="module-card" href="api/prompts.html">
+          <span class="m-name">Native prompts</span>
+          <span class="m-desc">CreatePrompt, IsPromptCompleted</span>
+        </a>
+        <a class="module-card" href="api/entities.html">
+          <span class="m-name">Peds, horses &amp; props</span>
+          <span class="m-desc">SpawnPed, SpawnHorse, SpawnProp</span>
+        </a>
+        <a class="module-card" href="api/distance.html">
+          <span class="m-name">Distance &amp; proximity</span>
+          <span class="m-desc">GetDistance, IsNearCoords</span>
+        </a>
+        <a class="module-card" href="api/webhook.html">
+          <span class="m-name">Discord webhooks</span>
+          <span class="m-desc">SendWebhook, Green Studio styling</span>
+        </a>
+        <a class="module-card" href="api/callbacks.html">
+          <span class="m-name">Callbacks</span>
+          <span class="m-desc">RegisterCallback, TriggerCallback</span>
+        </a>
+        <a class="module-card" href="api/lifecycle.html">
+          <span class="m-name">Lifecycle events</span>
+          <span class="m-desc">OnPlayerLoaded, OnJobUpdate</span>
+        </a>
+      </div>
+
+    </div>
+
+    <footer class="site-footer">
+      <span>wc_lib v1.0.0 — Green Studio</span>
+      <span>Built for Wild County RP</span>
+    </footer>
+
+  </main>
+</div>
+
+<script src="js/main.js"></script>
+</body>
+</html>

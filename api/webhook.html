@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Discord Webhooks — wc_lib</title>
+<meta name="description" content="SendWebhook reference for wc_lib, Green Studio branded Discord logging.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-brand">&#129312; <span>wc_lib</span></div>
+  <button class="topbar-toggle" data-sidebar-toggle>Menu</button>
+</div>
+
+<div class="shell">
+
+<nav class="sidebar">
+  <div class="brand"><span class="brand-mark">wc<span class="accent">_lib</span></span></div>
+  <span class="brand-sub">Green Studio &middot; RedM</span>
+  <div class="nav-group">
+    <span class="nav-label">Start here</span>
+    <ul class="nav-list">
+      <li><a href="../index.html">Overview</a></li>
+      <li><a href="../getting-started.html">Getting started</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Server API</span>
+    <ul class="nav-list">
+      <li><a href="../api/player.html">Player &amp; character</a></li>
+      <li><a href="../api/money.html">Money</a></li>
+      <li><a href="../api/revive.html">Revive &amp; heal</a></li>
+      <li><a href="../api/callbacks.html">Callbacks</a></li>
+      <li><a href="../api/lifecycle.html">Lifecycle events</a></li>
+      <li><a href="../api/webhook.html">Discord webhooks</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Client API</span>
+    <ul class="nav-list">
+      <li><a href="../api/notify.html">Notify</a></li>
+      <li><a href="../api/prompts.html">Native prompts</a></li>
+      <li><a href="../api/entities.html">Peds, horses &amp; props</a></li>
+      <li><a href="../api/distance.html">Distance &amp; proximity</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Reference</span>
+    <ul class="nav-list">
+      <li><a href="../api/framework.html">Framework &amp; Raw</a></li>
+      <li><a href="../examples/full-resource.html">Full example resource</a></li>
+      <li><a href="../customizing.html">Custom overrides</a></li>
+    </ul>
+  </div>
+</nav>
+
+  <main class="main">
+    <span class="eyebrow">Server API</span>
+    <h1 class="page-title">Discord Webhooks</h1>
+    <p class="page-lede">A generalized version of the embed style already used in <code>wc_encounter</code> — a clean monospace report inside a code block, action-to-colour mapping, a Discord mention appended below. Green Studio branded by default.</p>
+
+    <div class="note warn">
+      <strong>server_scripts only.</strong> This module never loads on the client. Webhook URLs and the send logic stay entirely server-side, by construction — not by convention you have to remember.
+    </div>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">SendWebhook</span>(<span class="tok-num">source</span>, <span class="tok-num">url</span>, <span class="tok-num">resourceLabel</span>, <span class="tok-num">action</span>, fields?, colorMap?)<span class="badge badge-server">server</span></span>
+        <p class="api-desc">Sends a styled Discord embed describing something a player just did.</p>
+      </div>
+      <div class="api-body">
+        <table class="param-table">
+          <tr><th>Param</th><th>Type</th><th>Description</th></tr>
+          <tr><td>source</td><td><span class="param-type">integer</span></td><td>Player the log entry is about.</td></tr>
+          <tr><td>url</td><td><span class="param-type">string</span></td><td>Discord webhook URL to POST to.</td></tr>
+          <tr><td>resourceLabel</td><td><span class="param-type">string</span></td><td>Shown as the title prefix — e.g. <code>"Encounter"</code> becomes <code>"Encounter &bull; Completed"</code>.</td></tr>
+          <tr><td>action</td><td><span class="param-type">string</span></td><td>Short key like <code>"complete"</code> — title-cased automatically.</td></tr>
+          <tr><td>fields</td><td><span class="param-type">{ {key, value}, ... } | nil</span></td><td>Ordered array of pairs, rendered as aligned rows.</td></tr>
+          <tr><td>colorMap</td><td><span class="param-type">{ [action] = hexColor } | nil</span></td><td>Per-action colour override.</td></tr>
+        </table>
+
+        <div class="note">
+          <strong>Why an array of pairs, not a table?</strong> Lua's <code>{ key = value }</code> tables don't preserve insertion order — so <code>fields</code> takes <code>{{"Money", 50}, {"XP", 10}}</code> instead, to keep your embed rows in the order you wrote them.
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-head">
+            <span class="code-block-tag">example — reward payout log</span>
+            <button class="copy-btn" type="button">copy</button>
+          </div>
+          <pre><code><span class="tok-kw">local</span> colorMap = {
+  complete = <span class="tok-num">0x2ECC71</span>, <span class="tok-com">-- green</span>
+  fail     = <span class="tok-num">0xE74C3C</span>, <span class="tok-com">-- red</span>
+  decline  = <span class="tok-num">0x9B59B6</span>, <span class="tok-com">-- purple, selfless act</span>
+}
+
+<span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">SendWebhook</span>(
+  source,
+  Config.WebhookUrl,
+  <span class="tok-str">"Encounter"</span>,
+  <span class="tok-str">"complete"</span>,
+  {
+    { <span class="tok-str">"Encounter"</span>,    <span class="tok-str">"Wagon Breakdown"</span> },
+    { <span class="tok-str">"Trust Score"</span>,  <span class="tok-str">"80/100"</span> },
+    { <span class="tok-str">"Money Earned"</span>, <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">FormatMoney</span>(<span class="tok-num">50</span>) },
+    { <span class="tok-str">"XP Earned"</span>,     <span class="tok-num">8</span> },
+  },
+  colorMap
+)</code></pre>
+        </div>
+
+        <p style="margin-top:18px;">Renders as:</p>
+
+        <div class="code-block">
+          <div class="code-block-head"><span class="code-block-tag">resulting embed</span></div>
+          <pre><code><span class="tok-com">Encounter • Completed</span>
+```
+Player            : John Marston
+IGN               : JohnM_RDR
+Character ID      : 14
+Action            : complete
+Encounter         : Wagon Breakdown
+Trust Score       : 80/100
+Money Earned      : $50.00
+XP Earned         : 8
+Time              : 14:32:08  2026-06-19
+```
+Discord: &lt;@123456789012345678&gt;</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">FormatMoney</span>(<span class="tok-num">value</span>)<span class="badge badge-server">server</span></span>
+        <p class="api-desc">Formats a number as <code>$X.XX</code>, matching the style used throughout wc_lib's own webhook rows.</p>
+      </div>
+      <div class="api-body">
+        <div class="code-block">
+          <div class="code-block-head">
+            <span class="code-block-tag">example</span>
+            <button class="copy-btn" type="button">copy</button>
+          </div>
+          <pre><code><span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">FormatMoney</span>(<span class="tok-num">12.5</span>) <span class="tok-com">-- "$12.50"</span></code></pre>
+        </div>
+      </div>
+    </div>
+
+    <h2>How the embed sender picks a path</h2>
+    <p>On VORP, wc_lib prefers <code>Core.AddWebhook</code> when it's available, since that's already the pattern <code>wc_encounter</code> uses. If it's missing, or you're on RSG, it falls back to a manual <code>PerformHttpRequest</code> POST with a Green Studio branded payload — same visual result either way.</p>
+
+    <hr class="divider">
+
+    <div class="page-nav">
+      <a href="lifecycle.html"><span class="dir">&larr; back</span>Lifecycle events</a>
+      <a class="right" href="notify.html"><span class="dir">next &rarr;</span>Notify</a>
+    </div>
+
+  </main>
+</div>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

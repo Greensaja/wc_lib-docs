@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Getting Started — wc_lib</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-brand">🤠 <span>wc_lib</span></div>
+  <button class="topbar-toggle" data-sidebar-toggle>Menu</button>
+</div>
+
+<div class="shell">
+
+  <nav class="sidebar">
+    <div class="brand"><span class="brand-mark">wc<span class="accent">_lib</span></span></div>
+    <span class="brand-sub">Green Studio · RedM</span>
+
+    <div class="nav-group">
+      <span class="nav-label">Start here</span>
+      <ul class="nav-list">
+        <li><a href="index.html">Overview</a></li>
+        <li><a href="getting-started.html">Getting started</a></li>
+      </ul>
+    </div>
+    <div class="nav-group">
+      <span class="nav-label">Server API</span>
+      <ul class="nav-list">
+        <li><a href="api/player.html">Player &amp; character</a></li>
+        <li><a href="api/money.html">Money</a></li>
+        <li><a href="api/revive.html">Revive &amp; heal</a></li>
+        <li><a href="api/callbacks.html">Callbacks</a></li>
+        <li><a href="api/lifecycle.html">Lifecycle events</a></li>
+        <li><a href="api/webhook.html">Discord webhooks</a></li>
+      </ul>
+    </div>
+    <div class="nav-group">
+      <span class="nav-label">Client API</span>
+      <ul class="nav-list">
+        <li><a href="api/notify.html">Notify</a></li>
+        <li><a href="api/prompts.html">Native prompts</a></li>
+        <li><a href="api/entities.html">Peds, horses &amp; props</a></li>
+        <li><a href="api/distance.html">Distance &amp; proximity</a></li>
+      </ul>
+    </div>
+    <div class="nav-group">
+      <span class="nav-label">Reference</span>
+      <ul class="nav-list">
+        <li><a href="api/framework.html">Framework &amp; Raw</a></li>
+        <li><a href="examples/full-resource.html">Full example resource</a></li>
+        <li><a href="customizing.html">Custom overrides</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="main">
+
+    <span class="eyebrow">Getting started</span>
+    <h1 class="page-title">Install wc_lib</h1>
+    <p class="page-lede">Three steps: drop the resource in, ensure it before anything that depends on it, optionally pin the framework. That's the whole setup.</p>
+
+    <h2>1. Add the resource</h2>
+    <p>Copy the <code>wc_lib</code> folder into your server's <code>resources</code> directory, alongside your other resources — not nested inside one of them.</p>
+
+    <div class="code-block">
+      <div class="code-block-head"><span class="code-block-tag">file tree</span></div>
+      <pre><code>resources/
+├── [core]/
+│   └── vorp_core/
+├── [standalone]/
+│   └── wc_lib/              <span class="tok-com">← here</span>
+└── [wc]/
+    ├── wc_encounter/
+    └── wc_death/</code></pre>
+    </div>
+
+    <h2>2. Ensure it before dependent resources</h2>
+    <p>wc_lib needs to start <em>before</em> any resource that calls its exports. Add it to your <code>server.cfg</code> ahead of everything else with a "wc_" prefix or anything else you plan to migrate.</p>
+
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-tag">server.cfg</span>
+        <button class="copy-btn" type="button">copy</button>
+      </div>
+      <pre><code>ensure vorp_core
+ensure wc_lib
+ensure wc_encounter
+ensure wc_death</code></pre>
+    </div>
+
+    <div class="note">
+      <strong>Order matters.</strong> If a resource calling <code>exports.wc_lib:GetMoney(...)</code> starts before wc_lib has finished initializing, the export won't exist yet. Keep <code>ensure wc_lib</code> directly after your core framework and before anything that uses it.
+    </div>
+
+    <h2>3. Confirm it picked up your framework</h2>
+    <p>On start, wc_lib auto-detects which core is running by checking for <code>vorp_core</code> or <code>rsg-core</code> as a started resource. Check your server console for a line like:</p>
+
+    <div class="code-block">
+      <div class="code-block-head"><span class="code-block-tag">console output</span></div>
+      <pre><code>[wc_lib] server ready — framework: vorp — version: 1.0.0
+[wc_lib] client ready — framework: vorp — version: 1.0.0</code></pre>
+    </div>
+
+    <p>If you see <code>NONE DETECTED</code> instead, your core framework either isn't installed or started after wc_lib. Check your <code>ensure</code> order, or set the framework explicitly — see below.</p>
+
+    <h2>Optional: force the framework</h2>
+    <p>Auto-detection covers almost every setup. The one case it doesn't is running both cores side by side mid-migration — wc_lib will default to VORP and print a warning if it sees both. Override it explicitly in <code>shared/config.lua</code>:</p>
+
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-tag">wc_lib/shared/config.lua</span>
+        <button class="copy-btn" type="button">copy</button>
+      </div>
+      <pre><code><span class="tok-com">-- leave as nil to auto-detect (the default)</span>
+WCLibConfig.ForceFramework = <span class="tok-str">'vorp'</span> <span class="tok-com">-- or 'rsg'</span></code></pre>
+    </div>
+
+    <h2>Calling wc_lib from your own resource</h2>
+    <p>Every function is exposed as a standard FXServer export. No require, no import — just call it the way you'd call any other resource's export.</p>
+
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-tag">server-side, any resource</span>
+        <button class="copy-btn" type="button">copy</button>
+      </div>
+      <pre><code><span class="tok-kw">local</span> money = <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">GetMoney</span>(source)
+<span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">AddMoney</span>(source, <span class="tok-num">50</span>)
+<span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">Notify</span>(source, { title = <span class="tok-str">"+$50"</span> })</code></pre>
+    </div>
+
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-tag">client-side, any resource</span>
+        <button class="copy-btn" type="button">copy</button>
+      </div>
+      <pre><code><span class="tok-kw">local</span> prompt = <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">CreatePrompt</span>(<span class="tok-str">"Talk [G]"</span>)
+<span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">SetPromptVisible</span>(prompt, <span class="tok-kw">true</span>)</code></pre>
+    </div>
+
+    <div class="note">
+      <strong>Tip.</strong> If you want autocomplete-friendly access inside <code>wc_lib</code> itself, the full <code>WCLib</code> table is also available as a global within wc_lib's own files — but from <em>outside</em> the resource, always go through <code>exports.wc_lib:FunctionName(...)</code>.
+    </div>
+
+    <hr class="divider">
+
+    <div class="page-nav">
+      <a href="index.html"><span class="dir">← back</span>Overview</a>
+      <a class="right" href="api/player.html"><span class="dir">next →</span>Player &amp; character API</a>
+    </div>
+
+  </main>
+</div>
+
+<script src="js/main.js"></script>
+</body>
+</html>

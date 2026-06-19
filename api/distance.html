@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Distance &amp; Proximity — wc_lib</title>
+<meta name="description" content="GetDistance and IsNearCoords reference for wc_lib.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-brand">&#129312; <span>wc_lib</span></div>
+  <button class="topbar-toggle" data-sidebar-toggle>Menu</button>
+</div>
+
+<div class="shell">
+
+<nav class="sidebar">
+  <div class="brand"><span class="brand-mark">wc<span class="accent">_lib</span></span></div>
+  <span class="brand-sub">Green Studio &middot; RedM</span>
+  <div class="nav-group">
+    <span class="nav-label">Start here</span>
+    <ul class="nav-list">
+      <li><a href="../index.html">Overview</a></li>
+      <li><a href="../getting-started.html">Getting started</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Server API</span>
+    <ul class="nav-list">
+      <li><a href="../api/player.html">Player &amp; character</a></li>
+      <li><a href="../api/money.html">Money</a></li>
+      <li><a href="../api/revive.html">Revive &amp; heal</a></li>
+      <li><a href="../api/callbacks.html">Callbacks</a></li>
+      <li><a href="../api/lifecycle.html">Lifecycle events</a></li>
+      <li><a href="../api/webhook.html">Discord webhooks</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Client API</span>
+    <ul class="nav-list">
+      <li><a href="../api/notify.html">Notify</a></li>
+      <li><a href="../api/prompts.html">Native prompts</a></li>
+      <li><a href="../api/entities.html">Peds, horses &amp; props</a></li>
+      <li><a href="../api/distance.html">Distance &amp; proximity</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Reference</span>
+    <ul class="nav-list">
+      <li><a href="../api/framework.html">Framework &amp; Raw</a></li>
+      <li><a href="../examples/full-resource.html">Full example resource</a></li>
+      <li><a href="../customizing.html">Custom overrides</a></li>
+    </ul>
+  </div>
+</nav>
+
+  <main class="main">
+    <span class="eyebrow">Client API</span>
+    <h1 class="page-title">Distance &amp; Proximity</h1>
+    <p class="page-lede">The <code>#(GetEntityCoords(playerPed) - GetEntityCoords(ped)) &lt; X</code> check shows up in nearly every encounter file in <code>wc_encounter</code>. These four functions are that pattern, named.</p>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">GetDistance</span>(<span class="tok-num">a</span>, <span class="tok-num">b</span>)<span class="badge badge-client">client</span></span>
+        <p class="api-desc">Actual 3D distance between two points.</p>
+      </div>
+      <div class="api-body">
+        <table class="param-table">
+          <tr><th>Param</th><th>Type</th></tr>
+          <tr><td>a, b</td><td><span class="param-type">vector3 | {x,y,z}</span></td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">SquaredDistance</span>(ax, ay, az, bx, by, bz)<span class="badge badge-client">client</span></span>
+        <p class="api-desc">Squared 3D distance — skips the <code>sqrt</code> call. Use this in hot loops where you only need to compare against a squared radius.</p>
+      </div>
+    </div>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">IsNearCoords</span>(<span class="tok-num">point</span>, <span class="tok-num">center</span>, <span class="tok-num">radius</span>)<span class="badge badge-client">client</span></span>
+        <p class="api-desc">Whether <code>point</code> is within <code>radius</code> of <code>center</code>. Uses the squared comparison internally.</p>
+      </div>
+    </div>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">IsPlayerNearCoords</span>(<span class="tok-num">center</span>, <span class="tok-num">radius</span>)<span class="badge badge-client">client</span></span>
+        <p class="api-desc">Convenience wrapper — checks the local player ped against <code>center</code> without you writing <code>GetEntityCoords(PlayerPedId())</code> at every call site.</p>
+      </div>
+      <div class="api-body">
+        <div class="code-block">
+          <div class="code-block-head">
+            <span class="code-block-tag">before — repeated across 8 encounter files</span>
+          </div>
+          <pre><code><span class="tok-kw">local</span> dist = #(<span class="tok-fn">GetEntityCoords</span>(<span class="tok-fn">PlayerPedId</span>()) - <span class="tok-fn">GetEntityCoords</span>(ped))
+<span class="tok-kw">if</span> dist &lt; <span class="tok-num">3.5</span> <span class="tok-kw">then</span> ... <span class="tok-kw">end</span></code></pre>
+        </div>
+        <div class="code-block">
+          <div class="code-block-head">
+            <span class="code-block-tag">after</span>
+            <button class="copy-btn" type="button">copy</button>
+          </div>
+          <pre><code><span class="tok-kw">if</span> <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">IsPlayerNearCoords</span>(<span class="tok-fn">GetEntityCoords</span>(ped), <span class="tok-num">3.5</span>) <span class="tok-kw">then</span> ... <span class="tok-kw">end</span></code></pre>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="page-nav">
+      <a href="entities.html"><span class="dir">&larr; back</span>Peds, horses &amp; props</a>
+      <a class="right" href="framework.html"><span class="dir">next &rarr;</span>Framework &amp; Raw</a>
+    </div>
+
+  </main>
+</div>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

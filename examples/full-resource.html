@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Full Example Resource — wc_lib</title>
+<meta name="description" content="A complete worked wc_lib resource example, side by side with the original.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-brand">&#129312; <span>wc_lib</span></div>
+  <button class="topbar-toggle" data-sidebar-toggle>Menu</button>
+</div>
+
+<div class="shell">
+
+<nav class="sidebar">
+  <div class="brand"><span class="brand-mark">wc<span class="accent">_lib</span></span></div>
+  <span class="brand-sub">Green Studio &middot; RedM</span>
+  <div class="nav-group">
+    <span class="nav-label">Start here</span>
+    <ul class="nav-list">
+      <li><a href="../index.html">Overview</a></li>
+      <li><a href="../getting-started.html">Getting started</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Server API</span>
+    <ul class="nav-list">
+      <li><a href="../api/player.html">Player &amp; character</a></li>
+      <li><a href="../api/money.html">Money</a></li>
+      <li><a href="../api/revive.html">Revive &amp; heal</a></li>
+      <li><a href="../api/callbacks.html">Callbacks</a></li>
+      <li><a href="../api/lifecycle.html">Lifecycle events</a></li>
+      <li><a href="../api/webhook.html">Discord webhooks</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Client API</span>
+    <ul class="nav-list">
+      <li><a href="../api/notify.html">Notify</a></li>
+      <li><a href="../api/prompts.html">Native prompts</a></li>
+      <li><a href="../api/entities.html">Peds, horses &amp; props</a></li>
+      <li><a href="../api/distance.html">Distance &amp; proximity</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Reference</span>
+    <ul class="nav-list">
+      <li><a href="../api/framework.html">Framework &amp; Raw</a></li>
+      <li><a href="../examples/full-resource.html">Full example resource</a></li>
+      <li><a href="../customizing.html">Custom overrides</a></li>
+    </ul>
+  </div>
+</nav>
+
+  <main class="main">
+    <span class="eyebrow">Reference</span>
+    <h1 class="page-title">Full Example Resource</h1>
+    <p class="page-lede">A small, complete roadside-encounter-style resource — "an injured traveler on the road, tend their wounds, get paid" — built entirely on wc_lib. Runs unmodified on VORP or RSG.</p>
+
+    <div class="fw-toggle-wrap">
+      <span class="fw-toggle-label">this resource will run unmodified on —</span>
+      <div class="fw-toggle">
+        <button type="button" class="fw-vorp" data-fw-set="vorp">VORP</button>
+        <button type="button" class="fw-rsg" data-fw-set="rsg">RSG</button>
+      </div>
+    </div>
+    <p style="margin-top:10px; font-size:0.85rem;" data-fw-panel="vorp" class="fw-active">Toggle above doesn't change the code below — that's the point. The same files work on both.</p>
+
+    <h2>fxmanifest.lua</h2>
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-tag">my_injured_traveler/fxmanifest.lua</span>
+        <button class="copy-btn" type="button">copy</button>
+      </div>
+      <pre><code>fx_version <span class="tok-str">"adamant"</span>
+game <span class="tok-str">"rdr3"</span>
+
+lua54 <span class="tok-str">'yes'</span>
+name <span class="tok-str">'my_injured_traveler'</span>
+
+shared_scripts {
+  <span class="tok-str">'config.lua'</span>,
+}
+
+client_scripts {
+  <span class="tok-str">'client.lua'</span>,
+}
+
+server_scripts {
+  <span class="tok-str">'server.lua'</span>,
+}</code></pre>
+    </div>
+
+    <h2>config.lua</h2>
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-tag">my_injured_traveler/config.lua</span>
+        <button class="copy-btn" type="button">copy</button>
+      </div>
+      <pre><code>Config = {}
+Config.WebhookUrl  = <span class="tok-str">"https://discord.com/api/webhooks/..."</span>
+Config.RewardMoney = <span class="tok-num">25</span>
+Config.NpcModels    = { <span class="tok-str">"a_m_m_armtownfolk_01"</span>, <span class="tok-str">"a_m_m_valrancher_01"</span> }</code></pre>
+    </div>
+
+    <h2>client.lua</h2>
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-tag">my_injured_traveler/client.lua</span>
+        <button class="copy-btn" type="button">copy</button>
+      </div>
+      <pre><code>RegisterCommand(<span class="tok-str">'tendtraveler'</span>, <span class="tok-kw">function</span>()
+  <span class="tok-kw">local</span> playerPos = <span class="tok-fn">GetEntityCoords</span>(<span class="tok-fn">PlayerPedId</span>())
+  <span class="tok-kw">local</span> spawnPos  = playerPos + vector3(<span class="tok-num">5.0</span>, <span class="tok-num">0.0</span>, <span class="tok-num">0.0</span>)
+
+  <span class="tok-kw">local</span> hash = <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">LoadAnyModel</span>(Config.NpcModels)
+  <span class="tok-kw">if</span> <span class="tok-kw">not</span> hash <span class="tok-kw">then</span> <span class="tok-kw">return</span> <span class="tok-kw">end</span>
+
+  <span class="tok-kw">local</span> ped = <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">SpawnPed</span>(hash, spawnPos.x, spawnPos.y, spawnPos.z, <span class="tok-num">0.0</span>, <span class="tok-kw">true</span>, <span class="tok-kw">true</span>)
+  <span class="tok-kw">if</span> <span class="tok-kw">not</span> ped <span class="tok-kw">then</span> <span class="tok-kw">return</span> <span class="tok-kw">end</span>
+
+  <span class="tok-kw">local</span> prompt = <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">CreatePrompt</span>(<span class="tok-str">"Tend Wounds [G]"</span>)
+  <span class="tok-kw">local</span> blip   = <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">CreateBlip</span>(spawnPos.x, spawnPos.y, spawnPos.z, <span class="tok-str">"Injured Traveler"</span>)
+
+  <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">Notify</span>(<span class="tok-kw">nil</span>, { title = <span class="tok-str">"Someone needs help nearby."</span> })
+
+  <span class="tok-kw">local</span> inRange = <span class="tok-kw">false</span>
+  <span class="tok-fn">CreateThread</span>(<span class="tok-kw">function</span>()
+    <span class="tok-kw">while</span> <span class="tok-kw">true</span> <span class="tok-kw">do</span>
+      <span class="tok-fn">Wait</span>(inRange <span class="tok-kw">and</span> <span class="tok-num">0</span> <span class="tok-kw">or</span> <span class="tok-num">300</span>)
+      <span class="tok-kw">local</span> near = <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">IsPlayerNearCoords</span>(spawnPos, <span class="tok-num">3.0</span>)
+
+      <span class="tok-kw">if</span> near <span class="tok-kw">and</span> <span class="tok-kw">not</span> inRange <span class="tok-kw">then</span>
+        inRange = <span class="tok-kw">true</span>
+        <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">SetPromptVisible</span>(prompt, <span class="tok-kw">true</span>)
+      <span class="tok-kw">elseif</span> <span class="tok-kw">not</span> near <span class="tok-kw">and</span> inRange <span class="tok-kw">then</span>
+        inRange = <span class="tok-kw">false</span>
+        <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">SetPromptVisible</span>(prompt, <span class="tok-kw">false</span>)
+      <span class="tok-kw">end</span>
+
+      <span class="tok-kw">if</span> inRange <span class="tok-kw">and</span> <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">IsPromptCompleted</span>(prompt) <span class="tok-kw">then</span>
+        <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">SetPromptVisible</span>(prompt, <span class="tok-kw">false</span>)
+        <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">DeletePrompt</span>(prompt)
+        <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">RemoveBlip</span>(blip)
+        <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">FaceEachOther</span>(ped)
+
+        <span class="tok-fn">TriggerServerEvent</span>(<span class="tok-str">'my_injured_traveler:complete'</span>)
+        <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">DeletePed</span>(ped)
+        <span class="tok-kw">break</span>
+      <span class="tok-kw">end</span>
+    <span class="tok-kw">end</span>
+  <span class="tok-kw">end</span>)
+<span class="tok-kw">end</span>, <span class="tok-kw">false</span>)</code></pre>
+    </div>
+
+    <h2>server.lua</h2>
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-tag">my_injured_traveler/server.lua</span>
+        <button class="copy-btn" type="button">copy</button>
+      </div>
+      <pre><code><span class="tok-fn">RegisterNetEvent</span>(<span class="tok-str">'my_injured_traveler:complete'</span>, <span class="tok-kw">function</span>()
+  <span class="tok-kw">local</span> src = source
+
+  <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">AddMoney</span>(src, Config.RewardMoney)
+  <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">Notify</span>(src, {
+    title = <span class="tok-str">"+$"</span> .. Config.RewardMoney,
+    icon  = <span class="tok-str">'itemtype_cash'</span>,
+  })
+
+  <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">SendWebhook</span>(
+    src,
+    Config.WebhookUrl,
+    <span class="tok-str">"Injured Traveler"</span>,
+    <span class="tok-str">"complete"</span>,
+    {
+      { <span class="tok-str">"Money Earned"</span>, <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">FormatMoney</span>(Config.RewardMoney) },
+    },
+    { complete = <span class="tok-num">0x2ECC71</span> }
+  )
+<span class="tok-kw">end</span>)</code></pre>
+    </div>
+
+    <p>That's the entire resource — 4 files, ~70 lines, zero direct calls to <code>vorp_core</code> or <code>rsg-core</code>. The only thing that changes between a VORP server and an RSG server is which copy of <code>wc_lib</code> is installed underneath — this resource never knows or cares.</p>
+
+    <hr class="divider">
+
+    <div class="page-nav">
+      <a href="../api/framework.html"><span class="dir">&larr; back</span>Framework &amp; Raw</a>
+      <a class="right" href="../customizing.html"><span class="dir">next &rarr;</span>Custom overrides</a>
+    </div>
+
+  </main>
+</div>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

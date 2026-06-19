@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Peds, Horses &amp; Props — wc_lib</title>
+<meta name="description" content="SpawnPed, SpawnHorse, SpawnProp reference for wc_lib.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-brand">&#129312; <span>wc_lib</span></div>
+  <button class="topbar-toggle" data-sidebar-toggle>Menu</button>
+</div>
+
+<div class="shell">
+
+<nav class="sidebar">
+  <div class="brand"><span class="brand-mark">wc<span class="accent">_lib</span></span></div>
+  <span class="brand-sub">Green Studio &middot; RedM</span>
+  <div class="nav-group">
+    <span class="nav-label">Start here</span>
+    <ul class="nav-list">
+      <li><a href="../index.html">Overview</a></li>
+      <li><a href="../getting-started.html">Getting started</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Server API</span>
+    <ul class="nav-list">
+      <li><a href="../api/player.html">Player &amp; character</a></li>
+      <li><a href="../api/money.html">Money</a></li>
+      <li><a href="../api/revive.html">Revive &amp; heal</a></li>
+      <li><a href="../api/callbacks.html">Callbacks</a></li>
+      <li><a href="../api/lifecycle.html">Lifecycle events</a></li>
+      <li><a href="../api/webhook.html">Discord webhooks</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Client API</span>
+    <ul class="nav-list">
+      <li><a href="../api/notify.html">Notify</a></li>
+      <li><a href="../api/prompts.html">Native prompts</a></li>
+      <li><a href="../api/entities.html">Peds, horses &amp; props</a></li>
+      <li><a href="../api/distance.html">Distance &amp; proximity</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Reference</span>
+    <ul class="nav-list">
+      <li><a href="../api/framework.html">Framework &amp; Raw</a></li>
+      <li><a href="../examples/full-resource.html">Full example resource</a></li>
+      <li><a href="../customizing.html">Custom overrides</a></li>
+    </ul>
+  </div>
+</nav>
+
+  <main class="main">
+    <span class="eyebrow">Client API</span>
+    <h1 class="page-title">Peds, Horses &amp; Props</h1>
+    <p class="page-lede">Spawn helpers extracted directly from <code>wc_encounter</code>'s eight encounter types. Framework-agnostic — these are pure RedM native wrappers, the same on VORP or RSG.</p>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">SpawnPed</span>(<span class="tok-num">hash</span>, x, y, z, heading?, isMission?, invincible?)<span class="badge badge-client">client</span></span>
+        <p class="api-desc">Spawns a single ped, ground-snapped and outfit-randomized.</p>
+      </div>
+      <div class="api-body">
+        <table class="param-table">
+          <tr><th>Param</th><th>Type</th><th>Description</th></tr>
+          <tr><td>hash</td><td><span class="param-type">number</span></td><td>A loaded model hash — see <a href="#load-model">LoadModel</a>.</td></tr>
+          <tr><td>x, y, z</td><td><span class="param-type">number</span></td><td>Spawn coordinates.</td></tr>
+          <tr><td>heading</td><td><span class="param-type">number | nil</span></td><td>Defaults to 0.</td></tr>
+          <tr><td>isMission</td><td><span class="param-type">boolean | nil</span></td><td>Marks as mission entity — won't get cleaned up by the engine.</td></tr>
+          <tr><td>invincible</td><td><span class="param-type">boolean | nil</span></td><td>Sets invincible + blocks non-temp events.</td></tr>
+        </table>
+
+        <div class="code-block">
+          <div class="code-block-head">
+            <span class="code-block-tag">example</span>
+            <button class="copy-btn" type="button">copy</button>
+          </div>
+          <pre><code><span class="tok-kw">local</span> hash = <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">LoadAnyModel</span>({ <span class="tok-str">"a_m_m_armtownfolk_01"</span>, <span class="tok-str">"a_m_m_valrancher_01"</span> })
+<span class="tok-kw">local</span> ped = <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">SpawnPed</span>(hash, pos.x, pos.y, pos.z, <span class="tok-num">90.0</span>, <span class="tok-kw">true</span>, <span class="tok-kw">true</span>)</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">SpawnHorse</span>(x, y, z, heading?, modelList?)<span class="badge badge-client">client</span></span>
+        <p class="api-desc">Spawns an ambient decoration horse — mission-entity and invincible by default.</p>
+      </div>
+      <div class="api-body">
+        <table class="param-table">
+          <tr><th>Param</th><th>Type</th><th>Description</th></tr>
+          <tr><td>x, y, z</td><td><span class="param-type">number</span></td><td>Spawn coordinates.</td></tr>
+          <tr><td>heading</td><td><span class="param-type">number | nil</span></td><td>Defaults to random.</td></tr>
+          <tr><td>modelList</td><td><span class="param-type">table | nil</span></td><td>Pool of horse model names to try.</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">SpawnProp</span>(<span class="tok-num">modelName</span>, x, y, z, heading?)<span class="badge badge-client">client</span></span>
+        <p class="api-desc">Spawns a frozen, no-collision decoration prop.</p>
+      </div>
+    </div>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">DeletePed</span> / <span class="fname">DeleteVehicle</span>(<span class="tok-num">entity</span>)<span class="badge badge-client">client</span></span>
+        <p class="api-desc">Safely deletes a ped or vehicle — unfreezes and unmarks mission-entity first, so the engine doesn't refuse the delete.</p>
+      </div>
+    </div>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">FaceEachOther</span>(<span class="tok-num">npcPed</span>)<span class="badge badge-client">client</span></span>
+        <p class="api-desc">Turns the player and an NPC to directly face one another — standard "start a conversation" framing.</p>
+      </div>
+    </div>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">PlacePedRelative</span>(<span class="tok-num">childPed</span>, <span class="tok-num">parentPed</span>, offX, offY, offZ, rotZ)<span class="badge badge-client">client</span></span>
+        <p class="api-desc">Positions one ped relative to another using a forward/right/up offset in metres, plus a heading delta. Used for things like "place this NPC right in front of the player, facing them."</p>
+      </div>
+      <div class="api-body">
+        <div class="code-block">
+          <div class="code-block-head">
+            <span class="code-block-tag">example — reward handover positioning</span>
+            <button class="copy-btn" type="button">copy</button>
+          </div>
+          <pre><code><span class="tok-com">-- place the NPC just in front of the player, facing them</span>
+<span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">PlacePedRelative</span>(npcPed, <span class="tok-fn">PlayerPedId</span>(), <span class="tok-num">0.1</span>, <span class="tok-num">0.90</span>, <span class="tok-num">0.09</span>, <span class="tok-num">180.0</span>)</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="api-entry" id="load-model">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">LoadModel</span>(<span class="tok-num">name</span>, timeoutMs?)<span class="badge badge-client">client</span></span>
+        <p class="api-desc">Requests a model and waits for it to load.</p>
+      </div>
+      <div class="api-body">
+        <table class="param-table">
+          <tr><th>Returns</th><th>Type</th></tr>
+          <tr><td>hash</td><td><span class="param-type">number | nil</span> — nil if invalid or timed out</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">LoadAnyModel</span>(<span class="tok-num">pool</span>, timeoutMs?)<span class="badge badge-client">client</span></span>
+        <p class="api-desc">Tries a list of model names in order, returns the first that loads. Useful for ped pools where any one of several models is fine.</p>
+      </div>
+    </div>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">LoadAnimDictSafe</span>(<span class="tok-num">dict</span>, ms?)<span class="badge badge-client">client</span></span>
+        <p class="api-desc">Requests an animation dictionary and waits for it to load. Returns a boolean.</p>
+      </div>
+    </div>
+
+    <h2>Bonus — GPS routes &amp; dialogue camera</h2>
+    <p>Two more world helpers extracted alongside the spawners:</p>
+
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-tag">GPS route to a destination</span>
+        <button class="copy-btn" type="button">copy</button>
+      </div>
+      <pre><code><span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">SetGPSRoute</span>(wagon.x, wagon.y, wagon.z, <span class="tok-str">'COLOR_RED'</span>)
+<span class="tok-com">-- ...</span>
+<span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">ClearGPSRoute</span>()</code></pre>
+    </div>
+
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-tag">scripted dialogue camera</span>
+        <button class="copy-btn" type="button">copy</button>
+      </div>
+      <pre><code><span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">EnableDialogueCamera</span>(npcPed)
+<span class="tok-com">-- ... run your dialogue ...</span>
+<span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">DisableDialogueCamera</span>()</code></pre>
+    </div>
+
+    <hr class="divider">
+
+    <div class="page-nav">
+      <a href="prompts.html"><span class="dir">&larr; back</span>Native prompts</a>
+      <a class="right" href="distance.html"><span class="dir">next &rarr;</span>Distance &amp; proximity</a>
+    </div>
+
+  </main>
+</div>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

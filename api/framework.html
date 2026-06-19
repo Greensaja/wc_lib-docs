@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Framework &amp; Raw — wc_lib</title>
+<meta name="description" content="Framework.Get, Framework.Is and Raw escape hatch reference for wc_lib.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-brand">&#129312; <span>wc_lib</span></div>
+  <button class="topbar-toggle" data-sidebar-toggle>Menu</button>
+</div>
+
+<div class="shell">
+
+<nav class="sidebar">
+  <div class="brand"><span class="brand-mark">wc<span class="accent">_lib</span></span></div>
+  <span class="brand-sub">Green Studio &middot; RedM</span>
+  <div class="nav-group">
+    <span class="nav-label">Start here</span>
+    <ul class="nav-list">
+      <li><a href="../index.html">Overview</a></li>
+      <li><a href="../getting-started.html">Getting started</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Server API</span>
+    <ul class="nav-list">
+      <li><a href="../api/player.html">Player &amp; character</a></li>
+      <li><a href="../api/money.html">Money</a></li>
+      <li><a href="../api/revive.html">Revive &amp; heal</a></li>
+      <li><a href="../api/callbacks.html">Callbacks</a></li>
+      <li><a href="../api/lifecycle.html">Lifecycle events</a></li>
+      <li><a href="../api/webhook.html">Discord webhooks</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Client API</span>
+    <ul class="nav-list">
+      <li><a href="../api/notify.html">Notify</a></li>
+      <li><a href="../api/prompts.html">Native prompts</a></li>
+      <li><a href="../api/entities.html">Peds, horses &amp; props</a></li>
+      <li><a href="../api/distance.html">Distance &amp; proximity</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Reference</span>
+    <ul class="nav-list">
+      <li><a href="../api/framework.html">Framework &amp; Raw</a></li>
+      <li><a href="../examples/full-resource.html">Full example resource</a></li>
+      <li><a href="../customizing.html">Custom overrides</a></li>
+    </ul>
+  </div>
+</nav>
+
+  <main class="main">
+    <span class="eyebrow">Reference</span>
+    <h1 class="page-title">Framework &amp; Raw</h1>
+    <p class="page-lede">For the cases where you genuinely need to know or reach past which framework is running — these two exist so you're never blocked waiting on a wc_lib update.</p>
+
+    <h2>Framework introspection</h2>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">Framework.Get</span>()<span class="badge badge-shared">shared</span></span>
+        <p class="api-desc">Returns the active framework name.</p>
+      </div>
+      <div class="api-body">
+        <table class="param-table">
+          <tr><th>Returns</th><th>Type</th></tr>
+          <tr><td>name</td><td><span class="param-type">'vorp' | 'rsg' | nil</span></td></tr>
+        </table>
+        <div class="code-block">
+          <div class="code-block-head">
+            <span class="code-block-tag">example</span>
+            <button class="copy-btn" type="button">copy</button>
+          </div>
+          <pre><code>print(<span class="tok-fn">exports</span>.wc_lib:Framework_Get()) <span class="tok-com">-- "vorp"</span></code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">Framework.Is</span>(<span class="tok-num">name</span>)<span class="badge badge-shared">shared</span></span>
+        <p class="api-desc">Boolean check against the active framework.</p>
+      </div>
+      <div class="api-body">
+        <div class="code-block">
+          <div class="code-block-head">
+            <span class="code-block-tag">example — VORP-only feature gate</span>
+            <button class="copy-btn" type="button">copy</button>
+          </div>
+          <pre><code><span class="tok-kw">if</span> <span class="tok-fn">exports</span>.wc_lib:Framework_Is(<span class="tok-str">'vorp'</span>) <span class="tok-kw">then</span>
+  <span class="tok-com">-- e.g. a Honor-skill feature that only exists in VORP's skill system</span>
+<span class="tok-kw">end</span></code></pre>
+        </div>
+      </div>
+    </div>
+
+    <h2>Raw escape hatch</h2>
+    <p>Need something the bridge doesn't cover yet — a specific VORP character setter, an RSG export with no wc_lib equivalent? Reach past the bridge entirely.</p>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">Raw.VORP</span>()<span class="badge badge-shared">shared</span></span>
+        <p class="api-desc">Returns VORP's native Core object directly. Returns <code>nil</code> with a console warning if <code>vorp_core</code> isn't running.</p>
+      </div>
+      <div class="api-body">
+        <div class="code-block">
+          <div class="code-block-head">
+            <span class="code-block-tag">example — a VORP-specific setter wc_lib doesn't wrap</span>
+            <button class="copy-btn" type="button">copy</button>
+          </div>
+          <pre><code><span class="tok-kw">local</span> Core = <span class="tok-fn">exports</span>.wc_lib:Raw_VORP()
+<span class="tok-kw">local</span> ch = <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">GetCharacter</span>(source)
+ch.<span class="tok-fn">setNickName</span>(<span class="tok-str">"Stranger"</span>)</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">Raw.RSG</span>()<span class="badge badge-shared">shared</span></span>
+        <p class="api-desc">Returns RSG's native <code>RSGCore</code> object directly. Returns <code>nil</code> with a console warning if <code>rsg-core</code> isn't running.</p>
+      </div>
+    </div>
+
+    <div class="note">
+      <strong>Reaching for Raw often enough?</strong> That's the signal to add a proper wrapped function instead — either contribute it back to wc_lib's modules, or add it once in <code>_custom/</code> so every resource gets the clean version instead of repeating the raw call. See <a href="../customizing.html">Custom overrides</a>.
+    </div>
+
+    <hr class="divider">
+
+    <div class="page-nav">
+      <a href="distance.html"><span class="dir">&larr; back</span>Distance &amp; proximity</a>
+      <a class="right" href="../examples/full-resource.html"><span class="dir">next &rarr;</span>Full example resource</a>
+    </div>
+
+  </main>
+</div>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

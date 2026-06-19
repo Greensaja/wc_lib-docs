@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Player &amp; Character — wc_lib</title>
+<meta name="description" content="GetPlayer, GetCharacter and GetJob reference for wc_lib.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-brand">&#129312; <span>wc_lib</span></div>
+  <button class="topbar-toggle" data-sidebar-toggle>Menu</button>
+</div>
+
+<div class="shell">
+
+<nav class="sidebar">
+  <div class="brand"><span class="brand-mark">wc<span class="accent">_lib</span></span></div>
+  <span class="brand-sub">Green Studio &middot; RedM</span>
+  <div class="nav-group">
+    <span class="nav-label">Start here</span>
+    <ul class="nav-list">
+      <li><a href="../index.html">Overview</a></li>
+      <li><a href="../getting-started.html">Getting started</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Server API</span>
+    <ul class="nav-list">
+      <li><a href="../api/player.html">Player &amp; character</a></li>
+      <li><a href="../api/money.html">Money</a></li>
+      <li><a href="../api/revive.html">Revive &amp; heal</a></li>
+      <li><a href="../api/callbacks.html">Callbacks</a></li>
+      <li><a href="../api/lifecycle.html">Lifecycle events</a></li>
+      <li><a href="../api/webhook.html">Discord webhooks</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Client API</span>
+    <ul class="nav-list">
+      <li><a href="../api/notify.html">Notify</a></li>
+      <li><a href="../api/prompts.html">Native prompts</a></li>
+      <li><a href="../api/entities.html">Peds, horses &amp; props</a></li>
+      <li><a href="../api/distance.html">Distance &amp; proximity</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Reference</span>
+    <ul class="nav-list">
+      <li><a href="../api/framework.html">Framework &amp; Raw</a></li>
+      <li><a href="../examples/full-resource.html">Full example resource</a></li>
+      <li><a href="../customizing.html">Custom overrides</a></li>
+    </ul>
+  </div>
+</nav>
+
+  <main class="main">
+    <span class="eyebrow">Server API</span>
+    <h1 class="page-title">Player &amp; Character</h1>
+    <p class="page-lede">Read player data without caring whether it lives on a VORP character object or an RSG <code>PlayerData</code> table. Always call these fresh — never cache the result across a <code>Wait()</code> or a new thread.</p>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">GetPlayer</span>(<span class="tok-num">source</span>)<span class="badge badge-server">server</span></span>
+        <p class="api-desc">Returns a flat snapshot table of player data. Built fresh on every call.</p>
+      </div>
+      <div class="api-body">
+        <table class="param-table">
+          <tr><th>Param</th><th>Type</th><th>Description</th></tr>
+          <tr><td>source</td><td><span class="param-type">integer</span></td><td>The player's server ID.</td></tr>
+        </table>
+
+        <p style="margin-top:14px;">Returns <code>nil</code> if the player isn't loaded yet. Otherwise:</p>
+
+        <div class="code-block">
+          <div class="code-block-head"><span class="code-block-tag">return shape</span></div>
+          <pre><code>{
+  source    = <span class="tok-num">1</span>,
+  charid    = <span class="tok-str">"ABC123"</span>,
+  firstname = <span class="tok-str">"John"</span>,
+  lastname  = <span class="tok-str">"Marston"</span>,
+  job = {
+    name   = <span class="tok-str">"marshal"</span>,
+    label  = <span class="tok-str">"Marshal"</span>,
+    grade  = <span class="tok-num">1</span>,
+    onduty = <span class="tok-kw">true</span>, <span class="tok-com">-- nil on VORP, see note below</span>
+  },
+  money  = <span class="tok-num">250.0</span>,
+  gold   = <span class="tok-num">0</span>,   <span class="tok-com">-- always nil on RSG</span>
+  rol    = <span class="tok-num">0</span>,   <span class="tok-com">-- always nil on RSG</span>
+  xp     = <span class="tok-num">1200</span>, <span class="tok-com">-- always nil on RSG</span>
+  age    = <span class="tok-num">34</span>,
+  gender = <span class="tok-str">"male"</span>,
+  group  = <span class="tok-str">"user"</span>,
+}</code></pre>
+        </div>
+
+        <div class="fw-toggle-wrap">
+          <span class="fw-toggle-label">underneath, on —</span>
+          <div class="fw-toggle">
+            <button type="button" class="fw-vorp" data-fw-set="vorp">VORP</button>
+            <button type="button" class="fw-rsg" data-fw-set="rsg">RSG</button>
+          </div>
+        </div>
+
+        <div class="code-block" style="margin-top:14px;">
+          <div data-fw-panel="vorp">
+            <div class="code-block-head"><span class="code-block-tag">vorp_core</span></div>
+            <pre><code><span class="tok-kw">local</span> user = Core.<span class="tok-fn">getUser</span>(source)
+<span class="tok-kw">local</span> ch = user.getUsedCharacter
+<span class="tok-com">-- ch.money, ch.gold, ch.rol, ch.job, ch.jobLabel, ch.jobGrade ...</span></code></pre>
+          </div>
+          <div data-fw-panel="rsg">
+            <div class="code-block-head"><span class="code-block-tag">rsg-core</span></div>
+            <pre><code><span class="tok-kw">local</span> Player = RSGCore.Functions.<span class="tok-fn">GetPlayer</span>(source)
+<span class="tok-kw">local</span> pd = Player.PlayerData
+<span class="tok-com">-- pd.money.cash, pd.job.name, pd.job.label, pd.job.grade.level ...</span></code></pre>
+          </div>
+        </div>
+
+        <div class="note">
+          <strong>onduty is currently VORP-incomplete.</strong> VORP doesn't expose duty status on the character object in the docs this lib was built against, so <code>job.onduty</code> is always <code>nil</code> on VORP. It works correctly on RSG. If your VORP server tracks duty separately, wire it in via <code>_custom/server.lua</code>.
+        </div>
+      </div>
+    </div>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">GetCharacter</span>(<span class="tok-num">source</span>)<span class="badge badge-server">server</span></span>
+        <p class="api-desc">Returns the raw underlying character/player object for whichever framework is active — VORP's <code>character</code>, RSG's <code>Player</code>.</p>
+      </div>
+      <div class="api-body">
+        <p>Use this when you need to call a framework-native method that <code>GetPlayer()</code>'s flat table doesn't expose — for example VORP's <code>character.setSkills(...)</code>. This is the exact object <code>server.lua</code> and <code>webhook.lua</code> in <code>wc_encounter</code> used to resolve by hand, twice, with duplicated logic. wc_lib does it once.</p>
+
+        <table class="param-table">
+          <tr><th>Param</th><th>Type</th><th>Description</th></tr>
+          <tr><td>source</td><td><span class="param-type">integer</span></td><td>The player's server ID.</td></tr>
+        </table>
+
+        <div class="code-block">
+          <div class="code-block-head">
+            <span class="code-block-tag">before — duplicated in two files</span>
+          </div>
+          <pre><code><span class="tok-kw">local</span> <span class="tok-fn">function</span> getCharacter(src)
+  <span class="tok-kw">local</span> user = VorpCore.<span class="tok-fn">getUser</span>(src)
+  <span class="tok-kw">if</span> <span class="tok-kw">not</span> user <span class="tok-kw">then</span> <span class="tok-kw">return</span> <span class="tok-kw">nil</span> <span class="tok-kw">end</span>
+  <span class="tok-kw">local</span> c = user.getUsedCharacter
+  <span class="tok-kw">if</span> type(c) == <span class="tok-str">"function"</span> <span class="tok-kw">then</span> c = c(user) <span class="tok-kw">end</span>
+  <span class="tok-kw">return</span> c
+<span class="tok-kw">end</span></code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-head">
+            <span class="code-block-tag">after</span>
+            <button class="copy-btn" type="button">copy</button>
+          </div>
+          <pre><code><span class="tok-kw">local</span> ch = <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">GetCharacter</span>(source)</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">GetJob</span>(<span class="tok-num">source</span>)<span class="badge badge-server">server</span></span>
+        <p class="api-desc">Returns just the job slice of player data.</p>
+      </div>
+      <div class="api-body">
+        <table class="param-table">
+          <tr><th>Param</th><th>Type</th><th>Description</th></tr>
+          <tr><td>source</td><td><span class="param-type">integer</span></td><td>The player's server ID.</td></tr>
+        </table>
+
+        <div class="code-block">
+          <div class="code-block-head"><span class="code-block-tag">return shape</span></div>
+          <pre><code>{
+  name   = <span class="tok-str">"marshal"</span>,
+  label  = <span class="tok-str">"Marshal"</span>,
+  grade  = <span class="tok-num">1</span>,
+  onduty = <span class="tok-kw">true</span>,
+}</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-head">
+            <span class="code-block-tag">example — job-gated logic</span>
+            <button class="copy-btn" type="button">copy</button>
+          </div>
+          <pre><code><span class="tok-kw">local</span> job = <span class="tok-fn">exports</span>.wc_lib:<span class="tok-fn">GetJob</span>(source)
+<span class="tok-kw">if</span> job <span class="tok-kw">and</span> job.name == <span class="tok-str">"bandit"</span> <span class="tok-kw">then</span>
+  <span class="tok-kw">return</span> <span class="tok-com">-- bandits don't get roadside encounters</span>
+<span class="tok-kw">end</span></code></pre>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="page-nav">
+      <a href="../getting-started.html"><span class="dir">&larr; back</span>Getting started</a>
+      <a class="right" href="money.html"><span class="dir">next &rarr;</span>Money</a>
+    </div>
+
+  </main>
+</div>
+
+<script src="../js/main.js"></script>
+</body>
+</html>
