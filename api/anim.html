@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Animations &amp; Scenarios — Wild Country Libs</title>
+<meta name="description" content="Animation and scenario playback helpers for RedM peds — WCLibAnim reference for wc_libs.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-brand">&#129312; <span>Wild Country Libs</span></div>
+  <button class="topbar-toggle" data-sidebar-toggle>Menu</button>
+</div>
+
+<div class="shell">
+
+<nav class="sidebar">
+  <div class="brand"><span class="brand-mark">Wild Country<span class="accent"> Libs</span></span></div>
+  <span class="brand-sub">Green Studio &middot; RedM</span>
+  <div class="nav-group">
+    <span class="nav-label">Start here</span>
+    <ul class="nav-list">
+      <li><a href="../index.html">Overview</a></li>
+      <li><a href="../getting-started.html">Getting started</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Server API</span>
+    <ul class="nav-list">
+      <li><a href="../api/player.html">Player &amp; character</a></li>
+      <li><a href="../api/money.html">Money</a></li>
+      <li><a href="../api/revive.html">Revive &amp; heal</a></li>
+      <li><a href="../api/callbacks.html">Callbacks</a></li>
+      <li><a href="../api/lifecycle.html">Lifecycle events</a></li>
+      <li><a href="../api/webhook.html">Discord webhooks</a></li>
+      <li><a href="../api/nearby.html">Nearby players</a></li>
+      <li><a href="../api/skill.html">Skills</a></li>
+      <li><a href="../api/battlepass.html">Battlepass</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Client API</span>
+    <ul class="nav-list">
+      <li><a href="../api/notify.html">Notify</a></li>
+      <li><a href="../api/topnotify.html">Top Notify</a></li>
+      <li><a href="../api/prompts.html">Native prompts</a></li>
+      <li><a href="../api/entities.html">Peds, horses &amp; props</a></li>
+      <li><a href="../api/distance.html">Distance &amp; proximity</a></li>
+      <li><a class="active" href="../api/anim.html">Animations &amp; scenarios</a></li>
+      <li><a href="../api/emotes.html">Emotes</a></li>
+      <li><a href="../api/zones.html">Zone checks</a></li>
+      <li><a href="../api/wagon.html">Wagons</a></li>
+      <li><a href="../api/dialogue.html">Dialogue (NUI)</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Reference</span>
+    <ul class="nav-list">
+      <li><a href="../api/framework.html">Framework &amp; Raw</a></li>
+      <li><a href="../examples/full-resource.html">Full example resource</a></li>
+      <li><a href="../customizing.html">Custom overrides</a></li>
+    </ul>
+  </div>
+</nav>
+
+  <main class="main">
+    <span class="eyebrow">Client API</span>
+    <h1 class="page-title">Animations &amp; Scenarios</h1>
+    <p class="page-lede">One call to load the dict and play — no more <code>RequestAnimDict</code> boilerplate scattered through every script. Covers one-shot anims, looping anims, world-position anims, and RDR2 scenarios.</p>
+
+    <!-- ─── PlayAnim ─── -->
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">PlayAnim</span>(<span class="tok-num">ped, dict, clip, opts</span>)<span class="badge badge-client">client</span></span>
+        <p class="api-desc">Loads the animation dictionary then plays the clip on <code>ped</code>. Returns <code>true</code> if the animation started.</p>
+      </div>
+      <div class="api-body">
+        <table class="param-table">
+          <tr><th>Param</th><th>Type</th><th>Description</th></tr>
+          <tr><td>ped</td><td><span class="param-type">number</span></td><td>Entity handle.</td></tr>
+          <tr><td>dict</td><td><span class="param-type">string</span></td><td>Animation dictionary name.</td></tr>
+          <tr><td>clip</td><td><span class="param-type">string</span></td><td>Animation clip name.</td></tr>
+          <tr><td>opts</td><td><span class="param-type">table|nil</span></td><td>See options below.</td></tr>
+        </table>
+
+        <table class="param-table" style="margin-top:10px;">
+          <tr><th>opts key</th><th>Default</th><th>Description</th></tr>
+          <tr><td>blendIn</td><td>8.0</td><td>Blend-in speed.</td></tr>
+          <tr><td>blendOut</td><td>-8.0</td><td>Blend-out speed.</td></tr>
+          <tr><td>duration</td><td>-1</td><td>Duration in ms. <code>-1</code> = play full clip once.</td></tr>
+          <tr><td>flags</td><td>0</td><td>TaskPlayAnim flags. Common: <code>0</code>=once, <code>1</code>=loop, <code>2</code>=hold last frame.</td></tr>
+          <tr><td>loop</td><td>false</td><td>Shorthand for <code>flags = 1</code>.</td></tr>
+          <tr><td>rate</td><td>1.0</td><td>Playback speed multiplier.</td></tr>
+          <tr><td>wait</td><td>false</td><td>Block the current thread until the clip ends.</td></tr>
+          <tr><td>waitTimeout</td><td>10000</td><td>Max ms to wait (only used when <code>wait = true</code>).</td></tr>
+          <tr><td>dictTimeout</td><td>5000</td><td>Max ms to wait for the dict to load.</td></tr>
+        </table>
+
+        <div class="code-block" style="margin-top:14px;">
+          <div class="code-block-head"><span class="code-block-tag">example</span><button class="copy-btn" type="button">copy</button></div>
+          <pre><code><span class="tok-cmt">-- play once and block until finished</span>
+wc:<span class="tok-fn">PlayAnim</span>(ped, <span class="tok-str">'mech_busted@unapproved'</span>, <span class="tok-str">'idle_b'</span>, { wait = <span class="tok-kw">true</span> })
+
+<span class="tok-cmt">-- loop with reduced speed</span>
+wc:<span class="tok-fn">PlayAnim</span>(ped, <span class="tok-str">'amb_rest@world_human_stand_impatient@male_a@idle_a'</span>, <span class="tok-str">'idle_a'</span>, {
+  loop = <span class="tok-kw">true</span>, rate = <span class="tok-num">0.8</span>
+})</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── PlayAnimLooped ─── -->
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">PlayAnimLooped</span>(<span class="tok-num">ped, dict, clip, opts</span>) → <span class="param-type">function</span><span class="badge badge-client">client</span></span>
+        <p class="api-desc">Plays a looping animation. Returns a stopper function — call it to stop the loop cleanly.</p>
+      </div>
+      <div class="api-body">
+        <div class="code-block">
+          <div class="code-block-head"><span class="code-block-tag">example</span><button class="copy-btn" type="button">copy</button></div>
+          <pre><code><span class="tok-kw">local</span> stop = wc:<span class="tok-fn">PlayAnimLooped</span>(npcPed, <span class="tok-str">'amb_rest@world_human_hang_out_street@male_a@idle_a'</span>, <span class="tok-str">'idle_a'</span>)
+
+Wait(<span class="tok-num">5000</span>)
+<span class="tok-fn">stop</span>() <span class="tok-cmt">-- blend out and end loop</span></code></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── PlayAnimAt ─── -->
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">PlayAnimAt</span>(<span class="tok-num">ped, dict, clip, pos, rot, opts</span>)<span class="badge badge-client">client</span></span>
+        <p class="api-desc">Plays an animation at a specific world position and rotation using <code>TaskPlayAnimAdvanced</code>. Useful for in-place actions at a map point regardless of where the ped is standing.</p>
+      </div>
+      <div class="api-body">
+        <table class="param-table">
+          <tr><th>Param</th><th>Type</th><th>Description</th></tr>
+          <tr><td>pos</td><td><span class="param-type">vector3</span></td><td>World position to play at.</td></tr>
+          <tr><td>rot</td><td><span class="param-type">vector3|nil</span></td><td>Rotation. Defaults to <code>vector3(0,0,0)</code>.</td></tr>
+          <tr><td>opts</td><td><span class="param-type">table|nil</span></td><td>Same blendIn/blendOut/duration/flags/rate as PlayAnim.</td></tr>
+        </table>
+        <div class="code-block" style="margin-top:10px;">
+          <div class="code-block-head"><span class="code-block-tag">example</span><button class="copy-btn" type="button">copy</button></div>
+          <pre><code><span class="tok-kw">local</span> pos = <span class="tok-fn">GetEntityCoords</span>(prop)
+wc:<span class="tok-fn">PlayAnimAt</span>(ped, <span class="tok-str">'mini@repair'</span>, <span class="tok-str">'fixing_a_ped'</span>, pos, <span class="tok-kw">nil</span>, { duration = <span class="tok-num">4000</span> })</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── IsAnimPlaying ─── -->
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">IsAnimPlaying</span>(<span class="tok-num">ped, dict, clip</span>) → <span class="param-type">boolean</span><span class="badge badge-client">client</span></span>
+        <p class="api-desc">Returns <code>true</code> if the ped is currently playing the given animation.</p>
+      </div>
+    </div>
+
+    <!-- ─── StopAnim / StopAnimNow ─── -->
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">StopAnim</span>(<span class="tok-num">ped</span>)<span class="badge badge-client">client</span></span>
+        <p class="api-desc">Stop all animations on the ped with a smooth blend-out (<code>ClearPedTasks</code>).</p>
+      </div>
+    </div>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">StopAnimNow</span>(<span class="tok-num">ped</span>)<span class="badge badge-client">client</span></span>
+        <p class="api-desc">Stop all animations immediately with no blend (<code>ClearPedTasksImmediately</code>). Use when you need an instant hard cut.</p>
+      </div>
+    </div>
+
+    <hr class="divider">
+    <h2 style="margin-bottom:18px;">Scenarios</h2>
+
+    <!-- ─── PlayScenario ─── -->
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">PlayScenario</span>(<span class="tok-num">ped, scenario, opts</span>) → <span class="param-type">function</span><span class="badge badge-client">client</span></span>
+        <p class="api-desc">Starts a scenario in place. Scenarios loop automatically. Returns a stopper function.</p>
+      </div>
+      <div class="api-body">
+        <table class="param-table">
+          <tr><th>Param</th><th>Type</th><th>Description</th></tr>
+          <tr><td>scenario</td><td><span class="param-type">string</span></td><td>RDR2 scenario name.</td></tr>
+          <tr><td>opts</td><td><span class="param-type">table | boolean | nil</span></td><td>Use a table for <code>duration</code> and <code>playEnterAnim</code>. A boolean is still accepted as the old <code>playEnterAnim</code> argument.</td></tr>
+          <tr><td>opts.duration</td><td><span class="param-type">number | nil</span></td><td>Scenario duration in milliseconds. Default <code>0</code>.</td></tr>
+          <tr><td>opts.playEnterAnim</td><td><span class="param-type">boolean | nil</span></td><td>Play the entry animation before the idle. Default <code>false</code> (snap instantly).</td></tr>
+        </table>
+        <div class="code-block" style="margin-top:10px;">
+          <div class="code-block-head"><span class="code-block-tag">example</span><button class="copy-btn" type="button">copy</button></div>
+          <pre><code><span class="tok-kw">local</span> stop = wc:<span class="tok-fn">PlayScenario</span>(npcPed, <span class="tok-str">'WORLD_HUMAN_LEAN_WALL'</span>)
+
+Wait(<span class="tok-num">8000</span>)
+<span class="tok-fn">stop</span>()</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── PlayScenarioAt ─── -->
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">PlayScenarioAt</span>(<span class="tok-num">ped, scenario, x, y, z, heading, opts</span>) → <span class="param-type">function</span><span class="badge badge-client">client</span></span>
+        <p class="api-desc">Plays a scenario at a specific world position. Returns a stopper function.</p>
+      </div>
+      <div class="api-body">
+        <table class="param-table">
+          <tr><th>opts key</th><th>Default</th><th>Description</th></tr>
+          <tr><td>duration</td><td>-1</td><td>Duration in ms. <code>-1</code> = indefinite.</td></tr>
+          <tr><td>standing</td><td>true</td><td>Play as a standing scenario.</td></tr>
+          <tr><td>playEnterAnim</td><td>false</td><td>Play the scenario entry animation.</td></tr>
+        </table>
+        <div class="code-block" style="margin-top:10px;">
+          <div class="code-block-head"><span class="code-block-tag">example</span><button class="copy-btn" type="button">copy</button></div>
+          <pre><code><span class="tok-kw">local</span> coords = <span class="tok-fn">GetEntityCoords</span>(npcPed)
+<span class="tok-kw">local</span> stop = wc:<span class="tok-fn">PlayScenarioAt</span>(npcPed,
+  <span class="tok-str">'WORLD_HUMAN_SMOKE_PIPE'</span>,
+  coords.x, coords.y, coords.z,
+  <span class="tok-fn">GetEntityHeading</span>(npcPed),
+  { duration = <span class="tok-num">10000</span> })
+
+Wait(<span class="tok-num">10000</span>)
+<span class="tok-fn">stop</span>()</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── StopScenario ─── -->
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">StopScenario</span>(<span class="tok-num">ped</span>)<span class="badge badge-client">client</span></span>
+        <p class="api-desc">Stops the scenario currently running on the ped.</p>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="page-nav">
+      <a href="distance.html"><span class="dir">&larr; back</span>Distance &amp; proximity</a>
+      <a href="emotes.html"><span class="dir">next &rarr;</span>Emotes</a>
+    </div>
+  </main>
+
+</div>
+
+<script src="../js/main.js"></script>
+</body>
+</html>
