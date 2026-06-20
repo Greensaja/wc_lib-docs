@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dialogue (NUI) — Wild Country Libs</title>
+<meta name="description" content="Multi-step trust conversations and accept/decline prompts rendered in a RedM-styled NUI panel.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-brand">&#129312; <span>Wild Country Libs</span></div>
+  <button class="topbar-toggle" data-sidebar-toggle>Menu</button>
+</div>
+
+<div class="shell">
+
+<nav class="sidebar">
+  <div class="brand"><span class="brand-mark">Wild Country<span class="accent"> Libs</span></span></div>
+  <span class="brand-sub">Green Studio &middot; RedM</span>
+  <div class="nav-group">
+    <span class="nav-label">Start here</span>
+    <ul class="nav-list">
+      <li><a href="../index.html">Overview</a></li>
+      <li><a href="../getting-started.html">Getting started</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Server API</span>
+    <ul class="nav-list">
+      <li><a href="../api/player.html">Player &amp; character</a></li>
+      <li><a href="../api/money.html">Money</a></li>
+      <li><a href="../api/revive.html">Revive &amp; heal</a></li>
+      <li><a href="../api/callbacks.html">Callbacks</a></li>
+      <li><a href="../api/lifecycle.html">Lifecycle events</a></li>
+      <li><a href="../api/webhook.html">Discord webhooks</a></li>
+      <li><a href="../api/nearby.html">Nearby players</a></li>
+      <li><a href="../api/skill.html">Skills</a></li>
+      <li><a href="../api/battlepass.html">Battlepass</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Client API</span>
+    <ul class="nav-list">
+      <li><a href="../api/notify.html">Notify</a></li>
+      <li><a href="../api/topnotify.html">Top Notify</a></li>
+      <li><a href="../api/prompts.html">Native prompts</a></li>
+      <li><a href="../api/entities.html">Peds, horses &amp; props</a></li>
+      <li><a href="../api/distance.html">Distance &amp; proximity</a></li>
+      <li><a href="../api/emotes.html">Emotes</a></li>
+      <li><a href="../api/zones.html">Zone checks</a></li>
+      <li><a href="../api/wagon.html">Wagons</a></li>
+      <li><a class="active" href="../api/dialogue.html">Dialogue (NUI)</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Reference</span>
+    <ul class="nav-list">
+      <li><a href="../api/framework.html">Framework &amp; Raw</a></li>
+      <li><a href="../examples/full-resource.html">Full example resource</a></li>
+      <li><a href="../customizing.html">Custom overrides</a></li>
+    </ul>
+  </div>
+</nav>
+
+  <main class="main">
+    <span class="eyebrow">Client API</span>
+    <h1 class="page-title">Dialogue (NUI)</h1>
+    <p class="page-lede">Multi-step trust conversations and simple accept/decline prompts rendered in a RedM-styled NUI panel. Extracted and generalized from wc_encounter — uses <code>wcdialogue:</code> message types to avoid collisions when multiple Green Studio resources are running.</p>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">RunDialogue</span>(<span class="tok-num">def</span>, <span class="tok-num">npcPed</span>, <span class="tok-num">timeoutSecs</span>, <span class="tok-num">opts</span>) &rarr; <span class="tok-num">string</span><span class="badge badge-client">client</span></span>
+        <p class="api-desc">Runs a multi-step trust conversation. Returns <code>"success"</code> (trust &ge; 70), <code>"partial"</code> (trust &ge; 40), or <code>"fail"</code>.</p>
+      </div>
+      <div class="api-body">
+        <table class="param-table">
+          <tr><th>Param</th><th>Type</th><th>Description</th></tr>
+          <tr><td>def.header</td><td><span class="param-type">string</span></td><td>Panel title.</td></tr>
+          <tr><td>def.npcName</td><td><span class="param-type">string</span></td><td>NPC display name.</td></tr>
+          <tr><td>def.trustLabel</td><td><span class="param-type">string</span></td><td>Label on the trust bar. Defaults to <code>"Trust"</code>.</td></tr>
+          <tr><td>def.intro</td><td><span class="param-type">table</span></td><td><code>{ text, mood }</code> — opening NPC line.</td></tr>
+          <tr><td>def.steps</td><td><span class="param-type">table</span></td><td>Array of step tables, each with an <code>options</code> array of <code>{ text, nextStep, trustChange, mood, response }</code>.</td></tr>
+          <tr><td>timeoutSecs</td><td><span class="param-type">number | nil</span></td><td>Auto-fail timeout in seconds. Defaults to 60.</td></tr>
+          <tr><td>opts.skipFaceEachOther</td><td><span class="param-type">boolean</span></td><td>Skip the face-each-other setup step.</td></tr>
+          <tr><td>opts.skipNpcGestures</td><td><span class="param-type">boolean</span></td><td>Suppress NPC conversation gestures.</td></tr>
+          <tr><td>opts.skipPlayerGestures</td><td><span class="param-type">boolean</span></td><td>Suppress player conversation gestures.</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">RunAccept</span>(<span class="tok-num">def</span>, <span class="tok-num">npcPed</span>, <span class="tok-num">opts</span>) &rarr; <span class="tok-num">boolean</span><span class="badge badge-client">client</span></span>
+        <p class="api-desc">Simple accept/decline prompt. Returns <code>true</code> if the player accepted.</p>
+      </div>
+      <div class="api-body">
+        <table class="param-table">
+          <tr><th>Param</th><th>Type</th><th>Description</th></tr>
+          <tr><td>def.header</td><td><span class="param-type">string</span></td><td>Panel title.</td></tr>
+          <tr><td>def.npcName</td><td><span class="param-type">string</span></td><td>NPC display name.</td></tr>
+          <tr><td>def.intro</td><td><span class="param-type">table</span></td><td><code>{ text, mood }</code> — NPC opening line.</td></tr>
+          <tr><td>def.options.accept</td><td><span class="param-type">table</span></td><td><code>{ text }</code> — accept button label.</td></tr>
+          <tr><td>def.options.decline</td><td><span class="param-type">table</span></td><td><code>{ text }</code> — decline button label.</td></tr>
+          <tr><td>npcPed</td><td><span class="param-type">number</span></td><td>Entity handle of the NPC.</td></tr>
+          <tr><td>opts</td><td><span class="param-type">table | nil</span></td><td>Same skip flags as RunDialogue.</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">WatchIgnore</span>(<span class="tok-num">guard</span>, <span class="tok-num">npcPed</span>, <span class="tok-num">distance</span>, <span class="tok-num">onIgnored</span>)<span class="badge badge-client">client</span></span>
+        <p class="api-desc">Fires <code>onIgnored()</code> if the player walks more than <code>distance</code> metres from <code>npcPed</code> while <code>guard.done</code> is false. Set <code>guard.done = true</code> when the encounter ends to cleanly stop the thread.</p>
+      </div>
+      <div class="api-body">
+        <table class="param-table">
+          <tr><th>Param</th><th>Type</th><th>Description</th></tr>
+          <tr><td>guard</td><td><span class="param-type">table</span></td><td>Shared state table. Set <code>guard.done = true</code> to stop watching.</td></tr>
+          <tr><td>npcPed</td><td><span class="param-type">number</span></td><td>Entity handle of the NPC to watch.</td></tr>
+          <tr><td>distance</td><td><span class="param-type">number | nil</span></td><td>Walk-away threshold in metres. Defaults to 80.</td></tr>
+          <tr><td>onIgnored</td><td><span class="param-type">function</span></td><td>Callback fired when the player walks away.</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-tag">example</span>
+        <button class="copy-btn" type="button">copy</button>
+      </div>
+      <pre><code><span class="tok-com">-- Accept/decline prompt</span>
+<span class="tok-kw">local</span> accepted = WCLib.<span class="tok-fn">RunAccept</span>({
+  header  = <span class="tok-str">'Stranger'</span>,
+  npcName = <span class="tok-str">'Old Pete'</span>,
+  intro   = { text = <span class="tok-str">'I need help haulin\' my wagon. You up for it?'</span>, mood = <span class="tok-str">'hopeful'</span> },
+  options = {
+    accept  = { text = <span class="tok-str">'Sure, I can help.'</span> },
+    decline = { text = <span class="tok-str">'Not today, friend.'</span> },
+  },
+}, npcPed)
+
+<span class="tok-kw">if</span> <span class="tok-kw">not</span> accepted <span class="tok-kw">then</span> <span class="tok-kw">return</span> <span class="tok-kw">end</span>
+
+<span class="tok-com">-- Multi-step trust dialogue</span>
+<span class="tok-kw">local</span> result = WCLib.<span class="tok-fn">RunDialogue</span>({
+  header     = <span class="tok-str">'Negotiation'</span>,
+  npcName    = <span class="tok-str">'Old Pete'</span>,
+  trustLabel = <span class="tok-str">'Trust'</span>,
+  intro      = { text = <span class="tok-str">'Right then. About the pay...'</span>, mood = <span class="tok-str">'neutral'</span> },
+  steps = {{
+    options = {
+      { text = <span class="tok-str">'Fair enough. What\'re you offerin\'?'</span>, trustChange = <span class="tok-num">10</span>,  mood = <span class="tok-str">'friendly'</span>, response = <span class="tok-str">'Fifty cents and no trouble.'</span> },
+      { text = <span class="tok-str">'I want double.'</span>,                       trustChange = <span class="tok-num">-15</span>, mood = <span class="tok-str">'doubtful'</span>, response = <span class="tok-str">'You sure about that, stranger?'</span> },
+    }
+  }}
+}, npcPed, <span class="tok-num">45</span>)
+
+<span class="tok-fn">print</span>(<span class="tok-str">'Dialogue result:'</span>, result)  <span class="tok-com">-- "success", "partial", or "fail"</span></code></pre>
+    </div>
+
+    <div class="note">
+      <strong>Message type prefix.</strong> The NUI panel uses <code>wcdialogue:</code> prefixed message types. If you previously used wc_encounter's <code>encounter:</code> types directly, update your JS accordingly.
+    </div>
+
+    <hr class="divider">
+
+    <div class="page-nav">
+      <a href="wagon.html"><span class="dir">&larr; back</span>Wagons</a>
+      <a class="right" href="framework.html"><span class="dir">next &rarr;</span>Framework &amp; Raw</a>
+    </div>
+
+  </main>
+</div>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Top Notify — Wild Country Libs</title>
+<meta name="description" content="TopNotify and WcNotify reference for wc_libs — cinematic mission header and HUD notification.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-brand">&#129312; <span>Wild Country Libs</span></div>
+  <button class="topbar-toggle" data-sidebar-toggle>Menu</button>
+</div>
+
+<div class="shell">
+
+<nav class="sidebar">
+  <div class="brand"><span class="brand-mark">Wild Country<span class="accent"> Libs</span></span></div>
+  <span class="brand-sub">Green Studio &middot; RedM</span>
+  <div class="nav-group">
+    <span class="nav-label">Start here</span>
+    <ul class="nav-list">
+      <li><a href="../index.html">Overview</a></li>
+      <li><a href="../getting-started.html">Getting started</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Server API</span>
+    <ul class="nav-list">
+      <li><a href="../api/player.html">Player &amp; character</a></li>
+      <li><a href="../api/money.html">Money</a></li>
+      <li><a href="../api/revive.html">Revive &amp; heal</a></li>
+      <li><a href="../api/callbacks.html">Callbacks</a></li>
+      <li><a href="../api/lifecycle.html">Lifecycle events</a></li>
+      <li><a href="../api/webhook.html">Discord webhooks</a></li>
+      <li><a href="../api/nearby.html">Nearby players</a></li>
+      <li><a href="../api/skill.html">Skills</a></li>
+      <li><a href="../api/battlepass.html">Battlepass</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Client API</span>
+    <ul class="nav-list">
+      <li><a href="../api/notify.html">Notify</a></li>
+      <li><a class="active" href="../api/topnotify.html">Top Notify</a></li>
+      <li><a href="../api/prompts.html">Native prompts</a></li>
+      <li><a href="../api/entities.html">Peds, horses &amp; props</a></li>
+      <li><a href="../api/distance.html">Distance &amp; proximity</a></li>
+      <li><a href="../api/emotes.html">Emotes</a></li>
+      <li><a href="../api/zones.html">Zone checks</a></li>
+      <li><a href="../api/wagon.html">Wagons</a></li>
+      <li><a href="../api/dialogue.html">Dialogue (NUI)</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Reference</span>
+    <ul class="nav-list">
+      <li><a href="../api/framework.html">Framework &amp; Raw</a></li>
+      <li><a href="../examples/full-resource.html">Full example resource</a></li>
+      <li><a href="../customizing.html">Custom overrides</a></li>
+    </ul>
+  </div>
+</nav>
+
+  <main class="main">
+    <span class="eyebrow">Client API</span>
+    <h1 class="page-title">Top Notify</h1>
+    <p class="page-lede">Shows the native RedM cinematic two-line mission-header notification using the <code>UiFeedPostTwoTextShard</code> native (0xA6F4216AB10EB08E). No framework required — pure native.</p>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">TopNotify</span>(<span class="tok-num">title</span>, <span class="tok-num">msg</span>, <span class="tok-num">headerFallback</span>)<span class="badge badge-client">client</span></span>
+        <p class="api-desc">Displays a cinematic two-line mission-header notification. Pass only <code>title</code> for a single-line header using the fallback label.</p>
+      </div>
+      <div class="api-body">
+        <table class="param-table">
+          <tr><th>Param</th><th>Type</th><th>Description</th></tr>
+          <tr><td>title</td><td><span class="param-type">string</span></td><td>Large upper line, or the full message if <code>msg</code> is omitted.</td></tr>
+          <tr><td>msg</td><td><span class="param-type">string | nil</span></td><td>Smaller lower line.</td></tr>
+          <tr><td>headerFallback</td><td><span class="param-type">string | nil</span></td><td>Label shown in the upper slot when only <code>title</code> is passed. Defaults to <code>"Wild County"</code>.</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">WcNotify</span>(<span class="tok-num">msg</span>, <span class="tok-num">level</span>, <span class="tok-num">placement</span>)<span class="badge badge-client">client</span></span>
+        <p class="api-desc">Fires the <code>wc_notify:send</code> event (configurable via <code>WCLibConfig.WcNotifyEvent</code>) for a HUD notification.</p>
+      </div>
+      <div class="api-body">
+        <table class="param-table">
+          <tr><th>Param</th><th>Type</th><th>Description</th></tr>
+          <tr><td>msg</td><td><span class="param-type">string</span></td><td>Notification message text.</td></tr>
+          <tr><td>level</td><td><span class="param-type">string | nil</span></td><td><code>"INFO"</code> | <code>"SUCCESS"</code> | <code>"WARNING"</code> | <code>"ERROR"</code>. Defaults to <code>"INFO"</code>.</td></tr>
+          <tr><td>placement</td><td><span class="param-type">string | nil</span></td><td>Placement hint. Defaults to <code>"middle-right"</code>.</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-tag">example</span>
+        <button class="copy-btn" type="button">copy</button>
+      </div>
+      <pre><code><span class="tok-com">-- Two-line cinematic header</span>
+WCLib.<span class="tok-fn">TopNotify</span>(<span class="tok-str">'New Contract'</span>, <span class="tok-str">'Speak to the stranger at Flatneck Station'</span>)
+
+<span class="tok-com">-- One-line (uses "Wild County" as the header)</span>
+WCLib.<span class="tok-fn">TopNotify</span>(<span class="tok-str">'Mission complete!'</span>)
+
+<span class="tok-com">-- Custom header label</span>
+WCLib.<span class="tok-fn">TopNotify</span>(<span class="tok-str">'10 Gold earned'</span>, <span class="tok-kw">nil</span>, <span class="tok-str">'Reward'</span>)
+
+<span class="tok-com">-- wc_notify HUD notification</span>
+WCLib.<span class="tok-fn">WcNotify</span>(<span class="tok-str">'Deer harvested successfully'</span>, <span class="tok-str">'SUCCESS'</span>)</code></pre>
+    </div>
+
+    <hr class="divider">
+
+    <div class="page-nav">
+      <a href="notify.html"><span class="dir">&larr; back</span>Notify</a>
+      <a class="right" href="prompts.html"><span class="dir">next &rarr;</span>Native prompts</a>
+    </div>
+
+  </main>
+</div>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

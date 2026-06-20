@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Emotes — Wild Country Libs</title>
+<meta name="description" content="Synchronized emotes, conversation gestures and reward animation reference for wc_libs.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-brand">&#129312; <span>Wild Country Libs</span></div>
+  <button class="topbar-toggle" data-sidebar-toggle>Menu</button>
+</div>
+
+<div class="shell">
+
+<nav class="sidebar">
+  <div class="brand"><span class="brand-mark">Wild Country<span class="accent"> Libs</span></span></div>
+  <span class="brand-sub">Green Studio &middot; RedM</span>
+  <div class="nav-group">
+    <span class="nav-label">Start here</span>
+    <ul class="nav-list">
+      <li><a href="../index.html">Overview</a></li>
+      <li><a href="../getting-started.html">Getting started</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Server API</span>
+    <ul class="nav-list">
+      <li><a href="../api/player.html">Player &amp; character</a></li>
+      <li><a href="../api/money.html">Money</a></li>
+      <li><a href="../api/revive.html">Revive &amp; heal</a></li>
+      <li><a href="../api/callbacks.html">Callbacks</a></li>
+      <li><a href="../api/lifecycle.html">Lifecycle events</a></li>
+      <li><a href="../api/webhook.html">Discord webhooks</a></li>
+      <li><a href="../api/nearby.html">Nearby players</a></li>
+      <li><a href="../api/skill.html">Skills</a></li>
+      <li><a href="../api/battlepass.html">Battlepass</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Client API</span>
+    <ul class="nav-list">
+      <li><a href="../api/notify.html">Notify</a></li>
+      <li><a href="../api/topnotify.html">Top Notify</a></li>
+      <li><a href="../api/prompts.html">Native prompts</a></li>
+      <li><a href="../api/entities.html">Peds, horses &amp; props</a></li>
+      <li><a href="../api/distance.html">Distance &amp; proximity</a></li>
+      <li><a class="active" href="../api/emotes.html">Emotes</a></li>
+      <li><a href="../api/zones.html">Zone checks</a></li>
+      <li><a href="../api/wagon.html">Wagons</a></li>
+      <li><a href="../api/dialogue.html">Dialogue (NUI)</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Reference</span>
+    <ul class="nav-list">
+      <li><a href="../api/framework.html">Framework &amp; Raw</a></li>
+      <li><a href="../examples/full-resource.html">Full example resource</a></li>
+      <li><a href="../customizing.html">Custom overrides</a></li>
+    </ul>
+  </div>
+</nav>
+
+  <main class="main">
+    <span class="eyebrow">Client API</span>
+    <h1 class="page-title">Emotes</h1>
+    <p class="page-lede">Synchronized player+NPC emotes, looping conversation gestures, and the money-handover reward animation. All functions are framework-agnostic pure-native wrappers.</p>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">StartConversationGestures</span>(<span class="tok-num">npcPed</span>, <span class="tok-num">skipNpc</span>, <span class="tok-num">skipPlayer</span>) &rarr; <span class="tok-num">function</span><span class="badge badge-client">client</span></span>
+        <p class="api-desc">Starts looping idle-conversation gestures while a dialogue is open. Returns a stopper function — call it when dialogue closes.</p>
+      </div>
+      <div class="api-body">
+        <table class="param-table">
+          <tr><th>Param</th><th>Type</th><th>Description</th></tr>
+          <tr><td>npcPed</td><td><span class="param-type">number</span></td><td>Entity handle of the NPC.</td></tr>
+          <tr><td>skipNpc</td><td><span class="param-type">boolean | nil</span></td><td>If true, NPC plays no gestures.</td></tr>
+          <tr><td>skipPlayer</td><td><span class="param-type">boolean | nil</span></td><td>If true, player plays no gestures.</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">PlayShareEmote</span>(<span class="tok-num">emoteKey</span>, <span class="tok-num">npcPed</span>, <span class="tok-num">customEmotes</span>)<span class="badge badge-client">client</span></span>
+        <p class="api-desc">Plays a synchronized emote between player and NPC. <code>emoteKey</code> indexes into <code>WCLibEmote.ShareEmotes</code> or the optional <code>customEmotes</code> table.</p>
+      </div>
+      <div class="api-body">
+        <table class="param-table">
+          <tr><th>Param</th><th>Type</th><th>Description</th></tr>
+          <tr><td>emoteKey</td><td><span class="param-type">string</span></td><td>Built-in keys: <code>hug</code>, <code>handshake</code>, <code>hat_tip</code>, <code>wave_thanks</code>, <code>cheer</code>, <code>kneel_grateful</code>.</td></tr>
+          <tr><td>npcPed</td><td><span class="param-type">number</span></td><td>Entity handle of the NPC.</td></tr>
+          <tr><td>customEmotes</td><td><span class="param-type">table | nil</span></td><td>Optional table of custom emote definitions to override built-ins.</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">PlayFailEmote</span>(<span class="tok-num">emoteKey</span>, <span class="tok-num">npcPed</span>, <span class="tok-num">customEmotes</span>)<span class="badge badge-client">client</span></span>
+        <p class="api-desc">Plays an NPC fail-reaction emote.</p>
+      </div>
+      <div class="api-body">
+        <table class="param-table">
+          <tr><th>Param</th><th>Type</th><th>Description</th></tr>
+          <tr><td>emoteKey</td><td><span class="param-type">string</span></td><td>Built-in keys: <code>slap</code>, <code>push</code>, <code>cry_run</code>, <code>cry_turn</code>, <code>shoo</code>, <code>head_shake</code>, <code>frustrated_gesture</code>, <code>ignore</code>.</td></tr>
+          <tr><td>npcPed</td><td><span class="param-type">number</span></td><td>Entity handle of the NPC.</td></tr>
+          <tr><td>customEmotes</td><td><span class="param-type">table | nil</span></td><td>Optional table of custom emote definitions to override built-ins.</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">PlayRewardHandover</span>(<span class="tok-num">npcPed</span>)<span class="badge badge-client">client</span></span>
+        <p class="api-desc">Full blocking money-handover reward animation (~8 seconds). NPC spawns a bill prop on its hand and passes it to the player.</p>
+      </div>
+      <div class="api-body">
+        <table class="param-table">
+          <tr><th>Param</th><th>Type</th><th>Description</th></tr>
+          <tr><td>npcPed</td><td><span class="param-type">number</span></td><td>Entity handle of the NPC performing the handover.</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-tag">example</span>
+        <button class="copy-btn" type="button">copy</button>
+      </div>
+      <pre><code><span class="tok-com">-- Conversation gestures (returns a stopper)</span>
+<span class="tok-kw">local</span> stop = WCLib.<span class="tok-fn">StartConversationGestures</span>(npcPed)
+<span class="tok-fn">Wait</span>(<span class="tok-num">5000</span>)
+<span class="tok-fn">stop</span>()
+
+<span class="tok-com">-- Synchronized emote</span>
+WCLib.<span class="tok-fn">PlayShareEmote</span>(<span class="tok-str">'handshake'</span>, npcPed)
+
+<span class="tok-com">-- Reward handover animation</span>
+WCLib.<span class="tok-fn">PlayRewardHandover</span>(npcPed)
+<span class="tok-fn">TriggerServerEvent</span>(<span class="tok-str">'myResource:giveReward'</span>, rewardAmount)</code></pre>
+    </div>
+
+    <hr class="divider">
+
+    <div class="page-nav">
+      <a href="distance.html"><span class="dir">&larr; back</span>Distance &amp; proximity</a>
+      <a class="right" href="zones.html"><span class="dir">next &rarr;</span>Zone checks</a>
+    </div>
+
+  </main>
+</div>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

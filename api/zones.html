@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zone Checks — Wild Country Libs</title>
+<meta name="description" content="Radius-based zone exclusion helpers for wc_libs — IsInside, IsPlayerInside.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-brand">&#129312; <span>Wild Country Libs</span></div>
+  <button class="topbar-toggle" data-sidebar-toggle>Menu</button>
+</div>
+
+<div class="shell">
+
+<nav class="sidebar">
+  <div class="brand"><span class="brand-mark">Wild Country<span class="accent"> Libs</span></span></div>
+  <span class="brand-sub">Green Studio &middot; RedM</span>
+  <div class="nav-group">
+    <span class="nav-label">Start here</span>
+    <ul class="nav-list">
+      <li><a href="../index.html">Overview</a></li>
+      <li><a href="../getting-started.html">Getting started</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Server API</span>
+    <ul class="nav-list">
+      <li><a href="../api/player.html">Player &amp; character</a></li>
+      <li><a href="../api/money.html">Money</a></li>
+      <li><a href="../api/revive.html">Revive &amp; heal</a></li>
+      <li><a href="../api/callbacks.html">Callbacks</a></li>
+      <li><a href="../api/lifecycle.html">Lifecycle events</a></li>
+      <li><a href="../api/webhook.html">Discord webhooks</a></li>
+      <li><a href="../api/nearby.html">Nearby players</a></li>
+      <li><a href="../api/skill.html">Skills</a></li>
+      <li><a href="../api/battlepass.html">Battlepass</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Client API</span>
+    <ul class="nav-list">
+      <li><a href="../api/notify.html">Notify</a></li>
+      <li><a href="../api/topnotify.html">Top Notify</a></li>
+      <li><a href="../api/prompts.html">Native prompts</a></li>
+      <li><a href="../api/entities.html">Peds, horses &amp; props</a></li>
+      <li><a href="../api/distance.html">Distance &amp; proximity</a></li>
+      <li><a href="../api/emotes.html">Emotes</a></li>
+      <li><a class="active" href="../api/zones.html">Zone checks</a></li>
+      <li><a href="../api/wagon.html">Wagons</a></li>
+      <li><a href="../api/dialogue.html">Dialogue (NUI)</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Reference</span>
+    <ul class="nav-list">
+      <li><a href="../api/framework.html">Framework &amp; Raw</a></li>
+      <li><a href="../examples/full-resource.html">Full example resource</a></li>
+      <li><a href="../customizing.html">Custom overrides</a></li>
+    </ul>
+  </div>
+</nav>
+
+  <main class="main">
+    <span class="eyebrow">Client API</span>
+    <h1 class="page-title">Zone checks</h1>
+    <p class="page-lede">Radius-based zone exclusion helpers. No framework required. Uses squared-distance comparison — no sqrt per call.</p>
+
+    <h2>Zone format</h2>
+    <p>Each zone is a table with the following fields:</p>
+    <table class="param-table" style="margin-bottom:24px;">
+      <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+      <tr><td>x</td><td><span class="param-type">number</span></td><td>World X coordinate.</td></tr>
+      <tr><td>y</td><td><span class="param-type">number</span></td><td>World Y coordinate.</td></tr>
+      <tr><td>z</td><td><span class="param-type">number</span></td><td>World Z coordinate.</td></tr>
+      <tr><td>radius</td><td><span class="param-type">number</span></td><td>Exclusion radius in metres.</td></tr>
+      <tr><td>name</td><td><span class="param-type">string | nil</span></td><td>Optional zone name returned by the check functions.</td></tr>
+    </table>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">IsInsideZone</span>(<span class="tok-num">pos</span>, <span class="tok-num">zones</span>) &rarr; <span class="tok-num">boolean, string|nil</span><span class="badge badge-client">client</span></span>
+        <p class="api-desc">Returns <code>inside, zoneName</code>. <code>zoneName</code> is <code>nil</code> if not inside any zone.</p>
+      </div>
+      <div class="api-body">
+        <table class="param-table">
+          <tr><th>Param</th><th>Type</th><th>Description</th></tr>
+          <tr><td>pos</td><td><span class="param-type">vector3 | table</span></td><td>Position to test — vector3 or <code>{x, y, z}</code>.</td></tr>
+          <tr><td>zones</td><td><span class="param-type">table</span></td><td>Array of zone tables.</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">IsPlayerInsideZone</span>(<span class="tok-num">zones</span>) &rarr; <span class="tok-num">boolean, string|nil</span><span class="badge badge-client">client</span></span>
+        <p class="api-desc">Convenience wrapper — uses <code>GetEntityCoords(PlayerPedId())</code> as the position.</p>
+      </div>
+      <div class="api-body">
+        <table class="param-table">
+          <tr><th>Param</th><th>Type</th><th>Description</th></tr>
+          <tr><td>zones</td><td><span class="param-type">table</span></td><td>Array of zone tables.</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-tag">example</span>
+        <button class="copy-btn" type="button">copy</button>
+      </div>
+      <pre><code><span class="tok-kw">local</span> NO_SPAWN_ZONES = {
+  { x = <span class="tok-num">-802.0</span>, y = <span class="tok-num">-1305.0</span>, z = <span class="tok-num">43.0</span>,  radius = <span class="tok-num">150.0</span>, name = <span class="tok-str">'Blackwater'</span> },
+  { x = <span class="tok-num">2559.0</span>, y =  <span class="tok-num">438.0</span>,  z = <span class="tok-num">57.0</span>,  radius = <span class="tok-num">200.0</span>, name = <span class="tok-str">'Annesburg'</span>  },
+}
+
+<span class="tok-com">-- in a spawn loop thread:</span>
+<span class="tok-kw">local</span> inside, zoneName = WCLib.<span class="tok-fn">IsPlayerInsideZone</span>(NO_SPAWN_ZONES)
+<span class="tok-kw">if</span> inside <span class="tok-kw">then</span>
+  <span class="tok-fn">print</span>(<span class="tok-str">'Player is inside '</span> .. <span class="tok-fn">tostring</span>(zoneName) .. <span class="tok-str">' — skipping spawn'</span>)
+<span class="tok-kw">end</span></code></pre>
+    </div>
+
+    <hr class="divider">
+
+    <div class="page-nav">
+      <a href="emotes.html"><span class="dir">&larr; back</span>Emotes</a>
+      <a class="right" href="wagon.html"><span class="dir">next &rarr;</span>Wagons</a>
+    </div>
+
+  </main>
+</div>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

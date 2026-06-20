@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nearby Players — Wild Country Libs</title>
+<meta name="description" content="GetPlayersInRadius reference for wc_libs — framework-agnostic FiveM native.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-brand">&#129312; <span>Wild Country Libs</span></div>
+  <button class="topbar-toggle" data-sidebar-toggle>Menu</button>
+</div>
+
+<div class="shell">
+
+<nav class="sidebar">
+  <div class="brand"><span class="brand-mark">Wild Country<span class="accent"> Libs</span></span></div>
+  <span class="brand-sub">Green Studio &middot; RedM</span>
+  <div class="nav-group">
+    <span class="nav-label">Start here</span>
+    <ul class="nav-list">
+      <li><a href="../index.html">Overview</a></li>
+      <li><a href="../getting-started.html">Getting started</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Server API</span>
+    <ul class="nav-list">
+      <li><a href="../api/player.html">Player &amp; character</a></li>
+      <li><a href="../api/money.html">Money</a></li>
+      <li><a href="../api/revive.html">Revive &amp; heal</a></li>
+      <li><a href="../api/callbacks.html">Callbacks</a></li>
+      <li><a href="../api/lifecycle.html">Lifecycle events</a></li>
+      <li><a href="../api/webhook.html">Discord webhooks</a></li>
+      <li><a class="active" href="../api/nearby.html">Nearby players</a></li>
+      <li><a href="../api/skill.html">Skills</a></li>
+      <li><a href="../api/battlepass.html">Battlepass</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Client API</span>
+    <ul class="nav-list">
+      <li><a href="../api/notify.html">Notify</a></li>
+      <li><a href="../api/topnotify.html">Top Notify</a></li>
+      <li><a href="../api/prompts.html">Native prompts</a></li>
+      <li><a href="../api/entities.html">Peds, horses &amp; props</a></li>
+      <li><a href="../api/distance.html">Distance &amp; proximity</a></li>
+      <li><a href="../api/emotes.html">Emotes</a></li>
+      <li><a href="../api/zones.html">Zone checks</a></li>
+      <li><a href="../api/wagon.html">Wagons</a></li>
+      <li><a href="../api/dialogue.html">Dialogue (NUI)</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Reference</span>
+    <ul class="nav-list">
+      <li><a href="../api/framework.html">Framework &amp; Raw</a></li>
+      <li><a href="../examples/full-resource.html">Full example resource</a></li>
+      <li><a href="../customizing.html">Custom overrides</a></li>
+    </ul>
+  </div>
+</nav>
+
+  <main class="main">
+    <span class="eyebrow">Server API</span>
+    <h1 class="page-title">Nearby players</h1>
+    <p class="page-lede">Returns all player source IDs within a radius of a reference player. Pure FiveM natives — framework-agnostic.</p>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">GetPlayersInRadius</span>(<span class="tok-num">source</span>, <span class="tok-num">radius</span>) &rarr; <span class="tok-num">table</span><span class="badge badge-server">server</span></span>
+        <p class="api-desc">Returns an array of server source IDs for all players within <code>radius</code> metres of <code>source</code>. Never includes <code>source</code> itself. Returns an empty table if no other players are in range.</p>
+      </div>
+      <div class="api-body">
+        <table class="param-table">
+          <tr><th>Param</th><th>Type</th><th>Description</th></tr>
+          <tr><td>source</td><td><span class="param-type">number</span></td><td>The reference player's server source ID.</td></tr>
+          <tr><td>radius</td><td><span class="param-type">number</span></td><td>Search radius in metres.</td></tr>
+        </table>
+
+        <div class="code-block" style="margin-top:18px;">
+          <div class="code-block-head">
+            <span class="code-block-tag">example</span>
+            <button class="copy-btn" type="button">copy</button>
+          </div>
+          <pre><code><span class="tok-kw">local</span> nearby = exports.wc_libs:<span class="tok-fn">GetPlayersInRadius</span>(source, <span class="tok-num">50.0</span>)
+<span class="tok-kw">for</span> _, pid <span class="tok-kw">in</span> <span class="tok-fn">ipairs</span>(nearby) <span class="tok-kw">do</span>
+  <span class="tok-fn">TriggerClientEvent</span>(<span class="tok-str">'myResource:doThing'</span>, pid)
+<span class="tok-kw">end</span></code></pre>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="page-nav">
+      <a href="webhook.html"><span class="dir">&larr; back</span>Discord webhooks</a>
+      <a class="right" href="skill.html"><span class="dir">next &rarr;</span>Skills</a>
+    </div>
+
+  </main>
+</div>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

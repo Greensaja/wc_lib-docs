@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wagons — Wild Country Libs</title>
+<meta name="description" content="Vehicle spawn, delete, repair and wheel-bone helpers for wc_libs.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-brand">&#129312; <span>Wild Country Libs</span></div>
+  <button class="topbar-toggle" data-sidebar-toggle>Menu</button>
+</div>
+
+<div class="shell">
+
+<nav class="sidebar">
+  <div class="brand"><span class="brand-mark">Wild Country<span class="accent"> Libs</span></span></div>
+  <span class="brand-sub">Green Studio &middot; RedM</span>
+  <div class="nav-group">
+    <span class="nav-label">Start here</span>
+    <ul class="nav-list">
+      <li><a href="../index.html">Overview</a></li>
+      <li><a href="../getting-started.html">Getting started</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Server API</span>
+    <ul class="nav-list">
+      <li><a href="../api/player.html">Player &amp; character</a></li>
+      <li><a href="../api/money.html">Money</a></li>
+      <li><a href="../api/revive.html">Revive &amp; heal</a></li>
+      <li><a href="../api/callbacks.html">Callbacks</a></li>
+      <li><a href="../api/lifecycle.html">Lifecycle events</a></li>
+      <li><a href="../api/webhook.html">Discord webhooks</a></li>
+      <li><a href="../api/nearby.html">Nearby players</a></li>
+      <li><a href="../api/skill.html">Skills</a></li>
+      <li><a href="../api/battlepass.html">Battlepass</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Client API</span>
+    <ul class="nav-list">
+      <li><a href="../api/notify.html">Notify</a></li>
+      <li><a href="../api/topnotify.html">Top Notify</a></li>
+      <li><a href="../api/prompts.html">Native prompts</a></li>
+      <li><a href="../api/entities.html">Peds, horses &amp; props</a></li>
+      <li><a href="../api/distance.html">Distance &amp; proximity</a></li>
+      <li><a href="../api/emotes.html">Emotes</a></li>
+      <li><a href="../api/zones.html">Zone checks</a></li>
+      <li><a class="active" href="../api/wagon.html">Wagons</a></li>
+      <li><a href="../api/dialogue.html">Dialogue (NUI)</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Reference</span>
+    <ul class="nav-list">
+      <li><a href="../api/framework.html">Framework &amp; Raw</a></li>
+      <li><a href="../examples/full-resource.html">Full example resource</a></li>
+      <li><a href="../customizing.html">Custom overrides</a></li>
+    </ul>
+  </div>
+</nav>
+
+  <main class="main">
+    <span class="eyebrow">Client API</span>
+    <h1 class="page-title">Wagons</h1>
+    <p class="page-lede">Vehicle spawn/delete/repair helpers and wheel-bone lookup. Framework-agnostic — pure native wrappers.</p>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">SpawnWagon</span>(<span class="tok-num">modelName</span>, <span class="tok-num">x</span>, <span class="tok-num">y</span>, <span class="tok-num">z</span>, <span class="tok-num">heading</span>, <span class="tok-num">opts</span>) &rarr; <span class="tok-num">number|nil</span><span class="badge badge-client">client</span></span>
+        <p class="api-desc">Spawns a wagon model at the given coordinates. Returns the vehicle handle, or <code>nil</code> on failure.</p>
+      </div>
+      <div class="api-body">
+        <table class="param-table">
+          <tr><th>Param</th><th>Type</th><th>Description</th></tr>
+          <tr><td>modelName</td><td><span class="param-type">string | number</span></td><td>Model name or hash.</td></tr>
+          <tr><td>x, y, z</td><td><span class="param-type">number</span></td><td>Spawn coordinates.</td></tr>
+          <tr><td>heading</td><td><span class="param-type">number</span></td><td>Spawn heading in degrees.</td></tr>
+          <tr><td>opts.broken</td><td><span class="param-type">boolean</span></td><td>Damage, freeze, and break the front-left wheel.</td></tr>
+          <tr><td>opts.isMission</td><td><span class="param-type">boolean</span></td><td>Mark as a mission entity.</td></tr>
+          <tr><td>opts.frozen</td><td><span class="param-type">boolean</span></td><td>Freeze position without applying damage.</td></tr>
+          <tr><td>opts.timeoutMs</td><td><span class="param-type">number</span></td><td>Model load timeout in ms. Defaults to 10000.</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">DeleteWagon</span>(<span class="tok-num">wagon</span>)<span class="badge badge-client">client</span></span>
+        <p class="api-desc">Safely deletes a wagon entity.</p>
+      </div>
+      <div class="api-body">
+        <table class="param-table">
+          <tr><th>Param</th><th>Type</th><th>Description</th></tr>
+          <tr><td>wagon</td><td><span class="param-type">number</span></td><td>Vehicle entity handle.</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">RepairWagon</span>(<span class="tok-num">wagon</span>)<span class="badge badge-client">client</span></span>
+        <p class="api-desc">Fixes damage, restores all health values, and makes the wagon driveable.</p>
+      </div>
+      <div class="api-body">
+        <table class="param-table">
+          <tr><th>Param</th><th>Type</th><th>Description</th></tr>
+          <tr><td>wagon</td><td><span class="param-type">number</span></td><td>Vehicle entity handle.</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">FreezeWagon</span>(<span class="tok-num">wagon</span>, <span class="tok-num">freeze</span>)<span class="badge badge-client">client</span></span>
+        <p class="api-desc">Freezes or unfreezes the wagon's position.</p>
+      </div>
+      <div class="api-body">
+        <table class="param-table">
+          <tr><th>Param</th><th>Type</th><th>Description</th></tr>
+          <tr><td>wagon</td><td><span class="param-type">number</span></td><td>Vehicle entity handle.</td></tr>
+          <tr><td>freeze</td><td><span class="param-type">boolean</span></td><td>True to freeze, false to unfreeze.</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">GetWheelPos</span>(<span class="tok-num">wagon</span>, <span class="tok-num">which</span>) &rarr; <span class="tok-num">vector3|nil</span><span class="badge badge-client">client</span></span>
+        <p class="api-desc">Returns the world position of the specified wheel bone. Falls back to calculated offsets if the model has no matching bone.</p>
+      </div>
+      <div class="api-body">
+        <table class="param-table">
+          <tr><th>Param</th><th>Type</th><th>Description</th></tr>
+          <tr><td>wagon</td><td><span class="param-type">number</span></td><td>Vehicle entity handle.</td></tr>
+          <tr><td>which</td><td><span class="param-type">string</span></td><td><code>'lf'</code> (front-left), <code>'lr'</code> (rear-left), <code>'rr'</code> (rear-right), <code>'rf'</code> (front-right).</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-tag">example</span>
+        <button class="copy-btn" type="button">copy</button>
+      </div>
+      <pre><code><span class="tok-com">-- Spawn a broken-down wagon as a scene prop</span>
+<span class="tok-kw">local</span> wagon = WCLib.<span class="tok-fn">SpawnWagon</span>(<span class="tok-str">'WAGON02X'</span>, <span class="tok-num">1234.0</span>, <span class="tok-num">-567.0</span>, <span class="tok-num">89.0</span>, <span class="tok-num">45.0</span>, {
+  broken    = <span class="tok-kw">true</span>,
+  isMission = <span class="tok-kw">true</span>,
+})
+
+<span class="tok-com">-- Later, reveal it's been fixed</span>
+WCLib.<span class="tok-fn">RepairWagon</span>(wagon)
+
+<span class="tok-com">-- Clean up</span>
+WCLib.<span class="tok-fn">DeleteWagon</span>(wagon)</code></pre>
+    </div>
+
+    <hr class="divider">
+
+    <div class="page-nav">
+      <a href="zones.html"><span class="dir">&larr; back</span>Zone checks</a>
+      <a class="right" href="dialogue.html"><span class="dir">next &rarr;</span>Dialogue (NUI)</a>
+    </div>
+
+  </main>
+</div>
+
+<script src="../js/main.js"></script>
+</body>
+</html>
