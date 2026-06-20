@@ -153,6 +153,37 @@ wc:<span class="tok-fn">WcNotify</span>(source, <span class="tok-str">'Reward ac
       </div>
     </div>
 
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">WcTip</span>(<span class="tok-num">msg</span>, <span class="tok-num">duration</span>, <span class="tok-num">opts</span>)<span class="badge badge-client">client</span></span>
+        <p class="api-desc">Shows a compact wc_libs NUI toast prompt using <code>nui/image/toast.png</code>.</p>
+      </div>
+      <div class="api-body">
+        <table class="param-table">
+          <tr><th>Param</th><th>Type</th><th>Description</th></tr>
+          <tr><td>msg</td><td><span class="param-type">string</span></td><td>Text displayed inside the toast.</td></tr>
+          <tr><td>duration</td><td><span class="param-type">number | nil</span></td><td>Duration in milliseconds. Defaults to 3000.</td></tr>
+          <tr><td>opts</td><td><span class="param-type">table | nil</span></td><td>Optional <code>placement</code>, <code>y</code>, and <code>rtl</code> overrides.</td></tr>
+        </table>
+
+        <div class="code-block">
+          <div class="code-block-head">
+            <span class="code-block-tag">client example</span>
+            <button class="copy-btn" type="button">copy</button>
+          </div>
+          <pre><code>wc:<span class="tok-fn">WcTip</span>(<span class="tok-str">'Help... somebody... please!'</span>, <span class="tok-num">3000</span>)
+
+wc:<span class="tok-fn">wctip</span>(<span class="tok-str">'Bring the sack to the wagon.'</span>, <span class="tok-num">4000</span>, {
+  y = <span class="tok-str">'74vh'</span>,
+})</code></pre>
+        </div>
+
+        <div class="note">
+          <strong>Toast asset.</strong> Place the background image at <code>D:\wc_libs\nui\image\toast.png</code>. For right-to-left styling, also provide <code>toast-rtl.png</code>.
+        </div>
+      </div>
+    </div>
+
     <h2>Variant reference</h2>
     <p>Every VORP variant, and what it collapses to on RSG.</p>
 
