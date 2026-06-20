@@ -30,6 +30,44 @@
 
 * { box-sizing: border-box; }
 
+/* ============================================================
+   Custom scrollbars — thin, themed, professional
+   ============================================================ */
+
+/* Firefox */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--panel-line) transparent;
+}
+.sidebar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--panel-line) transparent;
+}
+
+/* Webkit (Chrome, Edge, Safari) */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--panel-line);
+  border-radius: 100px;
+  transition: background 0.2s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--leather);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
 html {
   scroll-behavior: smooth;
 }
