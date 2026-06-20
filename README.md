@@ -8,6 +8,8 @@ Documentation site for **wc_libs**, Green Studio's shared RedM library that brid
 
 This repo is just the static documentation site — plain HTML/CSS/JS, no build step, hosted via GitHub Pages. It documents the actual `wc_libs` resource (the Lua library itself lives in your RedM server's `resources` folder, not in this repo).
 
+New client flow helpers are documented at `api/flow.html`: CleanupBag, WatchPrompt, WatchPlayerNear, WatchPlayerAway, and MissionMarker.
+
 ```
 .
 ├── index.html              Landing page + live VORP/RSG code toggle
