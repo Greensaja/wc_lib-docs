@@ -21,6 +21,7 @@ This repo is just the static documentation site — plain HTML/CSS/JS, no build 
 │   ├── lifecycle.html
 │   ├── webhook.html
 │   ├── notify.html
+│   ├── progress.html
 │   ├── prompts.html
 │   ├── entities.html
 │   └── distance.html
