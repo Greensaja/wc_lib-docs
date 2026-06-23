@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blips — Wild Country Libs</title>
+<meta name="description" content="CreateBlip, RemoveBlip and CreateEntityBlip reference for wc_libs.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-brand">&#129312; <span>Wild Country Libs</span></div>
+  <button class="topbar-toggle" data-sidebar-toggle>Menu</button>
+</div>
+
+<div class="shell">
+
+<nav class="sidebar">
+  <div class="brand"><span class="brand-mark">Wild Country<span class="accent"> Libs</span></span></div>
+  <span class="brand-sub">Green Studio &middot; RedM</span>
+  <div class="nav-group">
+    <span class="nav-label">Start here</span>
+    <ul class="nav-list">
+      <li><a href="../index.html">Overview</a></li>
+      <li><a href="../getting-started.html">Getting started</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Server API</span>
+    <ul class="nav-list">
+      <li><a href="../api/player.html">Player &amp; character</a></li>
+      <li><a href="../api/money.html">Money</a></li>
+      <li><a href="../api/revive.html">Revive &amp; heal</a></li>
+      <li><a href="../api/callbacks.html">Callbacks</a></li>
+      <li><a href="../api/lifecycle.html">Lifecycle events</a></li>
+      <li><a href="../api/webhook.html">Discord webhooks</a></li>
+      <li><a href="../api/nearby.html">Nearby players</a></li>
+      <li><a href="../api/skill.html">Skills</a></li>
+      <li><a href="../api/battlepass.html">Battlepass</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Client API</span>
+    <ul class="nav-list">
+      <li><a href="../api/notify.html">Notify</a></li>
+      <li><a href="../api/progress.html">Progress</a></li>
+      <li><a href="../api/flow.html">Flow helpers</a></li>
+      <li><a href="../api/blips.html">Blips</a></li>
+      <li><a href="../api/marker.html">Ground markers</a></li>
+      <li><a href="../api/topnotify.html">Top Notify</a></li>
+      <li><a href="../api/prompts.html">Native prompts</a></li>
+      <li><a href="../api/entities.html">Peds, horses &amp; props</a></li>
+      <li><a href="../api/distance.html">Distance &amp; proximity</a></li>
+      <li><a href="../api/anim.html">Animations &amp; scenarios</a></li>
+      <li><a href="../api/emotes.html">Emotes</a></li>
+      <li><a href="../api/zones.html">Zone checks</a></li>
+      <li><a href="../api/wagon.html">Wagons</a></li>
+      <li><a href="../api/dialogue.html">Dialogue (NUI)</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Reference</span>
+    <ul class="nav-list">
+      <li><a href="../api/framework.html">Framework &amp; Raw</a></li>
+      <li><a href="../examples/full-resource.html">Full example resource</a></li>
+      <li><a href="../customizing.html">Custom overrides</a></li>
+    </ul>
+  </div>
+</nav>
+
+  <main class="main">
+    <span class="eyebrow">Client API</span>
+    <h1 class="page-title">Blips</h1>
+    <p class="page-lede">Map blip helpers — create labelled blips at static coordinates, track a moving entity, and remove them cleanly. All three return a raw blip handle compatible with <code>wc:CleanupEncounter</code> and <code>CreateCleanupBag().AddBlip()</code>.</p>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">CreateBlip</span>(x, y, z, label?)<span class="badge badge-client">client</span></span>
+        <p class="api-desc">Creates a labelled map blip at the given world position.</p>
+      </div>
+      <div class="api-body">
+        <table class="param-table">
+          <tr><th>Param</th><th>Type</th><th>Description</th></tr>
+          <tr><td>x, y, z</td><td><span class="param-type">number</span></td><td>World coordinates for the blip.</td></tr>
+          <tr><td>label</td><td><span class="param-type">string | nil</span></td><td>Map label. Defaults to <code>"Encounter"</code>.</td></tr>
+        </table>
+        <table class="param-table" style="margin-top:10px;">
+          <tr><th>Returns</th><th>Type</th></tr>
+          <tr><td>blip</td><td><span class="param-type">number | nil</span> — raw blip handle, or nil on failure</td></tr>
+        </table>
+
+        <div class="code-block">
+          <div class="code-block-head">
+            <span class="code-block-tag">example</span>
+            <button class="copy-btn" type="button">copy</button>
+          </div>
+          <pre><code><span class="tok-kw">local</span> blip = wc:<span class="tok-fn">CreateBlip</span>(pos.x, pos.y, pos.z, <span class="tok-str">"Stranded Traveler"</span>)
+<span class="tok-com">-- later —</span>
+wc:<span class="tok-fn">RemoveBlip</span>(blip)</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">RemoveBlip</span>(<span class="tok-num">blip</span>)<span class="badge badge-client">client</span></span>
+        <p class="api-desc">Removes a blip if it still exists. Safe to call with a stale or nil handle.</p>
+      </div>
+      <div class="api-body">
+        <table class="param-table">
+          <tr><th>Param</th><th>Type</th><th>Description</th></tr>
+          <tr><td>blip</td><td><span class="param-type">number | nil</span></td><td>Blip handle returned by <code>CreateBlip</code> or <code>CreateEntityBlip</code>.</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">CreateEntityBlip</span>(<span class="tok-num">entity</span>, label?)<span class="badge badge-client">client</span></span>
+        <p class="api-desc">Creates a blip that follows a moving entity — a ped, horse, or vehicle. The blip is updated every 100 ms and auto-removes itself when the entity is deleted.</p>
+      </div>
+      <div class="api-body">
+        <table class="param-table">
+          <tr><th>Param</th><th>Type</th><th>Description</th></tr>
+          <tr><td>entity</td><td><span class="param-type">number</span></td><td>Entity handle to track. Returns nil if it doesn't exist.</td></tr>
+          <tr><td>label</td><td><span class="param-type">string | nil</span></td><td>Map label. Defaults to <code>"Encounter"</code>.</td></tr>
+        </table>
+        <table class="param-table" style="margin-top:10px;">
+          <tr><th>Returns</th><th>Type</th></tr>
+          <tr><td>blip</td><td><span class="param-type">number | nil</span> — raw blip handle</td></tr>
+        </table>
+
+        <div class="code-block">
+          <div class="code-block-head">
+            <span class="code-block-tag">example — track a wanted outlaw on horseback</span>
+            <button class="copy-btn" type="button">copy</button>
+          </div>
+          <pre><code><span class="tok-kw">local</span> horse = wc:<span class="tok-fn">SpawnHorse</span>(pos.x, pos.y, pos.z)
+<span class="tok-kw">local</span> outlaw = wc:<span class="tok-fn">SpawnPed</span>(hash, pos.x, pos.y, pos.z)
+
+ev.blip = wc:<span class="tok-fn">CreateEntityBlip</span>(horse, <span class="tok-str">"Wanted Outlaw"</span>)
+
+<span class="tok-com">-- ev.blip is automatically removed when the horse is deleted by CleanupEncounter</span></code></pre>
+        </div>
+
+        <div class="note">
+          <strong>How it cleans up.</strong> The internal tracking thread checks <code>DoesEntityExist</code> each tick — once the entity is gone (deleted by <code>CleanupEncounter</code> or otherwise) the blip removes itself with no extra call needed.
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="page-nav">
+      <a href="flow.html"><span class="dir">&larr; back</span>Flow helpers</a>
+      <a class="right" href="marker.html"><span class="dir">next &rarr;</span>Ground markers</a>
+    </div>
+
+  </main>
+</div>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

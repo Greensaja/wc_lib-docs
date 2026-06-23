@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -48,7 +48,7 @@
     <ul class="nav-list">
       <li><a href="../api/notify.html">Notify</a></li>
       <li><a href="../api/progress.html">Progress</a></li>
-      <li><a href="../api/flow.html">Flow helpers</a></li>
+      <li><a href="../api/flow.html">Flow helpers</a></li><li><a href="../api/blips.html">Blips</a></li><li><a href="../api/marker.html">Ground markers</a></li>
       <li><a href="../api/topnotify.html">Top Notify</a></li>
       <li><a href="../api/prompts.html">Native prompts</a></li>
       <li><a href="../api/entities.html">Peds, horses &amp; props</a></li>
@@ -182,6 +182,34 @@ wc:<span class="tok-fn">wctip</span>(<span class="tok-str">'Bring the sack to th
 
         <div class="note">
           <strong>Toast asset.</strong> Place the background image at <code>D:\wc_libs\nui\image\toast.png</code>. For right-to-left styling, also provide <code>toast-rtl.png</code>.
+        </div>
+      </div>
+    </div>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">NotifyIcon</span>(<span class="tok-num">source</span>, <span class="tok-num">text</span>, <span class="tok-num">icon</span>, <span class="tok-num">color</span>, <span class="tok-num">duration</span>, dict?)<span class="badge badge-server">server</span></span>
+        <p class="api-desc">Sends a VORP <code>avanced</code>-style notification with an item icon to a specific player from server code. Falls back to <code>WcNotify</code> if VORP is unavailable.</p>
+      </div>
+      <div class="api-body">
+        <table class="param-table">
+          <tr><th>Param</th><th>Type</th><th>Description</th></tr>
+          <tr><td>source</td><td><span class="param-type">number</span></td><td>Server-side player source.</td></tr>
+          <tr><td>text</td><td><span class="param-type">string</span></td><td>Notification text (e.g. <code>"+$50"</code>).</td></tr>
+          <tr><td>icon</td><td><span class="param-type">string</span></td><td>Item icon key, e.g. <code>'itemtype_cash'</code>.</td></tr>
+          <tr><td>color</td><td><span class="param-type">string</span></td><td>Color name, e.g. <code>'COLOR_WHITE'</code>.</td></tr>
+          <tr><td>duration</td><td><span class="param-type">number</span></td><td>Display time in milliseconds.</td></tr>
+          <tr><td>dict</td><td><span class="param-type">string | nil</span></td><td>Texture dictionary override. Defaults to <code>'itemtype_textures'</code>.</td></tr>
+        </table>
+        <div class="code-block">
+          <div class="code-block-head">
+            <span class="code-block-tag">server example — cash reward</span>
+            <button class="copy-btn" type="button">copy</button>
+          </div>
+          <pre><code>wc:<span class="tok-fn">NotifyIcon</span>(source, <span class="tok-str">"+$50"</span>, <span class="tok-str">'itemtype_cash'</span>, <span class="tok-str">'COLOR_WHITE'</span>, <span class="tok-num">3000</span>)</code></pre>
+        </div>
+        <div class="note">
+          <strong>Server-only.</strong> From the client, use <code>wc:Notify({ variant = 'avanced', ... })</code> instead.
         </div>
       </div>
     </div>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ground Markers — Wild Country Libs</title>
+<meta name="description" content="CreateMarker reference for wc_libs — DrawMarker ground disc wrapper.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-brand">&#129312; <span>Wild Country Libs</span></div>
+  <button class="topbar-toggle" data-sidebar-toggle>Menu</button>
+</div>
+
+<div class="shell">
+
+<nav class="sidebar">
+  <div class="brand"><span class="brand-mark">Wild Country<span class="accent"> Libs</span></span></div>
+  <span class="brand-sub">Green Studio &middot; RedM</span>
+  <div class="nav-group">
+    <span class="nav-label">Start here</span>
+    <ul class="nav-list">
+      <li><a href="../index.html">Overview</a></li>
+      <li><a href="../getting-started.html">Getting started</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Server API</span>
+    <ul class="nav-list">
+      <li><a href="../api/player.html">Player &amp; character</a></li>
+      <li><a href="../api/money.html">Money</a></li>
+      <li><a href="../api/revive.html">Revive &amp; heal</a></li>
+      <li><a href="../api/callbacks.html">Callbacks</a></li>
+      <li><a href="../api/lifecycle.html">Lifecycle events</a></li>
+      <li><a href="../api/webhook.html">Discord webhooks</a></li>
+      <li><a href="../api/nearby.html">Nearby players</a></li>
+      <li><a href="../api/skill.html">Skills</a></li>
+      <li><a href="../api/battlepass.html">Battlepass</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Client API</span>
+    <ul class="nav-list">
+      <li><a href="../api/notify.html">Notify</a></li>
+      <li><a href="../api/progress.html">Progress</a></li>
+      <li><a href="../api/flow.html">Flow helpers</a></li>
+      <li><a href="../api/blips.html">Blips</a></li>
+      <li><a href="../api/marker.html">Ground markers</a></li>
+      <li><a href="../api/topnotify.html">Top Notify</a></li>
+      <li><a href="../api/prompts.html">Native prompts</a></li>
+      <li><a href="../api/entities.html">Peds, horses &amp; props</a></li>
+      <li><a href="../api/distance.html">Distance &amp; proximity</a></li>
+      <li><a href="../api/anim.html">Animations &amp; scenarios</a></li>
+      <li><a href="../api/emotes.html">Emotes</a></li>
+      <li><a href="../api/zones.html">Zone checks</a></li>
+      <li><a href="../api/wagon.html">Wagons</a></li>
+      <li><a href="../api/dialogue.html">Dialogue (NUI)</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Reference</span>
+    <ul class="nav-list">
+      <li><a href="../api/framework.html">Framework &amp; Raw</a></li>
+      <li><a href="../examples/full-resource.html">Full example resource</a></li>
+      <li><a href="../customizing.html">Custom overrides</a></li>
+    </ul>
+  </div>
+</nav>
+
+  <main class="main">
+    <span class="eyebrow">Client API</span>
+    <h1 class="page-title">Ground Markers</h1>
+    <p class="page-lede">A thin wrapper around RedM's <code>DrawMarker</code> native (<code>0x2A32FAA57B937173</code>). Spawns a ground disc that draws every frame in its own thread and can be removed with a single method call.</p>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">CreateMarker</span>(x, y, z, opts?)<span class="badge badge-client">client</span></span>
+        <p class="api-desc">Draws a ground marker at the given world position. Returns a handle with a <code>Remove()</code> method to stop drawing.</p>
+      </div>
+      <div class="api-body">
+        <table class="param-table">
+          <tr><th>Param</th><th>Type</th><th>Description</th></tr>
+          <tr><td>x, y, z</td><td><span class="param-type">number</span></td><td>World position of the marker centre.</td></tr>
+          <tr><td>opts.type</td><td><span class="param-type">number | nil</span></td><td>Marker type hash. Default <code>0x94FDAE17</code> (flat disc).</td></tr>
+          <tr><td>opts.scaleX / scaleY</td><td><span class="param-type">number | nil</span></td><td>Horizontal scale in metres. Default 1.0.</td></tr>
+          <tr><td>opts.scaleZ</td><td><span class="param-type">number | nil</span></td><td>Vertical scale. Default 0.1.</td></tr>
+          <tr><td>opts.r / g / b</td><td><span class="param-type">number | nil</span></td><td>RGB colour 0–255. Default white (255, 255, 255).</td></tr>
+          <tr><td>opts.a</td><td><span class="param-type">number | nil</span></td><td>Alpha 0–255. Default 150.</td></tr>
+          <tr><td>opts.drawRadius</td><td><span class="param-type">number | nil</span></td><td>If set, the marker only draws when the player is within this distance (metres). Omit for always-visible.</td></tr>
+        </table>
+
+        <table class="param-table" style="margin-top:10px;">
+          <tr><th>Returns</th><th>Description</th></tr>
+          <tr><td>handle</td><td>Table with a single <code>handle:Remove()</code> method. Call it to stop the draw thread.</td></tr>
+        </table>
+
+        <div class="code-block">
+          <div class="code-block-head">
+            <span class="code-block-tag">example — yellow zone marker with draw distance</span>
+            <button class="copy-btn" type="button">copy</button>
+          </div>
+          <pre><code><span class="tok-kw">local</span> marker = wc:<span class="tok-fn">CreateMarker</span>(pos.x, pos.y, pos.z, {
+  scaleX      = <span class="tok-num">2.0</span>,
+  r           = <span class="tok-num">255</span>,
+  g           = <span class="tok-num">220</span>,
+  b           = <span class="tok-num">0</span>,
+  a           = <span class="tok-num">180</span>,
+  drawRadius  = <span class="tok-num">25.0</span>,
+})
+
+<span class="tok-com">-- when the encounter ends —</span>
+marker:<span class="tok-fn">Remove</span>()</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-head">
+            <span class="code-block-tag">example — minimal default (white disc, always visible)</span>
+            <button class="copy-btn" type="button">copy</button>
+          </div>
+          <pre><code><span class="tok-kw">local</span> marker = wc:<span class="tok-fn">CreateMarker</span>(x, y, z)
+<span class="tok-com">-- remove later</span>
+marker:<span class="tok-fn">Remove</span>()</code></pre>
+        </div>
+
+        <div class="note">
+          <strong>RedM native note.</strong> The standard <code>DrawMarker</code> global does not exist in RedM. <code>CreateMarker</code> calls the underlying native directly via <code>Citizen.InvokeNative(0x2A32FAA57B937173, ...)</code> every frame. This is handled transparently — you never need to manage the draw loop yourself.
+        </div>
+
+        <div class="note">
+          <strong>Cleanup.</strong> The draw thread exits as soon as <code>handle:Remove()</code> is called. No blip or GPS is attached — if you need a map blip at the same location, create one separately with <a href="../api/blips.html"><code>wc:CreateBlip</code></a>.
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="page-nav">
+      <a href="blips.html"><span class="dir">&larr; back</span>Blips</a>
+      <a class="right" href="topnotify.html"><span class="dir">next &rarr;</span>Top Notify</a>
+    </div>
+
+  </main>
+</div>
+
+<script src="../js/main.js"></script>
+</body>
+</html>
