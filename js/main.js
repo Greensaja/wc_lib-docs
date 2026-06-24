@@ -104,7 +104,8 @@
     } catch (e) {}
   }
 
-  document.addEventListener('DOMContentLoaded', restoreSidebarScroll);
+  restoreSidebarScroll();
+  window.addEventListener('pageshow', restoreSidebarScroll);
   window.addEventListener('beforeunload', saveSidebarScroll);
 
   document.addEventListener('click', function (e) {
@@ -123,11 +124,13 @@
   // Active nav-link highlighting based on current path
   // ---------------------------------------------------------
 
-  document.addEventListener('DOMContentLoaded', function () {
+  function markActiveNav() {
     var path = window.location.pathname.split('/').pop() || 'index.html';
     document.querySelectorAll('.nav-list a').forEach(function (a) {
       var href = a.getAttribute('href').split('/').pop();
-      if (href === path) a.classList.add('active');
+      a.classList.toggle('active', href === path);
     });
-  });
+  }
+
+  markActiveNav();
 })();

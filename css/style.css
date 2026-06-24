@@ -23,7 +23,7 @@
 
   /* Type */
   --font-display: 'Roboto Slab', Georgia, serif;
-  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Roboto Slab', Georgia, serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
 
   --radius: 3px;
@@ -132,7 +132,7 @@ p:last-child { margin-bottom: 0; }
 }
 
 .shell::after {
-  content: 'docs updated v2026.06.24-3';
+  content: 'docs updated v2026.06.25-3';
   position: fixed;
   right: 12px;
   bottom: 10px;
@@ -143,7 +143,7 @@ p:last-child { margin-bottom: 0; }
   border-radius: var(--radius);
   background: rgba(13, 15, 13, 0.82);
   color: var(--leather-bright);
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: 0.62rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -190,7 +190,7 @@ p:last-child { margin-bottom: 0; }
   color: var(--parchment);
   border-radius: var(--radius);
   padding: 6px 10px;
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: 0.85rem;
   cursor: pointer;
 }
@@ -239,7 +239,7 @@ p:last-child { margin-bottom: 0; }
 .brand-mark .accent { color: var(--leather-bright); }
 
 .brand-sub {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: 0.7rem;
   color: var(--parchment-dim);
   letter-spacing: 0.08em;
@@ -252,7 +252,7 @@ p:last-child { margin-bottom: 0; }
 .nav-group { margin-bottom: 22px; }
 
 .nav-label {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: 0.68rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -274,7 +274,7 @@ p:last-child { margin-bottom: 0; }
   border-left: 2px solid transparent;
   overflow: hidden;
   isolation: isolate;
-  transition: color 0.14s ease, text-shadow 0.14s ease;
+  font-weight: 500;
 }
 
 .nav-list a::before,
@@ -285,7 +285,6 @@ p:last-child { margin-bottom: 0; }
   pointer-events: none;
   opacity: 0;
   z-index: -1;
-  transition: opacity 0.14s ease;
 }
 
 .nav-list a::before {
@@ -296,7 +295,7 @@ p:last-child { margin-bottom: 0; }
 }
 
 .nav-list a::after {
-  inset: -5px -8px;
+  inset: 0;
   background: var(--wc-menu-hover) center / 100% 100% no-repeat;
   opacity: 0;
 }
@@ -310,12 +309,11 @@ p:last-child { margin-bottom: 0; }
 .nav-list a.active {
   color: #fff4d8;
   border-left-color: var(--rust);
-  font-weight: 600;
   text-shadow: 0 0 8px rgba(194, 69, 45, 0.45);
 }
 
 .nav-list a:hover::after {
-  opacity: 0.72;
+  opacity: 0.95;
 }
 
 .nav-list a.active::before {
@@ -323,7 +321,7 @@ p:last-child { margin-bottom: 0; }
 }
 
 .nav-list a.active::after {
-  opacity: 0.88;
+  opacity: 0.95;
 }
 
 /* ---- Main content ---- */
@@ -339,7 +337,7 @@ p:last-child { margin-bottom: 0; }
 }
 
 .eyebrow {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: 0.75rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -390,7 +388,7 @@ p:last-child { margin-bottom: 0; }
 }
 
 .code-block-tag {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: 0.72rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -401,7 +399,7 @@ p:last-child { margin-bottom: 0; }
   background: none;
   border: 1px solid var(--panel-line);
   color: var(--parchment-dim);
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: 0.7rem;
   padding: 3px 9px;
   border-radius: var(--radius);
@@ -440,7 +438,7 @@ p:last-child { margin-bottom: 0; }
 }
 
 .fw-toggle-label {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: 0.72rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -459,7 +457,7 @@ p:last-child { margin-bottom: 0; }
   background: none;
   border: none;
   color: var(--parchment-dim);
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: 0.78rem;
   font-weight: 600;
   padding: 6px 16px;
@@ -534,7 +532,7 @@ p:last-child { margin-bottom: 0; }
 
 .param-table th {
   text-align: left;
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: 0.7rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -565,7 +563,7 @@ p:last-child { margin-bottom: 0; }
 
 .badge {
   display: inline-block;
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: 0.66rem;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -612,7 +610,7 @@ p:last-child { margin-bottom: 0; }
 }
 
 .hero-kicker {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: 0.8rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -647,7 +645,7 @@ p:last-child { margin-bottom: 0; }
 }
 
 .btn {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: 0.88rem;
   font-weight: 600;
   padding: 12px 24px;
@@ -686,7 +684,7 @@ p:last-child { margin-bottom: 0; }
 }
 
 .stat .label {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: 0.72rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -722,7 +720,7 @@ p:last-child { margin-bottom: 0; }
 .feature-card p { font-size: 0.92rem; margin: 0; }
 
 .feature-glyph {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   color: var(--leather-bright);
 }
 
@@ -760,7 +758,7 @@ p:last-child { margin-bottom: 0; }
 }
 
 .module-card .m-name {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-weight: 700;
   color: var(--parchment);
   font-size: 0.95rem;
@@ -780,7 +778,7 @@ p:last-child { margin-bottom: 0; }
 .site-footer {
   border-top: 1px solid var(--panel-line);
   padding: 28px 64px;
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: 0.78rem;
   color: var(--parchment-dim);
   display: flex;
@@ -814,7 +812,7 @@ p:last-child { margin-bottom: 0; }
 .page-nav a:hover { border-color: var(--leather); text-decoration: none; }
 
 .page-nav .dir {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: 0.68rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
