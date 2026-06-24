@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>wc_menu — Wild Country Libs</title>
+<meta name="description" content="wc_menu — ornamental NUI menu library for RedM. Full API reference: open/close, item types, themes, exports, events.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-brand">&#129312; <span>Wild Country Libs</span></div>
+  <button class="topbar-toggle" data-sidebar-toggle>Menu</button>
+</div>
+
+<div class="shell">
+
+<nav class="sidebar">
+  <div class="brand"><span class="brand-mark">Wild Country<span class="accent"> Libs</span></span></div>
+  <span class="brand-sub">Green Studio &middot; RedM</span>
+  <div class="nav-group">
+    <span class="nav-label">Start here</span>
+    <ul class="nav-list">
+      <li><a href="index.html">Overview</a></li>
+      <li><a href="getting-started.html">Getting started</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Server API</span>
+    <ul class="nav-list">
+      <li><a href="api/player.html">Player &amp; character</a></li>
+      <li><a href="api/money.html">Money</a></li>
+      <li><a href="api/revive.html">Revive &amp; heal</a></li>
+      <li><a href="api/callbacks.html">Callbacks</a></li>
+      <li><a href="api/lifecycle.html">Lifecycle events</a></li>
+      <li><a href="api/webhook.html">Discord webhooks</a></li>
+      <li><a href="api/nearby.html">Nearby players</a></li>
+      <li><a href="api/skill.html">Skills</a></li>
+      <li><a href="api/battlepass.html">Battlepass</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Client API</span>
+    <ul class="nav-list">
+      <li><a href="api/notify.html">Notify</a></li>
+      <li><a href="api/progress.html">Progress</a></li>
+      <li><a href="api/flow.html">Flow helpers</a></li><li><a href="api/blips.html">Blips</a></li><li><a href="api/marker.html">Ground markers</a></li>
+      <li><a href="api/topnotify.html">Top Notify</a></li>
+      <li><a href="api/prompts.html">Native prompts</a></li>
+      <li><a href="api/entities.html">Peds, horses &amp; props</a></li>
+      <li><a href="api/distance.html">Distance &amp; proximity</a></li>
+      <li><a href="api/anim.html">Animations &amp; scenarios</a></li>
+      <li><a href="api/emotes.html">Emotes</a></li>
+      <li><a href="api/zones.html">Zone checks</a></li>
+      <li><a href="api/wagon.html">Wagons</a></li>
+      <li><a href="api/dialogue.html">Dialogue (NUI)</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Reference</span>
+    <ul class="nav-list">
+      <li><a href="api/framework.html">Framework &amp; Raw</a></li>
+      <li><a href="examples/full-resource.html">Full example resource</a></li>
+      <li><a href="customizing.html">Custom overrides</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Scripts</span>
+    <ul class="nav-list">
+      <li><a href="wc_menu.html">wc_menu</a></li>
+    </ul>
+  </div>
+</nav>
+
+  <main class="main">
+    <span class="eyebrow">Scripts</span>
+    <h1 class="page-title">wc_menu</h1>
+    <p class="page-lede">Modern ornamental NUI menu library for RedM. Drop-in for any script — no dependencies beyond <code>@wc_libs/init.lua</code>. Supports buttons, submenus, checkboxes, sliders, quantity pickers, inputs, selects, live updates, toast notifications, and multiple theme presets.</p>
+
+    <div class="note">
+      <strong>Download.</strong> Get wc_menu from GitHub: <a href="https://github.com/Greensaja/wc_menu" target="_blank" rel="noopener">github.com/Greensaja/wc_menu</a>
+    </div>
+
+    <!-- QUICK START -->
+    <h2>Quick start</h2>
+
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-tag">lua</span>
+        <button class="copy-btn" type="button">copy</button>
+      </div>
+      <pre><code>wc.menu.<span class="tok-fn">open</span>({
+    id    = <span class="tok-str">'my_menu'</span>,
+    title = <span class="tok-str">'My Menu'</span>,
+    items = {
+        {
+            id       = <span class="tok-str">'hello'</span>,
+            label    = <span class="tok-str">'Say Hello'</span>,
+            icon     = <span class="tok-str">'comment'</span>,
+            onSelect = <span class="tok-kw">function</span>()
+                wc.menu.<span class="tok-fn">toast</span>(<span class="tok-str">'Hello!'</span>, <span class="tok-str">'check'</span>, <span class="tok-num">2000</span>)
+            <span class="tok-kw">end</span>
+        },
+        {
+            id       = <span class="tok-str">'close'</span>,
+            label    = <span class="tok-str">'Close'</span>,
+            icon     = <span class="tok-str">'door-open'</span>,
+            onSelect = <span class="tok-kw">function</span>() wc.menu.<span class="tok-fn">close</span>() <span class="tok-kw">end</span>
+        }
+    }
+})</code></pre>
+    </div>
+
+    <hr class="divider">
+
+    <!-- CORE API -->
+    <h2>Core API</h2>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig">Open / Close</span>
+        <p class="api-desc">Open a menu, navigate back, or close entirely.</p>
+      </div>
+      <div class="api-body">
+        <table class="param-table">
+          <tr><th>Function</th><th>Description</th></tr>
+          <tr><td><code>wc.menu.open(menu)</code></td><td>Opens a menu. If one is already open, pushes the new one onto the navigation stack.</td></tr>
+          <tr><td><code>wc.menu.close()</code></td><td>Closes the menu and clears the entire navigation stack.</td></tr>
+          <tr><td><code>wc.menu.back()</code></td><td>Goes back one level. Closes entirely if at root.</td></tr>
+          <tr><td><code>wc.menu.isOpen()</code></td><td>Returns <code>true</code> if any menu is currently open.</td></tr>
+          <tr><td><code>wc.menu.currentId()</code></td><td>Returns the <code>id</code> of the currently open menu, or <code>nil</code>.</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig">Updates</span>
+        <p class="api-desc">Modify a menu or a single item while it is open.</p>
+      </div>
+      <div class="api-body">
+        <table class="param-table">
+          <tr><th>Function</th><th>Description</th></tr>
+          <tr><td><code>wc.menu.update(patch)</code></td><td>Merges <code>patch</code> into the current menu and re-renders. Resets cursor position.</td></tr>
+          <tr><td><code>wc.menu.updateItem(id, patch)</code></td><td>Updates a single item by <code>id</code> without closing or re-rendering the whole menu. Does not move the cursor.</td></tr>
+          <tr><td><code>wc.menu.toast(text, icon, ms)</code></td><td>Shows a floating notification. Works whether a menu is open or not.</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig">Builders</span>
+        <p class="api-desc">Shorthand helpers that return a pre-configured item table.</p>
+      </div>
+      <div class="api-body">
+        <table class="param-table">
+          <tr><th>Function</th><th>Description</th></tr>
+          <tr><td><code>wc.menu.action(opts)</code></td><td>Builds a button item with event/callback routing and optional job requirements.</td></tr>
+          <tr><td><code>wc.menu.purchase(opts)</code></td><td>Builds a quantity item with purchase defaults (min, max, confirm prompt).</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- MENU OPTIONS -->
+    <h2>wc.menu.open() — menu options</h2>
+
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-tag">all options</span>
+        <button class="copy-btn" type="button">copy</button>
+      </div>
+      <pre><code>wc.menu.<span class="tok-fn">open</span>({
+    id           = <span class="tok-str">'shop_main'</span>,         <span class="tok-com">-- string; unique ID (auto-generated if omitted)</span>
+    title        = <span class="tok-str">'General Store'</span>,     <span class="tok-com">-- string; REQUIRED</span>
+    subtitle     = <span class="tok-str">'Armadillo'</span>,         <span class="tok-com">-- string; secondary header</span>
+    description  = <span class="tok-str">'Buy supplies.'</span>,     <span class="tok-com">-- string; tertiary text</span>
+    layout       = <span class="tok-str">'portrait'</span>,          <span class="tok-com">-- 'portrait' | 'compact' | 'wide' | 'dialog'</span>
+    themePreset  = <span class="tok-str">'shop'</span>,              <span class="tok-com">-- see Theme Presets section</span>
+    theme        = { accent = <span class="tok-str">'#fff'</span> },  <span class="tok-com">-- overrides preset values</span>
+    itemsPerPage = <span class="tok-num">6</span>,                   <span class="tok-com">-- items before pagination (default: Config.ItemsPerPage)</span>
+    hints        = { ... },             <span class="tok-com">-- custom footer hints (default: Config.Hints.default)</span>
+    onTab        = <span class="tok-kw">function</span>(data) <span class="tok-kw">end</span>,  <span class="tok-com">-- called when TAB is pressed</span>
+    onOpen       = <span class="tok-kw">function</span>() <span class="tok-kw">end</span>,      <span class="tok-com">-- called after menu opens</span>
+    onClose      = <span class="tok-kw">function</span>() <span class="tok-kw">end</span>,      <span class="tok-com">-- called after menu closes</span>
+    items        = { ... },             <span class="tok-com">-- array of item definitions</span>
+})</code></pre>
+    </div>
+
+    <hr class="divider">
+
+    <!-- ITEM TYPES -->
+    <h2>Item types</h2>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig">Button <span class="badge badge-client">default</span></span>
+        <p class="api-desc">A selectable action item. Fires <code>onSelect</code> when the player confirms.</p>
+      </div>
+      <div class="api-body">
+        <div class="code-block">
+          <div class="code-block-head">
+            <span class="code-block-tag">lua</span>
+            <button class="copy-btn" type="button">copy</button>
+          </div>
+          <pre><code>{
+    id       = <span class="tok-str">'start'</span>,
+    label    = <span class="tok-str">'Start Patrol'</span>,
+    icon     = <span class="tok-str">'shield'</span>,            <span class="tok-com">-- Font Awesome icon name</span>
+    image    = <span class="tok-str">'badges.png'</span>,        <span class="tok-com">-- OR image from nui/assets/images/</span>
+    description = <span class="tok-str">'Begin route.'</span>,
+    onSelect = <span class="tok-kw">function</span>() <span class="tok-kw">end</span>,
+    confirm  = <span class="tok-str">'Are you sure?'</span>,      <span class="tok-com">-- shows confirm dialog before onSelect fires</span>
+}</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig">Submenu <span class="badge badge-client">type = 'submenu'</span></span>
+        <p class="api-desc">Opens a nested menu level on select. <code>submenu</code> can be a table or a function that returns a table (evaluated fresh each open).</p>
+      </div>
+      <div class="api-body">
+        <div class="code-block">
+          <div class="code-block-head">
+            <span class="code-block-tag">static submenu</span>
+            <button class="copy-btn" type="button">copy</button>
+          </div>
+          <pre><code>{
+    id      = <span class="tok-str">'settings'</span>,
+    label   = <span class="tok-str">'Settings'</span>,
+    icon    = <span class="tok-str">'gear'</span>,
+    type    = <span class="tok-str">'submenu'</span>,
+    submenu = {
+        id    = <span class="tok-str">'settings_sub'</span>,
+        title = <span class="tok-str">'Settings'</span>,
+        items = { ... }
+    }
+}</code></pre>
+        </div>
+        <div class="code-block">
+          <div class="code-block-head">
+            <span class="code-block-tag">dynamic submenu (built fresh each open)</span>
+            <button class="copy-btn" type="button">copy</button>
+          </div>
+          <pre><code>{
+    id      = <span class="tok-str">'live'</span>,
+    label   = <span class="tok-str">'Live Data'</span>,
+    type    = <span class="tok-str">'submenu'</span>,
+    submenu = <span class="tok-kw">function</span>()
+        <span class="tok-kw">return</span> {
+            id    = <span class="tok-str">'dynamic_sub'</span>,
+            title = <span class="tok-str">'Live Data'</span>,
+            items = <span class="tok-fn">buildItemsNow</span>()
+        }
+    <span class="tok-kw">end</span>
+}</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig">Checkbox <span class="badge badge-client">type = 'checkbox'</span></span>
+        <p class="api-desc">A toggleable on/off item. Calls <code>onChange</code> with the new boolean value.</p>
+      </div>
+      <div class="api-body">
+        <div class="code-block">
+          <div class="code-block-head">
+            <span class="code-block-tag">lua</span>
+            <button class="copy-btn" type="button">copy</button>
+          </div>
+          <pre><code>{
+    id       = <span class="tok-str">'notif'</span>,
+    label    = <span class="tok-str">'Notifications'</span>,
+    icon     = <span class="tok-str">'bell'</span>,
+    type     = <span class="tok-str">'checkbox'</span>,
+    value    = <span class="tok-kw">true</span>,                <span class="tok-com">-- current state</span>
+    onChange = <span class="tok-kw">function</span>(v) <span class="tok-kw">end</span>,     <span class="tok-com">-- v = true/false</span>
+}</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig">Slider <span class="badge badge-client">type = 'slider'</span></span>
+        <p class="api-desc">A horizontal range control. Left/right keys adjust by <code>step</code>.</p>
+      </div>
+      <div class="api-body">
+        <div class="code-block">
+          <div class="code-block-head">
+            <span class="code-block-tag">lua</span>
+            <button class="copy-btn" type="button">copy</button>
+          </div>
+          <pre><code>{
+    id       = <span class="tok-str">'volume'</span>,
+    label    = <span class="tok-str">'Volume'</span>,
+    icon     = <span class="tok-str">'volume-high'</span>,
+    type     = <span class="tok-str">'slider'</span>,
+    min      = <span class="tok-num">0</span>,
+    max      = <span class="tok-num">100</span>,
+    step     = <span class="tok-num">5</span>,
+    value    = <span class="tok-num">60</span>,
+    onChange = <span class="tok-kw">function</span>(v) <span class="tok-kw">end</span>,     <span class="tok-com">-- v = number</span>
+}</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig">Quantity <span class="badge badge-client">type = 'quantity'</span></span>
+        <p class="api-desc">A +/− counter. Designed for purchase amounts. Displays price in the item row and preview panel.</p>
+      </div>
+      <div class="api-body">
+        <div class="code-block">
+          <div class="code-block-head">
+            <span class="code-block-tag">lua</span>
+            <button class="copy-btn" type="button">copy</button>
+          </div>
+          <pre><code>{
+    id       = <span class="tok-str">'ammo'</span>,
+    label    = <span class="tok-str">'Ammunition'</span>,
+    icon     = <span class="tok-str">'boxes-stacked'</span>,
+    type     = <span class="tok-str">'quantity'</span>,
+    min      = <span class="tok-num">1</span>,
+    max      = <span class="tok-num">99</span>,
+    step     = <span class="tok-num">1</span>,
+    value    = <span class="tok-num">5</span>,
+    price    = { money = <span class="tok-num">2</span> },       <span class="tok-com">-- shown as $2 in item row and preview</span>
+    onChange = <span class="tok-kw">function</span>(v) <span class="tok-kw">end</span>,     <span class="tok-com">-- v = number; called on every +/- press</span>
+}</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig">Input <span class="badge badge-client">type = 'input'</span></span>
+        <p class="api-desc">A text field. Calls <code>onChange</code> as the player types.</p>
+      </div>
+      <div class="api-body">
+        <div class="code-block">
+          <div class="code-block-head">
+            <span class="code-block-tag">lua</span>
+            <button class="copy-btn" type="button">copy</button>
+          </div>
+          <pre><code>{
+    id          = <span class="tok-str">'search'</span>,
+    label       = <span class="tok-str">'Search'</span>,
+    icon        = <span class="tok-str">'keyboard'</span>,
+    type        = <span class="tok-str">'input'</span>,
+    value       = <span class="tok-str">''</span>,
+    placeholder = <span class="tok-str">'Type here...'</span>,
+    onChange    = <span class="tok-kw">function</span>(v) <span class="tok-kw">end</span>,  <span class="tok-com">-- v = string</span>
+}</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig">Select <span class="badge badge-client">type = 'select'</span></span>
+        <p class="api-desc">A cyclic selector. Left/right keys cycle through <code>options</code>.</p>
+      </div>
+      <div class="api-body">
+        <div class="code-block">
+          <div class="code-block-head">
+            <span class="code-block-tag">lua</span>
+            <button class="copy-btn" type="button">copy</button>
+          </div>
+          <pre><code>{
+    id       = <span class="tok-str">'difficulty'</span>,
+    label    = <span class="tok-str">'Mode'</span>,
+    icon     = <span class="tok-str">'list'</span>,
+    type     = <span class="tok-str">'select'</span>,
+    value    = <span class="tok-str">'normal'</span>,
+    options  = {
+        { value = <span class="tok-str">'easy'</span>,   label = <span class="tok-str">'Quiet'</span>     },
+        { value = <span class="tok-str">'normal'</span>, label = <span class="tok-str">'Standard'</span>  },
+        { value = <span class="tok-str">'hard'</span>,   label = <span class="tok-str">'High Risk'</span> },
+    },
+    onChange = <span class="tok-kw">function</span>(v) <span class="tok-kw">end</span>,     <span class="tok-com">-- v = selected option value</span>
+}</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig">Divider &amp; Label</span>
+        <p class="api-desc">Visual separators and section headers within the item list.</p>
+      </div>
+      <div class="api-body">
+        <div class="code-block">
+          <div class="code-block-head">
+            <span class="code-block-tag">lua</span>
+            <button class="copy-btn" type="button">copy</button>
+          </div>
+          <pre><code>{ type = <span class="tok-str">'divider'</span> }
+
+{ type = <span class="tok-str">'label'</span>, label = <span class="tok-str">'SECTION HEADER'</span> }</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- COMMON ITEM FIELDS -->
+    <h2>Common item fields</h2>
+    <p>These work on <strong>any</strong> item type.</p>
+
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-tag">all common fields</span>
+        <button class="copy-btn" type="button">copy</button>
+      </div>
+      <pre><code>{
+    <span class="tok-com">-- Visual</span>
+    badge        = <span class="tok-num">12</span>,              <span class="tok-com">-- circular number badge (e.g. unread count)</span>
+    rarity       = <span class="tok-str">'legendary'</span>,     <span class="tok-com">-- 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary'</span>
+    tags         = { <span class="tok-str">'New'</span>, <span class="tok-str">'Sale'</span> }, <span class="tok-com">-- small label pills in preview</span>
+    meta         = { Weight = <span class="tok-str">'1kg'</span>, Type = <span class="tok-str">'Ammo'</span> }, <span class="tok-com">-- key/value pills in preview</span>
+
+    <span class="tok-com">-- Stock info (display only)</span>
+    stock        = <span class="tok-num">50</span>,              <span class="tok-com">-- how many available</span>
+    owned        = <span class="tok-num">3</span>,               <span class="tok-com">-- how many the player has</span>
+    limit        = <span class="tok-num">10</span>,              <span class="tok-com">-- max purchasable</span>
+
+    <span class="tok-com">-- Locking</span>
+    disabled       = <span class="tok-kw">true</span>,
+    disabledReason = <span class="tok-str">'Requires Sheriff rank 3'</span>,  <span class="tok-com">-- shown as toast + lock banner in preview</span>
+    status         = <span class="tok-str">'Locked'</span>,      <span class="tok-com">-- shown as meta pill</span>
+
+    <span class="tok-com">-- Price</span>
+    price = { money = <span class="tok-num">5</span> },
+}</code></pre>
+    </div>
+
+    <hr class="divider">
+
+    <!-- PRICE FORMATS -->
+    <h2>Price formats</h2>
+
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-tag">all supported formats</span>
+        <button class="copy-btn" type="button">copy</button>
+      </div>
+      <pre><code><span class="tok-com">-- Money (shorthand)</span>
+price = <span class="tok-num">5</span>
+price = { money = <span class="tok-num">5</span> }
+
+<span class="tok-com">-- Gold</span>
+price = { gold = <span class="tok-num">1</span> }
+
+<span class="tok-com">-- ROL</span>
+price = { rol = <span class="tok-num">50</span> }
+
+<span class="tok-com">-- Items</span>
+price = { item = <span class="tok-str">'pelt'</span>, quantity = <span class="tok-num">2</span>, label = <span class="tok-str">'Pelts'</span> }
+
+<span class="tok-com">-- Multiple currencies</span>
+price = { money = <span class="tok-num">10</span>, gold = <span class="tok-num">1</span> }
+
+<span class="tok-com">-- Array form</span>
+price = { { money = <span class="tok-num">10</span> }, { gold = <span class="tok-num">1</span> } }</code></pre>
+    </div>
+
+    <hr class="divider">
+
+    <!-- SERVER & CLIENT EVENTS -->
+    <h2>Server &amp; client events</h2>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig">serverEvent / clientEvent</span>
+        <p class="api-desc">Any item can fire an event on selection instead of (or alongside) <code>onSelect</code>.</p>
+      </div>
+      <div class="api-body">
+        <div class="code-block">
+          <div class="code-block-head">
+            <span class="code-block-tag">item definition</span>
+            <button class="copy-btn" type="button">copy</button>
+          </div>
+          <pre><code>{
+    id          = <span class="tok-str">'buy_horse'</span>,
+    label       = <span class="tok-str">'Buy Horse'</span>,
+    type        = <span class="tok-str">'button'</span>,
+    serverEvent = <span class="tok-str">'myshop:purchase'</span>,    <span class="tok-com">-- triggers TriggerServerEvent</span>
+    clientEvent = <span class="tok-str">'myshop:localAction'</span>, <span class="tok-com">-- triggers TriggerEvent</span>
+    args        = { item = <span class="tok-str">'horse'</span>, color = <span class="tok-str">'black'</span> },
+}</code></pre>
+        </div>
+
+        <p style="margin-top:18px;">The event handler receives a single <code>payload</code> table:</p>
+
+        <div class="code-block">
+          <div class="code-block-head">
+            <span class="code-block-tag">server handler — payload shape</span>
+            <button class="copy-btn" type="button">copy</button>
+          </div>
+          <pre><code><span class="tok-fn">RegisterNetEvent</span>(<span class="tok-str">'myshop:purchase'</span>, <span class="tok-kw">function</span>(payload)
+    <span class="tok-com">-- payload.menuId   = 'my_menu'</span>
+    <span class="tok-com">-- payload.itemId   = 'buy_horse'</span>
+    <span class="tok-com">-- payload.label    = 'Buy Horse'</span>
+    <span class="tok-com">-- payload.type     = 'button'</span>
+    <span class="tok-com">-- payload.value    = nil  (or quantity for type='quantity')</span>
+    <span class="tok-com">-- payload.price    = { { money = 500 } }</span>
+    <span class="tok-com">-- payload.args     = { item = 'horse', color = 'black' }</span>
+    <span class="tok-com">-- payload.index    = 3</span>
+<span class="tok-kw">end</span>)</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- HELPER BUILDERS -->
+    <h2>Helper builders</h2>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">wc.menu.action</span>(<span class="tok-num">opts</span>)<span class="badge badge-client">client</span></span>
+        <p class="api-desc">Shorthand for a button with event routing and optional job/grade requirements. Returns an item table.</p>
+      </div>
+      <div class="api-body">
+        <div class="code-block">
+          <div class="code-block-head">
+            <span class="code-block-tag">lua</span>
+            <button class="copy-btn" type="button">copy</button>
+          </div>
+          <pre><code>wc.menu.<span class="tok-fn">action</span>({
+    id           = <span class="tok-str">'start_patrol'</span>,
+    label        = <span class="tok-str">'Start Patrol'</span>,
+    icon         = <span class="tok-str">'shield'</span>,
+    serverEvent  = <span class="tok-str">'patrol:start'</span>,
+    args         = { zone = <span class="tok-str">'armadillo'</span> },
+    requiredJob  = <span class="tok-str">'sheriff'</span>,
+    requiredGrade = <span class="tok-num">2</span>,
+    confirm      = <span class="tok-str">'Begin patrol?'</span>,
+})</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="api-entry">
+      <div class="api-entry-head">
+        <span class="api-sig"><span class="fname">wc.menu.purchase</span>(<span class="tok-num">opts</span>)<span class="badge badge-client">client</span></span>
+        <p class="api-desc">Shorthand for a quantity item with purchase defaults. Returns an item table. Defaults: <code>min=1</code>, <code>max=99</code>, <code>step=1</code>, <code>confirm='Confirm purchase?'</code>, <code>icon='dollar-sign'</code>.</p>
+      </div>
+      <div class="api-body">
+        <div class="code-block">
+          <div class="code-block-head">
+            <span class="code-block-tag">lua</span>
+            <button class="copy-btn" type="button">copy</button>
+          </div>
+          <pre><code>wc.menu.<span class="tok-fn">purchase</span>({
+    id          = <span class="tok-str">'buy_ammo'</span>,
+    label       = <span class="tok-str">'Ammo Box'</span>,
+    icon        = <span class="tok-str">'box'</span>,
+    price       = { money = <span class="tok-num">5</span> },
+    max         = <span class="tok-num">20</span>,
+    serverEvent = <span class="tok-str">'shop:buy'</span>,
+    args        = { sku = <span class="tok-str">'ammo_box'</span> },
+})</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- LIVE UPDATES -->
+    <h2>Live updates</h2>
+    <p>Update items while the menu is open — stock counters, badge counts, disabled states — without closing the menu.</p>
+
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-tag">update a badge count after 3 seconds</span>
+        <button class="copy-btn" type="button">copy</button>
+      </div>
+      <pre><code>wc.menu.<span class="tok-fn">open</span>({
+    id    = <span class="tok-str">'reports'</span>,
+    title = <span class="tok-str">'Reports'</span>,
+    items = {
+        { id = <span class="tok-str">'inbox'</span>, label = <span class="tok-str">'Inbox'</span>, icon = <span class="tok-str">'envelope'</span>, badge = <span class="tok-num">5</span> }
+    }
+})
+
+<span class="tok-fn">SetTimeout</span>(<span class="tok-num">3000</span>, <span class="tok-kw">function</span>()
+    wc.menu.<span class="tok-fn">updateItem</span>(<span class="tok-str">'inbox'</span>, { badge = <span class="tok-num">6</span> })
+<span class="tok-kw">end</span>)</code></pre>
+    </div>
+
+    <div class="note">
+      <strong>update() vs updateItem().</strong> <code>wc.menu.update(patch)</code> replaces the whole items list and resets the cursor. <code>wc.menu.updateItem(id, patch)</code> patches one item in place without moving the cursor. Prefer <code>updateItem</code> for live data.
+    </div>
+
+    <hr class="divider">
+
+    <!-- TOAST NOTIFICATIONS -->
+    <h2>Toast notifications</h2>
+    <p>Works whether a menu is open or not. <code>icon</code> accepts a Font Awesome icon name <em>or</em> an image filename from <code>nui/assets/images/</code>.</p>
+
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-tag">examples</span>
+        <button class="copy-btn" type="button">copy</button>
+      </div>
+      <pre><code>wc.menu.<span class="tok-fn">toast</span>(<span class="tok-str">'Patrol started!'</span>,   <span class="tok-str">'shield-check'</span>, <span class="tok-num">3000</span>)
+wc.menu.<span class="tok-fn">toast</span>(<span class="tok-str">'Not enough money.'</span>, <span class="tok-str">'circle-xmark'</span>, <span class="tok-num">2500</span>)
+wc.menu.<span class="tok-fn">toast</span>(<span class="tok-str">'Item purchased.'</span>,   <span class="tok-str">'bag-shopping'</span>,  <span class="tok-num">2000</span>)</code></pre>
+    </div>
+
+    <hr class="divider">
+
+    <!-- LOCKED / DISABLED ITEMS -->
+    <h2>Locked / disabled items</h2>
+    <p>Disabled items remain navigable so players can read the requirement. Use this for transparent access gates.</p>
+
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-tag">static lock</span>
+        <button class="copy-btn" type="button">copy</button>
+      </div>
+      <pre><code>{
+    id             = <span class="tok-str">'special_mission'</span>,
+    label          = <span class="tok-str">'Special Mission'</span>,
+    icon           = <span class="tok-str">'lock'</span>,
+    disabled       = <span class="tok-kw">true</span>,
+    disabledReason = <span class="tok-str">'Requires Sheriff grade 3'</span>,
+    rarity         = <span class="tok-str">'legendary'</span>,
+    description    = <span class="tok-str">'Unlocks at Sheriff grade 3.'</span>,
+    tags           = { <span class="tok-str">'Requirement'</span> },
+}</code></pre>
+    </div>
+
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-tag">dynamic lock via server callback (VORP)</span>
+        <button class="copy-btn" type="button">copy</button>
+      </div>
+      <pre><code><span class="tok-com">-- server/main.lua</span>
+VORPcore.Callback.<span class="tok-fn">Register</span>(<span class="tok-str">'myscript:getJob'</span>, <span class="tok-kw">function</span>(source, cb)
+    <span class="tok-kw">local</span> char = VORPcore.<span class="tok-fn">getUser</span>(source).getUsedCharacter
+    <span class="tok-fn">cb</span>({ job = tostring(char.job <span class="tok-kw">or</span> <span class="tok-str">''</span>), grade = tonumber(char.jobGrade) <span class="tok-kw">or</span> <span class="tok-num">0</span> })
+<span class="tok-kw">end</span>)
+
+<span class="tok-com">-- client/main.lua</span>
+<span class="tok-fn">RegisterCommand</span>(<span class="tok-str">'mymenu'</span>, <span class="tok-kw">function</span>()
+    <span class="tok-kw">local</span> r     = VORPcore.Callback.<span class="tok-fn">TriggerAwait</span>(<span class="tok-str">'myscript:getJob'</span>)
+    <span class="tok-kw">local</span> job   = r <span class="tok-kw">and</span> r.job   <span class="tok-kw">or</span> <span class="tok-str">''</span>
+    <span class="tok-kw">local</span> grade = r <span class="tok-kw">and</span> r.grade <span class="tok-kw">or</span> <span class="tok-num">0</span>
+
+    wc.menu.<span class="tok-fn">open</span>({
+        id    = <span class="tok-str">'my_menu'</span>,
+        title = <span class="tok-str">'My Menu'</span>,
+        items = {
+            {
+                id             = <span class="tok-str">'locked_item'</span>,
+                label          = <span class="tok-str">'Special Access'</span>,
+                icon           = grade >= <span class="tok-num">3</span> <span class="tok-kw">and</span> <span class="tok-str">'unlock'</span> <span class="tok-kw">or</span> <span class="tok-str">'lock'</span>,
+                disabled       = grade < <span class="tok-num">3</span>,
+                disabledReason = grade < <span class="tok-num">3</span> <span class="tok-kw">and</span> (<span class="tok-str">'Requires Sheriff grade 3\n(yours: '</span> .. job .. <span class="tok-str">' '</span> .. grade .. <span class="tok-str">')'</span>) <span class="tok-kw">or</span> <span class="tok-kw">nil</span>,
+                onSelect       = grade >= <span class="tok-num">3</span> <span class="tok-kw">and</span> <span class="tok-kw">function</span>()
+                    wc.menu.<span class="tok-fn">toast</span>(<span class="tok-str">'Access granted!'</span>, <span class="tok-str">'unlock'</span>, <span class="tok-num">1800</span>)
+                <span class="tok-kw">end</span> <span class="tok-kw">or</span> <span class="tok-kw">nil</span>,
+            }
+        }
+    })
+<span class="tok-kw">end</span>, <span class="tok-kw">false</span>)</code></pre>
+    </div>
+
+    <div class="note">
+      <strong>VORP callback tip.</strong> Always pass a single table from <code>cb({...})</code>. Calling <code>cb(a, b)</code> silently drops <code>b</code> — only the first value survives <code>Citizen.Await</code>.
+    </div>
+
+    <hr class="divider">
+
+    <!-- CONFIRM DIALOG -->
+    <h2>Confirm dialog</h2>
+    <p>Any selectable item can require player confirmation before <code>onSelect</code> or <code>serverEvent</code> fires.</p>
+
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-tag">lua</span>
+        <button class="copy-btn" type="button">copy</button>
+      </div>
+      <pre><code>{
+    id       = <span class="tok-str">'delete'</span>,
+    label    = <span class="tok-str">'Delete Character'</span>,
+    icon     = <span class="tok-str">'triangle-exclamation'</span>,
+    confirm  = <span class="tok-str">'This cannot be undone. Proceed?'</span>,
+    onSelect = <span class="tok-kw">function</span>()
+        <span class="tok-com">-- only fires after player clicks Yes</span>
+    <span class="tok-kw">end</span>
+}</code></pre>
+    </div>
+
+    <hr class="divider">
+
+    <!-- SUBMENUS NAVIGATION -->
+    <h2>Submenus — navigation pattern</h2>
+
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-tag">two-level menu with back button</span>
+        <button class="copy-btn" type="button">copy</button>
+      </div>
+      <pre><code>wc.menu.<span class="tok-fn">open</span>({
+    id    = <span class="tok-str">'root'</span>,
+    title = <span class="tok-str">'Main Menu'</span>,
+    items = {
+        {
+            id      = <span class="tok-str">'sub'</span>,
+            label   = <span class="tok-str">'Sub Menu'</span>,
+            type    = <span class="tok-str">'submenu'</span>,
+            submenu = {
+                id    = <span class="tok-str">'sub_menu'</span>,
+                title = <span class="tok-str">'Sub Menu'</span>,
+                items = {
+                    {
+                        id       = <span class="tok-str">'back'</span>,
+                        label    = <span class="tok-str">'Back'</span>,
+                        icon     = <span class="tok-str">'arrow-left'</span>,
+                        onSelect = <span class="tok-kw">function</span>() wc.menu.<span class="tok-fn">back</span>() <span class="tok-kw">end</span>
+                    }
+                }
+            }
+        },
+        {
+            id       = <span class="tok-str">'close'</span>,
+            label    = <span class="tok-str">'Close'</span>,
+            icon     = <span class="tok-str">'door-open'</span>,
+            onSelect = <span class="tok-kw">function</span>() wc.menu.<span class="tok-fn">close</span>() <span class="tok-kw">end</span>
+        }
+    }
+})</code></pre>
+    </div>
+
+    <hr class="divider">
+
+    <!-- THEME PRESETS -->
+    <h2>Theme presets</h2>
+
+    <table class="param-table" style="margin-bottom:24px;">
+      <tr><th>themePreset</th><th>Description</th></tr>
+      <tr><td><code>'default'</code></td><td>Neutral</td></tr>
+      <tr><td><code>'sheriff'</code></td><td>Deep red accent, heavy ornament</td></tr>
+      <tr><td><code>'doctor'</code></td><td>Pale bone accent</td></tr>
+      <tr><td><code>'shop'</code></td><td>Gold accent</td></tr>
+      <tr><td><code>'stable'</code></td><td>Brown accent</td></tr>
+      <tr><td><code>'crafting'</code></td><td>Amber accent, light ornament</td></tr>
+      <tr><td><code>'warning'</code></td><td>Red accent, heavy ornament</td></tr>
+    </table>
+
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-tag">override individual values</span>
+        <button class="copy-btn" type="button">copy</button>
+      </div>
+      <pre><code>themePreset = <span class="tok-str">'shop'</span>,
+theme = { accent = <span class="tok-str">'#d4af37'</span>, scale = <span class="tok-num">0.95</span> }</code></pre>
+    </div>
+
+    <hr class="divider">
+
+    <!-- LAYOUTS -->
+    <h2>Layouts</h2>
+
+    <table class="param-table" style="margin-bottom:24px;">
+      <tr><th>layout</th><th>Description</th></tr>
+      <tr><td><code>'portrait'</code></td><td>Tall, left-aligned (default)</td></tr>
+      <tr><td><code>'compact'</code></td><td>Shorter, no title cartouche</td></tr>
+      <tr><td><code>'wide'</code></td><td>Wider panel, centred</td></tr>
+      <tr><td><code>'dialog'</code></td><td>Centred, confirm-style</td></tr>
+    </table>
+
+    <hr class="divider">
+
+    <!-- KEYBOARD CONTROLS -->
+    <h2>Keyboard controls</h2>
+
+    <table class="param-table" style="margin-bottom:24px;">
+      <tr><th>Key</th><th>Action</th></tr>
+      <tr><td><code>W</code> / <code>↑</code></td><td>Move up</td></tr>
+      <tr><td><code>S</code> / <code>↓</code></td><td>Move down</td></tr>
+      <tr><td><code>A</code> / <code>←</code></td><td>Decrease value (slider / quantity)</td></tr>
+      <tr><td><code>D</code> / <code>→</code></td><td>Increase value (slider / quantity)</td></tr>
+      <tr><td><code>E</code> / <code>Enter</code></td><td>Select item</td></tr>
+      <tr><td><code>Q</code> / <code>Backspace</code></td><td>Back / close</td></tr>
+      <tr><td><code>ESC</code></td><td>Close menu entirely</td></tr>
+      <tr><td><code>TAB</code></td><td>Tab / mode switch (if <code>onTab</code> set)</td></tr>
+      <tr><td><code>/</code></td><td>Open search / filter</td></tr>
+    </table>
+
+    <p>Mouse is fully supported — click to select, scroll to navigate.</p>
+
+    <hr class="divider">
+
+    <!-- EXPORT API -->
+    <h2>Export API</h2>
+    <p>Use these exports to control wc_menu from any resource (no wc_libs required).</p>
+
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-tag">all exports</span>
+        <button class="copy-btn" type="button">copy</button>
+      </div>
+      <pre><code><span class="tok-com">-- Open / close</span>
+exports.wc_menu:<span class="tok-fn">OpenMenu</span>(menu)
+exports.wc_menu:<span class="tok-fn">CloseMenu</span>()
+exports.wc_menu:<span class="tok-fn">BackMenu</span>()
+
+<span class="tok-com">-- Updates</span>
+exports.wc_menu:<span class="tok-fn">UpdateMenu</span>(patch)
+exports.wc_menu:<span class="tok-fn">UpdateItem</span>(id, patch)
+
+<span class="tok-com">-- Builders</span>
+<span class="tok-kw">local</span> item = exports.wc_menu:<span class="tok-fn">ActionItem</span>(opts)
+<span class="tok-kw">local</span> item = exports.wc_menu:<span class="tok-fn">PurchaseItem</span>(opts)
+
+<span class="tok-com">-- State</span>
+<span class="tok-kw">local</span> open = exports.wc_menu:<span class="tok-fn">IsMenuOpen</span>()
+<span class="tok-kw">local</span> id   = exports.wc_menu:<span class="tok-fn">CurrentMenuId</span>()
+
+<span class="tok-com">-- Toast</span>
+exports.wc_menu:<span class="tok-fn">Toast</span>(<span class="tok-str">'Message'</span>, <span class="tok-str">'icon'</span>, <span class="tok-num">2500</span>)</code></pre>
+    </div>
+
+    <hr class="divider">
+
+    <!-- EVENTS -->
+    <h2>Events</h2>
+
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-tag">listen for menu actions in your script</span>
+        <button class="copy-btn" type="button">copy</button>
+      </div>
+      <pre><code><span class="tok-com">-- Menu opened</span>
+<span class="tok-fn">AddEventHandler</span>(<span class="tok-str">'wc_menu:menu:opened'</span>, <span class="tok-kw">function</span>(menuId) <span class="tok-kw">end</span>)
+
+<span class="tok-com">-- Menu closed</span>
+<span class="tok-fn">AddEventHandler</span>(<span class="tok-str">'wc_menu:menu:closed'</span>, <span class="tok-kw">function</span>(menuId) <span class="tok-kw">end</span>)
+
+<span class="tok-com">-- Item selected</span>
+<span class="tok-fn">AddEventHandler</span>(<span class="tok-str">'wc_menu:menu:itemSelected'</span>, <span class="tok-kw">function</span>(menuId, itemId) <span class="tok-kw">end</span>)</code></pre>
+    </div>
+
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-tag">push job data to keep locked items in sync</span>
+        <button class="copy-btn" type="button">copy</button>
+      </div>
+      <pre><code><span class="tok-com">-- From your server script:</span>
+<span class="tok-fn">TriggerClientEvent</span>(<span class="tok-str">'wc_menu:setPlayerJob'</span>, playerId, <span class="tok-str">'sheriff'</span>, <span class="tok-num">3</span>)
+<span class="tok-com">-- wc_menu will auto-recalculate disabled states for any open menu</span></code></pre>
+    </div>
+
+    <hr class="divider">
+
+    <!-- FULL EXAMPLE -->
+    <h2>Full example — shop menu</h2>
+
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-tag">client + server</span>
+        <button class="copy-btn" type="button">copy</button>
+      </div>
+      <pre><code><span class="tok-fn">RegisterCommand</span>(<span class="tok-str">'shop'</span>, <span class="tok-kw">function</span>()
+    wc.menu.<span class="tok-fn">open</span>({
+        id          = <span class="tok-str">'general_store'</span>,
+        title       = <span class="tok-str">'General Store'</span>,
+        subtitle    = <span class="tok-str">'Armadillo'</span>,
+        themePreset = <span class="tok-str">'shop'</span>,
+        layout      = <span class="tok-str">'portrait'</span>,
+        onClose     = <span class="tok-kw">function</span>()
+            print(<span class="tok-str">'Store closed'</span>)
+        <span class="tok-kw">end</span>,
+        items = {
+            { type = <span class="tok-str">'label'</span>, label = <span class="tok-str">'Consumables'</span> },
+            wc.menu.<span class="tok-fn">purchase</span>({
+                id          = <span class="tok-str">'bandage'</span>,
+                label       = <span class="tok-str">'Bandage'</span>,
+                image       = <span class="tok-str">'bandage.png'</span>,
+                price       = { money = <span class="tok-num">3</span> },
+                stock       = <span class="tok-num">100</span>,
+                max         = <span class="tok-num">10</span>,
+                description = <span class="tok-str">'Stops bleeding.'</span>,
+                serverEvent = <span class="tok-str">'shop:purchase'</span>,
+                args        = { sku = <span class="tok-str">'bandage'</span> },
+            }),
+            wc.menu.<span class="tok-fn">purchase</span>({
+                id          = <span class="tok-str">'antibiotic'</span>,
+                label       = <span class="tok-str">'Antibiotic'</span>,
+                image       = <span class="tok-str">'antibiotic.png'</span>,
+                price       = { money = <span class="tok-num">8</span> },
+                stock       = <span class="tok-num">40</span>,
+                max         = <span class="tok-num">5</span>,
+                rarity      = <span class="tok-str">'uncommon'</span>,
+                description = <span class="tok-str">'Cures infections.'</span>,
+                serverEvent = <span class="tok-str">'shop:purchase'</span>,
+                args        = { sku = <span class="tok-str">'antibiotic'</span> },
+            }),
+            { type = <span class="tok-str">'divider'</span> },
+            { type = <span class="tok-str">'label'</span>, label = <span class="tok-str">'Equipment'</span> },
+            {
+                id      = <span class="tok-str">'horse_gear'</span>,
+                label   = <span class="tok-str">'Horse Gear'</span>,
+                icon    = <span class="tok-str">'horse'</span>,
+                type    = <span class="tok-str">'submenu'</span>,
+                submenu = {
+                    id    = <span class="tok-str">'horse_gear_sub'</span>,
+                    title = <span class="tok-str">'Horse Gear'</span>,
+                    items = {
+                        wc.menu.<span class="tok-fn">purchase</span>({
+                            id          = <span class="tok-str">'saddle'</span>,
+                            label       = <span class="tok-str">'Saddle'</span>,
+                            icon        = <span class="tok-str">'horse-saddle'</span>,
+                            price       = { money = <span class="tok-num">150</span> },
+                            max         = <span class="tok-num">1</span>,
+                            serverEvent = <span class="tok-str">'shop:purchase'</span>,
+                            args        = { sku = <span class="tok-str">'saddle'</span> },
+                        }),
+                        {
+                            id       = <span class="tok-str">'back'</span>,
+                            label    = <span class="tok-str">'Back'</span>,
+                            icon     = <span class="tok-str">'arrow-left'</span>,
+                            onSelect = <span class="tok-kw">function</span>() wc.menu.<span class="tok-fn">back</span>() <span class="tok-kw">end</span>
+                        }
+                    }
+                }
+            },
+            { type = <span class="tok-str">'divider'</span> },
+            {
+                id       = <span class="tok-str">'close'</span>,
+                label    = <span class="tok-str">'Leave Store'</span>,
+                icon     = <span class="tok-str">'door-open'</span>,
+                onSelect = <span class="tok-kw">function</span>() wc.menu.<span class="tok-fn">close</span>() <span class="tok-kw">end</span>
+            }
+        }
+    })
+<span class="tok-kw">end</span>, <span class="tok-kw">false</span>)
+
+<span class="tok-com">-- Server-side handler</span>
+<span class="tok-fn">RegisterNetEvent</span>(<span class="tok-str">'shop:purchase'</span>, <span class="tok-kw">function</span>(payload)
+    <span class="tok-kw">local</span> src = source
+    <span class="tok-kw">local</span> sku = payload.args <span class="tok-kw">and</span> payload.args.sku
+    <span class="tok-kw">local</span> qty = payload.value <span class="tok-kw">or</span> <span class="tok-num">1</span>
+    print((<span class="tok-str">'[shop] %s buying %dx %s'</span>):<span class="tok-fn">format</span>(src, qty, sku))
+    <span class="tok-com">-- do your DB / inventory logic here</span>
+<span class="tok-kw">end</span>)</code></pre>
+    </div>
+
+    <hr class="divider">
+
+    <!-- TIPS & GOTCHAS -->
+    <h2>Tips &amp; gotchas</h2>
+
+    <div class="note">
+      <strong>VORP callbacks.</strong> Always <code>cb({ key = val })</code> — never <code>cb(a, b)</code>. Only the first argument survives <code>Citizen.Await</code>.
+    </div>
+    <div class="note">
+      <strong>Submenu as function.</strong> Use <code>submenu = function() return {...} end</code> when the items need fresh data each time the sub-menu opens.
+    </div>
+    <div class="note">
+      <strong>Cache busting.</strong> If you edit NUI files (<code>js/</code>, <code>css/</code>) and changes don't appear in-game, bump the <code>?v=N</code> query string in <code>nui/index.html</code>.
+    </div>
+    <div class="note">
+      <strong>Disabled items are still navigable.</strong> Players can highlight a disabled item and read its <code>disabledReason</code>. Use this for requirement transparency, not to hide content.
+    </div>
+    <div class="note">
+      <strong>confirm + serverEvent.</strong> The server event only fires after the player confirms. Safe to use on destructive or irreversible actions.
+    </div>
+
+  </main>
+</div>
+
+<script src="js/main.js"></script>
+</body>
+</html>
