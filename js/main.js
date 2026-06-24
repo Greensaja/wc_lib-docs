@@ -87,10 +87,32 @@
   // Mobile sidebar toggle
   // ---------------------------------------------------------
 
+  var SIDEBAR_SCROLL_KEY = 'wclib_docs_sidebar_scroll';
+
+  function saveSidebarScroll() {
+    var sb = document.querySelector('.sidebar');
+    if (!sb) return;
+    try { sessionStorage.setItem(SIDEBAR_SCROLL_KEY, String(sb.scrollTop)); } catch (e) {}
+  }
+
+  function restoreSidebarScroll() {
+    var sb = document.querySelector('.sidebar');
+    if (!sb) return;
+    try {
+      var stored = sessionStorage.getItem(SIDEBAR_SCROLL_KEY);
+      if (stored !== null) sb.scrollTop = parseInt(stored, 10) || 0;
+    } catch (e) {}
+  }
+
+  document.addEventListener('DOMContentLoaded', restoreSidebarScroll);
+  window.addEventListener('beforeunload', saveSidebarScroll);
+
   document.addEventListener('click', function (e) {
     if (e.target.closest('[data-sidebar-toggle]')) {
       var sb = document.querySelector('.sidebar');
       if (sb) sb.classList.toggle('open');
+    } else if (e.target.closest('.sidebar a')) {
+      saveSidebarScroll();
     } else if (!e.target.closest('.sidebar') && !e.target.closest('[data-sidebar-toggle]')) {
       var sbOpen = document.querySelector('.sidebar.open');
       if (sbOpen && window.innerWidth <= 900) sbOpen.classList.remove('open');
